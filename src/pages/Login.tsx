@@ -1,9 +1,43 @@
 import Button from "../component/Button";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import '../css/login.css'
-import {Simulate} from "react-dom/test-utils";
+import {useEffect} from "react";
+import WebSocketService from "../webSocket/webSocketService";
 
 export default function Login() {
+    const navigate = useNavigate();
+    useEffect(() => {
+        WebSocketService.connect("ws://140.238.54.136:8080/chat/chat")
+        WebSocketService.registerCallback('LOGIN', (data : any) => {
+            console.log(`Login response: ${data}`)
+            const error = document.querySelector(".error") as HTMLDivElement;
+            const errorText = document.querySelector(".error .error-text") as HTMLParagraphElement;
+            data = data.substring(0, 3) == 'nlu' ? '' : data;
+            if (data != ''){
+                errorText.innerText = data;
+                error.style.display = "flex"
+            }else {
+                navigate('/chat')
+            }
+        })
+    }, []);
+
+    const handleLogin = (user:string, pass:string) => {
+        WebSocketService.sendMessage(
+            {
+                action: 'onchat',
+                data: {
+                    event: 'LOGIN',
+                    data: {
+                        user: user,
+                        pass: pass
+                    }
+                }
+            }
+        )
+
+    }
+
     const handleValidate = () => {
         const inputUserName = document.querySelector("#username") as HTMLInputElement;
         const inputPass = document.querySelector("#password") as HTMLInputElement;
@@ -13,8 +47,9 @@ export default function Login() {
 
         if (username.length == 0 || pass.length == 0){
             error.style.display = "flex";
+        }else {
+            handleLogin(username, pass)
         }
-        console.log("1")
     }
 
     const handleHideError = () => {
