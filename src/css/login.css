@@ -71,6 +71,15 @@ body {
   outline: none;
 }
 
+.error {
+  display: none;
+  align-items: center;
+  justify-content: left;
+  gap: 8px;
+  margin: 16px 0;
+  color: #e75f5f;
+}
+
 .forgot-pass {
   margin-bottom: 12px;
 }

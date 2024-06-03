@@ -76,6 +76,15 @@ body {
   }
 }
 
+.error {
+  display: none;
+  align-items: center;
+  justify-content: left;
+  gap: 8px;
+  margin: 16px 0;
+  color: $warning;
+}
+
 .forgot-pass{
   margin-bottom: 12px;
 }
