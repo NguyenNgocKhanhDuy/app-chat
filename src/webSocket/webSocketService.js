@@ -11,11 +11,7 @@ const WebSocketService = (() => {
 
         socket.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            if (callbacks[data.event] && data.status == 'success') {
-                callbacks[data.event](data.data);
-            }else if (callbacks[data.event] && data.status == 'error'){
-                callbacks[data.event](data.mes);
-            }
+            (data.data && data.event == 'LOGIN') ? callbacks[data.event](data.data.RE_LOGIN_CODE || data.mes) : callbacks[data.event](data.data || data.mes)
         };
 
         socket.onclose = () => {
