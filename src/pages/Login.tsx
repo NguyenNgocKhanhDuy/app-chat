@@ -82,6 +82,7 @@ export default function Login() {
                   <i className="fa-solid fa-circle-info"></i>
                   <p className={"error-text"}>Please enter login information.</p>
               </div>
+
               <div className="forgot-pass">
                   <Link to={"forget-pass"}>Forgot your password?</Link>
               </div>
@@ -89,7 +90,7 @@ export default function Login() {
               <div className="register">
                   <p>
                       Not register yet?
-                      <Link to={"register"}> Create an Account</Link>
+                      <Link to={"/register"}> Create an Account</Link>
                   </p>
               </div>
           </div>

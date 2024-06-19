@@ -1,0 +1,95 @@
+@import "~@fortawesome/fontawesome-free/css/all.css";
+* {
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+  font-family: Arial, Tahoma, sans-serif;
+}
+
+body {
+  background-color: #fafbfc;
+}
+
+.container {
+  width: 400px;
+  margin: 60px auto;
+  background-color: #fff;
+  padding: 30px;
+  text-align: center;
+  border-radius: 20px;
+  border: 1px solid #e9ecef;
+}
+.container a {
+  color: #38c585;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.25s linear;
+}
+.container a:hover {
+  opacity: 0.8;
+}
+
+.form .title {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+.form .sub_title {
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+.form .wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: baseline;
+  width: 100%;
+  margin-bottom: 12px;
+}
+.form .wrapper label {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.form .wrapper .holder {
+  width: 100%;
+  border-radius: 4px;
+  padding: 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e9ecef;
+}
+.form .wrapper .holder i {
+  width: 10%;
+  color: #e9ecef;
+}
+.form .wrapper .holder i:has(+ input:not(:placeholder-shown)) {
+  color: #000;
+}
+.form .wrapper .holder input {
+  width: 90%;
+  border: none;
+  outline: none;
+}
+
+.error, .error-password-confirm {
+  display: none;
+  align-items: center;
+  justify-content: left;
+  gap: 8px;
+  margin: 16px 0;
+  color: #e75f5f;
+}
+
+.accept {
+  margin-bottom: 12px;
+}
+
+button {
+  width: 100%;
+}
+
+.register {
+  margin-top: 40px;
+}
+
+/*# sourceMappingURL=register.css.map */
