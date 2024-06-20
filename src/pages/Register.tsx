@@ -1,6 +1,6 @@
 import Button from "../component/Button";
 import {Link, useNavigate} from "react-router-dom";
-import '../css/register.css'
+import '../assets/css/register.css'
 import {useEffect} from "react";
 import WebSocketService from "../webSocket/webSocketService";
 
