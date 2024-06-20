@@ -159,8 +159,8 @@ export default function Chat() {
             <div className="right">
                 <div className="top">
                     <div className="action">
-                        <Button icon={<i className="fa-solid fa-location-dot"></i>} text={"Chat Rooms"}
-                                    className={"chat-room"}/>
+                        <Button text={"New Room"} className={"chat-room"}/>
+                        <Button text={"Join Room"} className={"chat-room"}/>
                         <Button text={"Events"} className={"event"}/>
                     </div>
                     <div className="location">
