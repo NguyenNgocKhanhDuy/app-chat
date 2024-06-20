@@ -1,0 +1,72 @@
+@import "~@fortawesome/fontawesome-free/css/all.css";
+* {
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+  font-family: Arial, Tahoma, sans-serif;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.modal-container {
+  position: relative;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 32px 40px;
+  border-radius: 4px;
+  border-top: 1px solid #e9ecef;
+  border-right: 1px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
+  border-left: 1px solid #e9ecef;
+}
+.modal-container .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  font-size: 20px;
+  transition: all 0.25s linear;
+  cursor: pointer;
+}
+.modal-container .close:hover {
+  color: #38c585;
+}
+.modal-container .title {
+  font-size: 24px;
+  color: #38c585;
+}
+.modal-container input[type=text] {
+  width: 100%;
+  font-size: 16px;
+  color: #38c585;
+  margin: 24px 0;
+  background-color: #f8f9fa;
+  padding: 12px;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  border-top: 1px solid #e9ecef;
+  border-right: 1px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
+  border-left: 1px solid #e9ecef;
+}
+.modal-container input[type=text]::placeholder {
+  color: #b3bac5;
+}
+.modal-container .btn {
+  font-size: 16px;
+}
+
+/*# sourceMappingURL=modalRoom.css.map */
