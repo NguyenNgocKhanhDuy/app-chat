@@ -15,7 +15,7 @@
 
   .right {
     width: 70%;
-    height: calc(100% - 80px - 50px - 50px - 80px);
+    //height: calc(100% - 80px - 50px - 50px - 80px);
   }
 
   .top {
@@ -23,6 +23,8 @@
     @include line(0, 0, 1, 0);
   }
 }
+
+
 
 .left {
   .top {
@@ -75,7 +77,6 @@
   }
 
   .chat-list {
-    padding: 16px;
     @include line(1, 0, 0, 0);
     height: 100%;
     overflow: auto;
@@ -84,11 +85,14 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin: 32px 0;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.25s linear;
 
-      &:first-child {
-        margin: 0;
+      &:hover {
+        background-color: #f0f0f0;
       }
+
 
       &-info {
         display: flex;
@@ -206,158 +210,6 @@
       }
 
     }
-  }
-
-
-  .chat-content {
-    height: 100%;
-
-    .header {
-      padding: 0 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: calc(50px + 16px*2);
-      background-color: $white;
-      @include line(0, 0, 1, 0);
-
-      .info {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-
-        img {
-          width: 40px;
-          height: 40px;
-        }
-
-        .title {
-          display: flex;
-          flex-direction: column;
-          height: 40px;
-          justify-content: space-between;
-          align-items: baseline;
-
-          .name {
-            font-size: 16px;
-            font-weight: 600;
-          }
-
-          .locate {
-            color: $inputText;
-            i {
-              margin-right: 8px;
-            }
-          }
-        }
-      }
-
-      .action {
-        i {
-          font-size: 16px;
-        }
-
-        i:nth-child(2) {
-          margin: 0 16px;
-        }
-      }
-    }
-
-
-    .content {
-      padding: 16px;
-      height: 100%;
-      overflow: auto;
-      background-color: #f8f9fa;
-      @include line(0, 0, 0, 1);
-
-      .item {
-        width: 50%;
-        margin: 12px 0;
-
-        .user {
-          display: flex;
-          gap: 8px;
-
-          .avatar {
-            width: 30px;
-            height: 30px;
-          }
-
-          .name {
-            margin-top: 4px;
-          }
-        }
-
-        .text {
-          margin-left: 38px;
-          margin-top: -8px;
-          width: fit-content;
-          padding: 12px;
-          border-radius: 4px;
-          background-color: $white;
-        }
-      }
-
-      .my-chat {
-        margin-left: auto;
-
-        .text {
-          background-color: $green;
-          color: $white;
-          margin-left: auto;
-          margin-top: 12px;
-        }
-      }
-    }
-
-
-    .chat-action {
-      height: 50px;
-      padding: 16px;
-      position: absolute;
-      bottom: 0;
-      background-color: $white;
-      left: calc(30% + 1px);
-      right: 0;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      @include line(0, 0, 0, 1);
-
-      .holder {
-        width: calc(100% - 80px);
-        height: 50px;
-        padding: 0 16px;
-        border-radius: 4px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        background-color: $input;
-
-        input[type="text"] {
-          width: 100%;
-          height: 100%;
-          border: none;
-          outline: none;
-          background-color: transparent;
-          font-size: 16px;
-
-          &::placeholder {
-            color: $inputText;
-          }
-
-        }
-      }
-
-      .send {
-        width: 80px;
-        height: 50px;
-        font-size: 16px;
-      }
-    }
-
   }
 
 }
