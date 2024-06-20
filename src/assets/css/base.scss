@@ -8,10 +8,20 @@ $darkGray: #39455a;
 $green: #38c585;
 $grayBG: #fafbfc;
 $warning: #e75f5f;
+$input: #f8f9fa;
+$inputText: #b3bac5;
+$noneBg: #f8f9fa;
 
 * {
   padding: 0;
   margin: 0;
   font-size: 12px;
   font-family: Arial, Tahoma, sans-serif;
+}
+
+@mixin line($top, $right, $bottom, $left) {
+    border-top: $top+px solid $lightGray;
+    border-right: $right+px solid $lightGray;
+    border-bottom: $bottom+px solid $lightGray;
+    border-left: $left+px solid $lightGray;
 }

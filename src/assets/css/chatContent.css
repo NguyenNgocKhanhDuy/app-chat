@@ -1,0 +1,149 @@
+@import "~@fortawesome/fontawesome-free/css/all.css";
+* {
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+  font-family: Arial, Tahoma, sans-serif;
+}
+
+.right {
+  height: calc(100% - 80px - 50px - 50px - 80px) !important;
+}
+
+.chat-content {
+  height: 100%;
+}
+.chat-content .wrapper {
+  height: 100%;
+}
+.chat-content .header {
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 82px;
+  background-color: #fff;
+  border-top: 0px solid #e9ecef;
+  border-right: 0px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
+  border-left: 0px solid #e9ecef;
+}
+.chat-content .header .info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.chat-content .header .info img {
+  width: 40px;
+  height: 40px;
+}
+.chat-content .header .info .title {
+  display: flex;
+  flex-direction: column;
+  height: 40px;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.chat-content .header .info .title .name {
+  font-size: 16px;
+  font-weight: 600;
+}
+.chat-content .header .info .title .locate {
+  color: #b3bac5;
+}
+.chat-content .header .info .title .locate i {
+  margin-right: 8px;
+}
+.chat-content .header .action i {
+  font-size: 16px;
+}
+.chat-content .header .action i:nth-child(2) {
+  margin: 0 16px;
+}
+.chat-content .content {
+  padding: 16px;
+  height: 100%;
+  overflow-y: auto;
+  background-color: #f8f9fa;
+  border-top: 0px solid #e9ecef;
+  border-right: 0px solid #e9ecef;
+  border-bottom: 0px solid #e9ecef;
+  border-left: 1px solid #e9ecef;
+}
+.chat-content .content .item {
+  width: 50%;
+  margin: 12px 0;
+}
+.chat-content .content .item .user {
+  display: flex;
+  gap: 8px;
+}
+.chat-content .content .item .user .avatar {
+  width: 30px;
+  height: 30px;
+}
+.chat-content .content .item .user .name {
+  margin-top: 4px;
+}
+.chat-content .content .item .text {
+  margin-left: 38px;
+  margin-top: -8px;
+  width: fit-content;
+  padding: 12px;
+  border-radius: 4px;
+  background-color: #fff;
+}
+.chat-content .content .my-chat {
+  margin-left: auto;
+}
+.chat-content .content .my-chat .text {
+  background-color: #38c585;
+  color: #fff;
+  margin-left: auto;
+  margin-top: 12px;
+}
+.chat-content .chat-action {
+  height: 50px;
+  padding: 16px;
+  position: absolute;
+  bottom: 0;
+  background-color: #fff;
+  left: calc(30% + 1px);
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-top: 0px solid #e9ecef;
+  border-right: 0px solid #e9ecef;
+  border-bottom: 0px solid #e9ecef;
+  border-left: 1px solid #e9ecef;
+}
+.chat-content .chat-action .holder {
+  width: calc(100% - 80px);
+  height: 50px;
+  padding: 0 16px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background-color: #f8f9fa;
+}
+.chat-content .chat-action .holder input[type=text] {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-size: 16px;
+}
+.chat-content .chat-action .holder input[type=text]::placeholder {
+  color: #b3bac5;
+}
+.chat-content .chat-action .send {
+  width: 80px;
+  height: 50px;
+  font-size: 16px;
+}
+
+/*# sourceMappingURL=chatContent.css.map */

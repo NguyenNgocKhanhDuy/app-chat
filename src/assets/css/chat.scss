@@ -1,0 +1,215 @@
+@import "./base";
+
+.chat {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  background-color: $white;
+
+  .left {
+    width: 30%;
+    // 80: top, 50: search, :32 margin
+    height: calc(100% - 80px - 50px - 32px);
+    @include line(1, 1, 0, 1);
+  }
+
+  .right {
+    width: 70%;
+    //height: calc(100% - 80px - 50px - 50px - 80px);
+  }
+
+  .top {
+    height: 80px;
+    @include line(0, 0, 1, 0);
+  }
+}
+
+
+
+.left {
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+
+    .logo {
+      font-size: 28px;
+      font-weight: 600;
+      color: $green;
+      text-shadow: 0 0 1px $black;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  .search {
+    height: 50px;
+    margin: 16px;
+    background-color: $input;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 12px;
+    border-radius: 4px;
+
+    input[type = "text"] {
+      width: 100%;
+      height: 100%;
+      outline: none;
+      border: none;
+      background-color: transparent;
+      padding: 12px;
+      font-size: 16px;
+
+      &::placeholder {
+        color: $inputText;
+      }
+    }
+
+    i {
+      color: $inputText;
+      font-size: 16px;
+    }
+  }
+
+  .chat-list {
+    @include line(1, 0, 0, 0);
+    height: 100%;
+    overflow: auto;
+
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.25s linear;
+
+      &:hover {
+        background-color: #f0f0f0;
+      }
+
+
+      &-info {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        justify-content: space-between;
+      }
+
+      &-img {
+        width: 40px;
+        height: 40px;
+      }
+
+      &-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 40px;
+
+        .title {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .name {
+            font-weight: 600;
+            font-size: 16px;
+          }
+
+          i {
+            color: $green;
+          }
+        }
+
+        .desc {
+          color: $inputText;
+        }
+
+      }
+
+      &-status {
+        height: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-end;
+
+        .amount {
+          color: $white;
+          background: $warning;
+          border-radius: 50%;
+          padding: 2px 6px;
+          width: fit-content;
+        }
+      }
+
+    }
+  }
+
+}
+
+.right {
+  .top {
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+
+      Button {
+        width: fit-content;
+        text-transform: uppercase;
+      }
+
+      .event {
+        background-color: $lightGray;
+        color: $gray;
+      }
+    }
+
+    .location {
+      display: flex;
+      align-items: center;
+      gap: 50px;
+
+      .info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        i {
+          color: $green;
+          font-size: 20px;
+          background-color: #dff6eb;
+          padding: 8px 10px;
+          border-radius: 50%;
+        }
+
+        .desc {
+          text-align: left;
+
+          .title {
+            color: $green;
+          }
+
+          .locate {
+            font-size: 14px;
+          }
+        }
+      }
+
+    }
+  }
+
+}

@@ -1,0 +1,36 @@
+@import "~@fortawesome/fontawesome-free/css/all.css";
+* {
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+  font-family: Arial, Tahoma, sans-serif;
+}
+
+.right {
+  height: 100% !important;
+}
+
+.chat-content {
+  background-color: #f8f9fa;
+}
+
+.welcome {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%);
+}
+.welcome .bg {
+  width: 300px;
+  height: auto;
+}
+.welcome .title {
+  font-size: 28px;
+}
+.welcome .desc {
+  width: 400px;
+  margin-top: 12px;
+  font-size: 16px;
+}
+
+/*# sourceMappingURL=chatWelcome.css.map */
