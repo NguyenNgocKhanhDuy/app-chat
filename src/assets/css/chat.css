@@ -138,6 +138,14 @@
   width: fit-content;
 }
 
+.rightFull {
+  height: 100%;
+}
+
+.rightCalc {
+  height: calc(100% - 80px - 50px - 50px - 80px);
+}
+
 .right .top {
   padding: 0 16px;
   display: flex;

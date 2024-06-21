@@ -4,11 +4,32 @@ import Button from "../component/Button";
 import {useState} from "react";
 import ChatWelcome from "../component/ChatWelcome";
 import ChatContent from "../component/ChatContent";
+import ModalRoom from "../component/ModalRoom";
 
 export default function Chat() {
     const [isChatOpen, setIsChatOpen] = useState(false);
 
     const toggleChat = () => setIsChatOpen(true);
+
+    const [isModalRoomOpen, setIsModalRoomOpen] = useState(false);
+    const [modalRoomText, setModalRoomText] = useState("");
+    const [modalRoomBtnText, setModalRoomBtnText] = useState("");
+
+    const handleCreateModalRoom = () => {
+        setModalRoomText("Create Room");
+        setModalRoomBtnText("Create");
+        setIsModalRoomOpen(!isModalRoomOpen);
+    }
+
+    const handleJoinModalRoom = () => {
+        setModalRoomText("Join Room");
+        setModalRoomBtnText("Join");
+        setIsModalRoomOpen(!isModalRoomOpen);
+    }
+
+    const handleCloseModal = () => {
+        setIsModalRoomOpen(!isModalRoomOpen);
+    }
 
     return(
         <div className={"chat"}>
@@ -156,11 +177,11 @@ export default function Chat() {
                     </div>
                 </div>
             </div>
-            <div className="right">
+            <div className={`right ${isChatOpen ? "rightCalc" : "rightFull"}`}>
                 <div className="top">
                     <div className="action">
-                        <Button icon={<i className="fa-solid fa-location-dot"></i>} text={"Chat Rooms"}
-                                    className={"chat-room"}/>
+                        <Button text={"New Room"} className={"chat-room"} onClick={handleCreateModalRoom}/>
+                        <Button text={"Join Room"} className={"chat-room"} onClick={handleJoinModalRoom}/>
                         <Button text={"Events"} className={"event"}/>
                     </div>
                     <div className="location">
@@ -178,6 +199,9 @@ export default function Chat() {
                     {isChatOpen ? <ChatContent/> : <ChatWelcome/>}
                 </div>
             </div>
+
+            {isModalRoomOpen ? <ModalRoom onClose={handleCloseModal} modalText={modalRoomText} btnText={modalRoomBtnText}/> : ""}
+
         </div>
     )
 }
