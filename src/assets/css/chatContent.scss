@@ -68,6 +68,8 @@
     height: 100%;
     overflow-y: auto;
     background-color: $noneBg;
+    display: flex;
+    flex-direction: column-reverse;
     @include line(0, 0, 0, 1);
 
     .item {
@@ -95,17 +97,44 @@
         padding: 12px;
         border-radius: 4px;
         background-color: $white;
+        position: relative;
+        cursor: pointer;
+        @include line(1, 1, 1, 1);
+
+        .time {
+          display: none;
+          width: 100px;
+          height: 10px;
+          position: absolute;
+          top: 0;
+          right: 0;
+          transform: translateX(calc(100% + 4px));
+          padding: 8px;
+          color: $white;
+          font-size: 10px;
+          background-color: rgba(0, 0, 0, 0.7);
+          border-radius: 4px;
+        }
+
+        &:hover .time{
+          display: block;
+        }
       }
     }
 
     .my-chat {
-      margin-left: auto;
+      margin: 8px 0 8px auto;
 
       .text {
         background-color: $green;
         color: $white;
         margin-left: auto;
-        margin-top: 12px;
+
+        .time {
+          right: auto;
+          left: 0;
+          transform: translateX(calc(-100% - 4px));
+        }
       }
     }
   }

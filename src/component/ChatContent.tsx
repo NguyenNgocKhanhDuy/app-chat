@@ -2,14 +2,72 @@ import avatar from "../assets/img/avatar.png";
 import Button from "./Button";
 import {useEffect, useRef} from "react";
 import "../assets/css/chatContent.scss"
+import WebSocketService from "../webSocket/webSocketService";
 
-export default function ChatContent() {
+export default function ChatContent(props : any) {
     const chatListRef = useRef<HTMLDivElement>(null);
+    // const user = props.user.user;
+
     useEffect(() => {
+        // WebSocketService.connect("ws://140.238.54.136:8080/chat/chat")
+        // WebSocketService.registerCallback('GET_PEOPLE_CHAT_MES', (data : any) => {
+        //     console.log(data)
+        //
+        //     var htmlItem = ``
+        //
+        //     for (let i = 0; i < data.length; i++) {
+        //         if (data[i].to != user){
+        //             console.log(user)
+        //             htmlItem += `<div class="item my-chat">
+        //                             <div class="text">
+        //                                 ${data[i].mes}
+        //                                 <span class="time">${data[i].createAt}</span>
+        //                             </div>
+        //                         </div>`
+        //         }else {
+        //             htmlItem += `<div class="item">
+        //                             <div class="user">
+        //                                 <img src=${avatar} class="avatar"/>
+        //                                 <p class="name">${data[i].name}</p>
+        //                             </div>
+        //                             <div class="text">
+        //                                 ${data[i].mes}
+        //                                 <span class="time">${data[i].createAt}</span>
+        //                             </div>
+        //                         </div>`
+        //         }
+        //     }
+        //
+        //     if (chatListRef.current) {
+        //         chatListRef.current.innerHTML = htmlItem;
+        //     }
+        // })
+        //
+        // WebSocketService.close()
+
+
         if (chatListRef.current) {
             chatListRef.current.scrollTo({ top: chatListRef.current.scrollHeight });
         }
     }, []);
+
+    // const handleGetChat= () => {
+    //     WebSocketService.sendMessage(
+    //         {
+    //             action: 'onchat',
+    //             data: {
+    //                 event: 'GET_PEOPLE_CHAT_MES',
+    //                 data: {
+    //                     name: 'duy035',
+    //                     page:1
+    //                 }
+    //             }
+    //         }
+    //     )
+    // }
+    //
+    // handleGetChat()
+
     return (
         <div className="wrapper">
             <div className="header">
@@ -29,6 +87,10 @@ export default function ChatContent() {
                     <i className="fa-solid fa-ellipsis-vertical"></i>
                 </div>
             </div>
+            {/*<div className="content" ref={chatListRef}>*/}
+
+            {/*</div>*/}
+
             <div className="content" ref={chatListRef}>
                 <div className="item">
                     <div className="user">
@@ -37,6 +99,7 @@ export default function ChatContent() {
                     </div>
                     <div className="text">
                         Hi, how's going?
+                        <span className={"time"}>2024-06-21 11:40:12</span>
                     </div>
                 </div>
                 <div className="item">
@@ -48,10 +111,10 @@ export default function ChatContent() {
                         Hi, how's going?
                     </div>
                 </div>
-
                 <div className="item my-chat">
                     <div className="text">
                         Yes, you can swap with paying you network power.
+                        <span className={"time"}>2024-06-21 11:40:12</span>
                     </div>
                 </div>
                 <div className="item my-chat">

@@ -5,6 +5,7 @@ import {useState} from "react";
 import ChatWelcome from "../component/ChatWelcome";
 import ChatContent from "../component/ChatContent";
 import ModalRoom from "../component/ModalRoom";
+import {useSelector} from "react-redux";
 
 export default function Chat() {
     const [isChatOpen, setIsChatOpen] = useState(false);
@@ -30,6 +31,8 @@ export default function Chat() {
     const handleCloseModal = () => {
         setIsModalRoomOpen(!isModalRoomOpen);
     }
+
+    const user = useSelector((state:any) => state.user);
 
     return(
         <div className={"chat"}>
@@ -196,7 +199,7 @@ export default function Chat() {
                     </div>
                 </div>
                 <div className="chat-content">
-                    {isChatOpen ? <ChatContent/> : <ChatWelcome/>}
+                    {isChatOpen ? <ChatContent user={user}/> : <ChatWelcome/>}
                 </div>
             </div>
 
