@@ -10,6 +10,7 @@ const WebSocketService = (() => {
         };
 
         socket.onmessage = (event) => {
+            console.log(event)
             const data = JSON.parse(event.data);
             (data.data && data.event == 'LOGIN') ? callbacks[data.event](data.data.RE_LOGIN_CODE || data.mes) : callbacks[data.event](data.data || data.mes)
         };
