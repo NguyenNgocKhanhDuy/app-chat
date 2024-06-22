@@ -17,7 +17,7 @@ export default function Login() {
     useEffect(() => {
         WebSocketService.connect("ws://140.238.54.136:8080/chat/chat")
         WebSocketService.registerCallback('LOGIN', (data : any) => {
-            console.log(`Login response: ${data}`)
+            // console.log(`Login response: ${data}`)
             const error = document.querySelector(".error") as HTMLDivElement;
             const errorText = document.querySelector(".error .error-text") as HTMLParagraphElement;
             data = data.substring(0, 3) == 'nlu' ? '' : data;
