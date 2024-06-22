@@ -61,6 +61,8 @@
   height: 100%;
   overflow-y: auto;
   background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column-reverse;
   border-top: 0px solid #e9ecef;
   border-right: 0px solid #e9ecef;
   border-bottom: 0px solid #e9ecef;
@@ -88,15 +90,42 @@
   padding: 12px;
   border-radius: 4px;
   background-color: #fff;
+  position: relative;
+  cursor: pointer;
+  border-top: 1px solid #e9ecef;
+  border-right: 1px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
+  border-left: 1px solid #e9ecef;
+}
+.chat-content .content .item .text .time {
+  display: none;
+  width: 100px;
+  height: 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translateX(calc(100% + 4px));
+  padding: 8px;
+  color: #fff;
+  font-size: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 4px;
+}
+.chat-content .content .item .text:hover .time {
+  display: block;
 }
 .chat-content .content .my-chat {
-  margin-left: auto;
+  margin: 8px 0 8px auto;
 }
 .chat-content .content .my-chat .text {
   background-color: #38c585;
   color: #fff;
   margin-left: auto;
-  margin-top: 12px;
+}
+.chat-content .content .my-chat .text .time {
+  right: auto;
+  left: 0;
+  transform: translateX(calc(-100% - 4px));
 }
 .chat-content .chat-action {
   height: 50px;

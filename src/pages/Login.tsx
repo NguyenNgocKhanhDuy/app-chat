@@ -3,9 +3,17 @@ import {Link, useNavigate} from "react-router-dom";
 import '../assets/css/login.scss'
 import {useEffect} from "react";
 import WebSocketService from "../webSocket/webSocketService";
+import {useDispatch} from "react-redux";
+import {setUser} from "../Store/Action";
+
 
 export default function Login() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const handleSetUser = (data : String) => {
+        dispatch(setUser(data));
+    };
+
     useEffect(() => {
         WebSocketService.connect("ws://140.238.54.136:8080/chat/chat")
         WebSocketService.registerCallback('LOGIN', (data : any) => {
@@ -17,6 +25,9 @@ export default function Login() {
                 errorText.innerText = data;
                 error.style.display = "flex"
             }else {
+                const inputUserName = document.querySelector("#username") as HTMLInputElement;
+                const username = inputUserName.value;
+                handleSetUser(username);
                 navigate('/chat')
             }
         })

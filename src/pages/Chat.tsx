@@ -5,8 +5,12 @@ import {useEffect, useState} from "react";
 import ChatWelcome from "../component/ChatWelcome";
 import ChatContent from "../component/ChatContent";
 import ModalRoom from "../component/ModalRoom";
+
+import {useSelector} from "react-redux";
+
 import webSocketService from "../webSocket/webSocketService";
 import WebSocketService from "../webSocket/webSocketService";
+
 
 interface User {
     name: string;
@@ -39,8 +43,11 @@ export default function Chat() {
         setIsModalRoomOpen(!isModalRoomOpen);
     }
 
+
+    const user = useSelector((state:any) => state.user);
+
     useEffect(() => {
-        // WebSocketService.connect("ws://140.238.54.136:8080/chat/chat")
+        
         const handleGetUserList = () => {
             WebSocketService.sendMessage(
                 {
@@ -58,6 +65,7 @@ export default function Chat() {
                 setUsers(userData);
         })
     }, []);
+
 
 
 
@@ -120,7 +128,7 @@ export default function Chat() {
                     </div>
                 </div>
                 <div className="chat-content">
-                    {isChatOpen ? <ChatContent/> : <ChatWelcome/>}
+                    {isChatOpen ? <ChatContent user={user}/> : <ChatWelcome/>}
                 </div>
             </div>
 
