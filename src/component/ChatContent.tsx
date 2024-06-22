@@ -7,6 +7,8 @@ import WebSocketService from "../webSocket/webSocketService";
 export default function ChatContent(props : any) {
     const chatListRef = useRef<HTMLDivElement>(null);
     const user = props.user.user;
+    const userChatTo = props.userChatTo;
+    console.log("UsẻrCghatTo: "+userChatTo)
 
     useEffect(() => {
         WebSocketService.registerCallback('GET_PEOPLE_CHAT_MES', (data : any) => {
@@ -53,13 +55,13 @@ export default function ChatContent(props : any) {
     }, []);
 
     const handleGetChat = () => {
-        var host = ""
-        if (user == "21130035") {
-            host = "duy035"
-            console.log("host")
-        }else {
-           host = "21130035"
-        }
+        // var host = ""
+        // if (user == "21130035") {
+        //     host = "duy035"
+        //     console.log("host")
+        // }else {
+        //    host = "21130035"
+        // }
 
         WebSocketService.sendMessage(
             {
@@ -67,7 +69,7 @@ export default function ChatContent(props : any) {
                 data: {
                     event: 'GET_PEOPLE_CHAT_MES',
                     data: {
-                        name: host,
+                        name: userChatTo,
                         page:1
                     }
                 }
@@ -80,12 +82,12 @@ export default function ChatContent(props : any) {
 
     const inputMessRef = useRef<HTMLInputElement>(null);
     const handleSendChat = () => {
-        var userChatTo = ""
-        if (user == "21130035") {
-            userChatTo = "duy035"
-        }else {
-            userChatTo = "21130035"
-        }
+        // var userChatTo = ""
+        // if (user == "21130035") {
+        //     userChatTo = "duy035"
+        // }else {
+        //     userChatTo = "21130035"
+        // }
         var mess = ""
         if (inputMessRef.current) {
             mess = inputMessRef.current.value
@@ -116,7 +118,8 @@ export default function ChatContent(props : any) {
                 <div className="info">
                     <img src={avatar}/>
                     <div className="title">
-                        <p className="name">Santosa Yoga Health</p>
+                        {/*<p className="name">Santosa Yoga Health</p>*/}
+                        <p className="name">{userChatTo}</p>
                         <p className="locate">
                             <i className="fa-solid fa-location-dot"></i>
                             San Juan, Puerto Rico
