@@ -72,6 +72,7 @@
     flex-direction: column-reverse;
     @include line(0, 0, 0, 1);
 
+
     .item {
       width: 50%;
       margin: 12px 0;
@@ -103,7 +104,7 @@
 
         .time {
           display: none;
-          width: 100px;
+          width: 30px;
           height: 10px;
           position: absolute;
           top: 0;

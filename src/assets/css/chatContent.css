@@ -99,7 +99,7 @@
 }
 .chat-content .content .item .text .time {
   display: none;
-  width: 100px;
+  width: 30px;
   height: 10px;
   position: absolute;
   top: 0;

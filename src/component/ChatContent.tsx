@@ -3,6 +3,7 @@ import Button from "./Button";
 import {useEffect, useRef, useState} from "react";
 import "../assets/css/chatContent.scss"
 import WebSocketService from "../webSocket/webSocketService";
+import convertTime, {getHourMinute} from "../utils/convertTime";
 
 export default function ChatContent(props : any) {
     const chatListRef = useRef<HTMLDivElement>(null);
@@ -20,12 +21,14 @@ export default function ChatContent(props : any) {
             var htmlItem = ``
 
             for (let i = 0; i < data.length; i++) {
+                var time =  getHourMinute(convertTime(data[i].createAt))
+                // const {hour, minute} = getHourMinute(convertTime(data[i].createAt))
                 if (data[i].to != user){
                     console.log(user)
                     htmlItem += `<div class="item my-chat">
                                     <div class="text">
                                         ${data[i].mes}
-                                        <span class="time">${data[i].createAt}</span>
+                                        <span class="time">${time}</span>
                                     </div>
                                 </div>`
                 }else {
@@ -36,9 +39,14 @@ export default function ChatContent(props : any) {
                                     </div>
                                     <div class="text">
                                         ${data[i].mes}
-                                        <span class="time">${data[i].createAt}</span>
+                                        <span class="time">${time}</span>
                                     </div>
                                 </div>`
+                }
+                if ((i < data.length - 1) && (data[i].createAt.substring(0, 10) != data[i+1].createAt.substring(0, 10))) {
+                    htmlItem += `<span class="date">${data[i].createAt.substring(0, 10)}</span>`
+                }else if (i == data.length - 1) {
+                    htmlItem += `<span class="date">${data[i].createAt.substring(0, 10)}</span>`
                 }
             }
 
@@ -57,6 +65,7 @@ export default function ChatContent(props : any) {
             chatListRef.current.scrollTo({ top: chatListRef.current.scrollHeight });
         }
     }, []);
+
 
     const handleUpdateListUser = (username : string)=>{
         props.onUpdateUser(username);
@@ -127,6 +136,7 @@ export default function ChatContent(props : any) {
                 </div>
             </div>
             <div className="content" ref={chatListRef}>
+
 
             </div>
 
