@@ -1,7 +1,7 @@
 import Button from "./Button";
 import '../assets/css/modalRoom.scss';
 
-export default function ModalRoom(props : any) {
+export default function ModalChat(props : any) {
     const handleCloseModal = () => {
         props.onClose();
     }
@@ -15,7 +15,7 @@ export default function ModalRoom(props : any) {
             <div className="modal-container">
                 <i className="fa-solid fa-xmark close" onClick={handleCloseModal}></i>
                 <h2 className={"title"}>{props.modalText}</h2>
-                <input type="text" placeholder={"Name"}/>
+                <input type="text" placeholder={"Input username"}/>
                 {/*<Button className={"btn"} text={props.btnText}/>*/}
                 <Button className="btn" text={props.btnText} onClick={handleCreateNewRoom} />
             </div>
