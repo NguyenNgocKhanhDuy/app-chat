@@ -10,6 +10,7 @@ import {useSelector} from "react-redux";
 
 import webSocketService from "../webSocket/webSocketService";
 import WebSocketService from "../webSocket/webSocketService";
+import ModalChat from "../component/ModalChat";
 
 
 interface User {
@@ -43,11 +44,24 @@ export default function Chat() {
     const [modalRoomText, setModalRoomText] = useState("");
     const [modalRoomBtnText, setModalRoomBtnText] = useState("");
 
+    const [isModalChatOpen, setIsModalChatOpen] = useState(false);
+    const [modalChatText, setModalChatText] = useState("");
+    const [modalChatBtnText, setModalChatBtnText] = useState("");
+
+
     const handleCreateModalRoom = () => {
         setModalRoomText("Create Room");
         setModalRoomBtnText("Create");
         setIsModalRoomOpen(!isModalRoomOpen);
     }
+
+    const handleCreateModalChat=()=>{
+        setModalChatText("Create New Chat");
+        setModalChatBtnText("Send");
+        setIsModalChatOpen(!isModalChatOpen);
+
+    }
+
 
     const handleJoinModalRoom = () => {
         setModalRoomText("Join Room");
@@ -57,6 +71,9 @@ export default function Chat() {
 
     const handleCloseModal = () => {
         setIsModalRoomOpen(!isModalRoomOpen);
+    }
+    const  handleCloseModalChat=()=>{
+        setIsModalChatOpen(!isModalChatOpen);
     }
 
 
@@ -77,8 +94,8 @@ export default function Chat() {
         }
         handleGetUserList();
         WebSocketService.registerCallback('GET_USER_LIST', (data : any) => {
-                const userData: User[] = data;
-                setUsers(userData);
+            const userData: User[] = data;
+            setUsers(userData);
         })
 
     }, []);
@@ -169,6 +186,7 @@ export default function Chat() {
                     <div className="action">
                         <Button text={"New Room"} className={"chat-room"} onClick={handleCreateModalRoom}/>
                         <Button text={"Join Room"} className={"chat-room"} onClick={handleJoinModalRoom}/>
+                        <Button text={"New Chat"} className={"chat-room"} onClick={handleCreateModalChat}/>
                         <Button text={"Events"} className={"event"}/>
                     </div>
                     <div className="location">
@@ -189,6 +207,7 @@ export default function Chat() {
 
             {isModalRoomOpen ? <ModalRoom onClose={handleCloseModal} modalText={modalRoomText} btnText={modalRoomBtnText}/> : ""}
 
+            {isModalChatOpen ? <ModalChat onClose={handleCloseModalChat} modalText={modalChatText} btnText={modalChatBtnText}/> : ""}
         </div>
     )
 }
