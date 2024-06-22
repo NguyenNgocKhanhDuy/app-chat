@@ -127,15 +127,19 @@
   height: 40px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-end;
 }
 .left .chat-list .item-status .amount {
   color: #fff;
   background: #e75f5f;
   border-radius: 50%;
-  padding: 2px 6px;
-  width: fit-content;
+  width: 10px;
+  height: 10px;
+}
+
+.show {
+  display: block !important;
 }
 
 .rightFull {

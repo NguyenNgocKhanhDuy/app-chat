@@ -27,6 +27,16 @@ export default function Chat() {
     const [users, setUsers] = useState<User[]>([]);
     const toggleChat = (username : string) => {
         setUsername(username)
+        setNewestChat(preList=> {
+            const existingUserIndex = preList.findIndex(user => user.name === username);
+            if (existingUserIndex !== -1) {
+                const updatedUsers = [...preList];
+                const [user] = updatedUsers.splice(existingUserIndex, 1);
+                return updatedUsers;
+            } else {
+                return preList;
+            }
+        });
         setIsChatOpen(true);
     }
 
@@ -84,13 +94,47 @@ export default function Chat() {
         }
         handleGetUserList();
         WebSocketService.registerCallback('GET_USER_LIST', (data : any) => {
-            console.log(`Login response: ${data}`)
             const userData: User[] = data;
             setUsers(userData);
         })
+
     }, []);
 
+    useEffect(() => {
+        WebSocketService.registerCallback('SEND_CHAT', (data: any) => {
+            const userNewChat = data.name;
+            console.log("new chat: "+userNewChat)
+            updateUsersList(userNewChat)
 
+        })
+    }, [users]);
+
+    const [newestChat, setNewestChat] = useState<User[]>([]);
+
+    const updateUsersList = (userNewChat: string) => {
+        setUsers(prevUsers => {
+            const existingUserIndex = prevUsers.findIndex(user => user.name === userNewChat);
+            if (existingUserIndex !== -1) {
+                const updatedUsers = [...prevUsers];
+                const [user] = updatedUsers.splice(existingUserIndex, 1);
+                updatedUsers.unshift(user);
+                return updatedUsers;
+            } else {
+                const newUser = { name: userNewChat, type: 0, actionTime: "", mes: "" };
+                return [newUser, ...prevUsers];
+            }
+        });
+
+        setNewestChat(preList=> {
+            const existingUserIndex = preList.findIndex(user => user.name === userNewChat);
+            if (existingUserIndex == -1) {
+                const newUser = { name: userNewChat, type: 0, actionTime: "", mes: "" };
+                return [...preList, newUser];
+            } else {
+                return preList
+            }
+        });
+    }
 
 
     return(
@@ -123,8 +167,12 @@ export default function Chat() {
                                     </div>
                                 </div>
                                 <div className="item-status">
-                                    <p className="time">Just now</p>
-                                    <p className="amount">1</p>
+                                    {/*<p className="time">Just now</p>*/}
+                                    {newestChat.length > 0 ? (
+                                        newestChat.map((u) => (
+                                            u.name == user.name ? <p className="amount"></p> : ""
+                                        ))
+                                    ) : ""}
                                 </div>
                             </div>
                         ))
@@ -153,7 +201,7 @@ export default function Chat() {
                     </div>
                 </div>
                 <div className="chat-content">
-                    {isChatOpen ? <ChatContent user={userHost} userChatTo={username}/> : <ChatWelcome/>}
+                    {isChatOpen ? <ChatContent onUpdateUser={(usern : string) => updateUsersList(usern)} listUsers={users} user={userHost} userChatTo={username}/> : <ChatWelcome/>}
                 </div>
             </div>
 
