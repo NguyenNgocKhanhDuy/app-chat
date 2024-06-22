@@ -19,9 +19,15 @@ interface User {
     mes: string;
 }
 export default function Chat() {
+
+
     const [isChatOpen, setIsChatOpen] = useState(false);
+    const [username, setUsername] = useState("");
     const [users, setUsers] = useState<User[]>([]);
-    const toggleChat = () => setIsChatOpen(true);
+    const toggleChat = (username : string) => {
+        setUsername(username)
+        setIsChatOpen(true);
+    }
 
     const [isModalRoomOpen, setIsModalRoomOpen] = useState(false);
     const [modalRoomText, setModalRoomText] = useState("");
@@ -44,7 +50,8 @@ export default function Chat() {
     }
 
 
-    const user = useSelector((state:any) => state.user);
+    const userHost = useSelector((state:any) => state.user);
+
 
     useEffect(() => {
         
@@ -87,7 +94,7 @@ export default function Chat() {
                 <div className="chat-list">
                     {users.length > 0 ? (
                         users.map((user) => (
-                            <div className="item" onClick={toggleChat} key={user.name}>
+                            <div className="item" onClick={() => toggleChat(user.name)} key={user.name}>
                                 <div className="item-info">
                                     <img src={avatar} className="item-img" alt="Avatar"/>
                                     <div className="item-content">
@@ -128,7 +135,7 @@ export default function Chat() {
                     </div>
                 </div>
                 <div className="chat-content">
-                    {isChatOpen ? <ChatContent user={user}/> : <ChatWelcome/>}
+                    {isChatOpen ? <ChatContent user={userHost} userChatTo={username}/> : <ChatWelcome/>}
                 </div>
             </div>
 
