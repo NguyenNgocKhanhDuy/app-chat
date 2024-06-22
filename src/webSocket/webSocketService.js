@@ -1,10 +1,9 @@
-const WebSocketService = (() => {
+    const WebSocketService = (() => {
     let socket;
     let callbacks = {};
 
     const connect = (url) => {
         socket = new WebSocket(url);
-
         socket.onopen = () => {
             console.log('WebSocket connected');
         };

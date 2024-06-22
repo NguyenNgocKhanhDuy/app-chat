@@ -1,14 +1,22 @@
 import '../assets/css/chat.scss'
 import avatar from  '../assets/img/avatar.png';
 import Button from "../component/Button";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import ChatWelcome from "../component/ChatWelcome";
 import ChatContent from "../component/ChatContent";
 import ModalRoom from "../component/ModalRoom";
+import webSocketService from "../webSocket/webSocketService";
+import WebSocketService from "../webSocket/webSocketService";
 
+interface User {
+    name: string;
+    type: number;
+    actionTime: string;
+    mes: string;
+}
 export default function Chat() {
     const [isChatOpen, setIsChatOpen] = useState(false);
-
+    const [users, setUsers] = useState<User[]>([]);
     const toggleChat = () => setIsChatOpen(true);
 
     const [isModalRoomOpen, setIsModalRoomOpen] = useState(false);
@@ -31,6 +39,28 @@ export default function Chat() {
         setIsModalRoomOpen(!isModalRoomOpen);
     }
 
+    useEffect(() => {
+        // WebSocketService.connect("ws://140.238.54.136:8080/chat/chat")
+        const handleGetUserList = () => {
+            WebSocketService.sendMessage(
+                {
+                    "action": "onchat",
+                    "data": {
+                        "event": "GET_USER_LIST"
+                    }
+                }
+            )
+        }
+        handleGetUserList();
+        WebSocketService.registerCallback('GET_USER_LIST', (data : any) => {
+            console.log(`Login response: ${data}`)
+                const userData: User[] = data;
+                setUsers(userData);
+        })
+    }, []);
+
+
+
     return(
         <div className={"chat"}>
             <div className="left">
@@ -47,134 +77,28 @@ export default function Chat() {
                     <i className="fa-solid fa-magnifying-glass"></i>
                 </div>
                 <div className="chat-list">
-                    <div className="item" onClick={toggleChat}>
-                        <div className="item-info">
-                            <img src={avatar} className="item-img"/>
-                            <div className="item-content">
-                                <div className="title">
-                                    <p className="name">Welcome to Picnic</p>
-                                    <i className="fa-regular fa-comment-dots"></i>
+                    {users.length > 0 ? (
+                        users.map((user) => (
+                            <div className="item" onClick={toggleChat} key={user.name}>
+                                <div className="item-info">
+                                    <img src={avatar} className="item-img" alt="Avatar"/>
+                                    <div className="item-content">
+                                        <div className="title">
+                                            <p className="name">{user.name}</p>
+                                            <i className="fa-regular fa-comment-dots"></i>
+                                        </div>
+                                        <p className="desc">{user.mes}</p>
+                                    </div>
                                 </div>
-                                <p className="desc">I want to ask about the group chat</p>
-                            </div>
-                        </div>
-                        <div className="item-status">
-                            <p className="time">Just now</p>
-                            <p className="amount">1</p>
-                        </div>
-                    </div>
-                    <div className="item" onClick={toggleChat}>
-                        <div className="item-info">
-                            <img src={avatar} className="item-img"/>
-                            <div className="item-content">
-                                <div className="title">
-                                    <p className="name">Welcome to Picnic</p>
-                                    <i className="fa-regular fa-comment-dots"></i>
+                                <div className="item-status">
+                                    <p className="time">Just now</p>
+                                    <p className="amount">1</p>
                                 </div>
-                                <p className="desc">I want to ask about the group chat</p>
                             </div>
-                        </div>
-                        <div className="item-status">
-                            <p className="time">Just now</p>
-                            <p className="amount">1</p>
-                        </div>
-                    </div>
-                    <div className="item" onClick={toggleChat}>
-                        <div className="item-info">
-                            <img src={avatar} className="item-img"/>
-                            <div className="item-content">
-                                <div className="title">
-                                    <p className="name">Welcome to Picnic</p>
-                                    <i className="fa-regular fa-comment-dots"></i>
-                                </div>
-                                <p className="desc">I want to ask about the group chat</p>
-                            </div>
-                        </div>
-                        <div className="item-status">
-                            <p className="time">Just now</p>
-                            <p className="amount">1</p>
-                        </div>
-                    </div>
-                    <div className="item" onClick={toggleChat}>
-                        <div className="item-info">
-                            <img src={avatar} className="item-img"/>
-                            <div className="item-content">
-                                <div className="title">
-                                    <p className="name">Welcome to Picnic</p>
-                                    <i className="fa-regular fa-comment-dots"></i>
-                                </div>
-                                <p className="desc">I want to ask about the group chat</p>
-                            </div>
-                        </div>
-                        <div className="item-status">
-                            <p className="time">Just now</p>
-                            <p className="amount">1</p>
-                        </div>
-                    </div>
-                    <div className="item" onClick={toggleChat}>
-                        <div className="item-info">
-                            <img src={avatar} className="item-img"/>
-                            <div className="item-content">
-                                <div className="title">
-                                    <p className="name">Welcome to Picnic</p>
-                                    <i className="fa-regular fa-comment-dots"></i>
-                                </div>
-                                <p className="desc">I want to ask about the group chat</p>
-                            </div>
-                        </div>
-                        <div className="item-status">
-                            <p className="time">Just now</p>
-                            <p className="amount">1</p>
-                        </div>
-                    </div>
-                    <div className="item" onClick={toggleChat}>
-                        <div className="item-info">
-                            <img src={avatar} className="item-img"/>
-                            <div className="item-content">
-                                <div className="title">
-                                    <p className="name">Welcome to Picnic</p>
-                                    <i className="fa-regular fa-comment-dots"></i>
-                                </div>
-                                <p className="desc">I want to ask about the group chat</p>
-                            </div>
-                        </div>
-                        <div className="item-status">
-                            <p className="time">Just now</p>
-                            <p className="amount">1</p>
-                        </div>
-                    </div>
-                    <div className="item" onClick={toggleChat}>
-                        <div className="item-info">
-                            <img src={avatar} className="item-img"/>
-                            <div className="item-content">
-                                <div className="title">
-                                    <p className="name">Welcome to Picnic</p>
-                                    <i className="fa-regular fa-comment-dots"></i>
-                                </div>
-                                <p className="desc">I want to ask about the group chat</p>
-                            </div>
-                        </div>
-                        <div className="item-status">
-                            <p className="time">Just now</p>
-                            <p className="amount">1</p>
-                        </div>
-                    </div>
-                    <div className="item" onClick={toggleChat}>
-                        <div className="item-info">
-                            <img src={avatar} className="item-img"/>
-                            <div className="item-content">
-                                <div className="title">
-                                    <p className="name">Welcome to Picnic</p>
-                                    <i className="fa-regular fa-comment-dots"></i>
-                                </div>
-                                <p className="desc">I want to ask about the group chat</p>
-                            </div>
-                        </div>
-                        <div className="item-status">
-                            <p className="time">Just now</p>
-                            <p className="amount">1</p>
-                        </div>
-                    </div>
+                        ))
+                    ) : (
+                        <p>No users available</p>
+                    )}
                 </div>
             </div>
             <div className={`right ${isChatOpen ? "rightCalc" : "rightFull"}`}>
