@@ -30,6 +30,25 @@
   border-right: 1px solid #e9ecef;
   border-bottom: 1px solid #e9ecef;
   border-left: 1px solid #e9ecef;
+  /*textarea[type='text_message'] {
+    width: 100%;
+    height: 60px;
+    font-size: 16px;
+    color: $green;
+    margin: 24px 0;
+    background-color: $input;
+    padding: 12px;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    resize: none;
+    white-space: pre-wrap;
+    @include line(1, 1, 1, 1);
+
+    &::placeholder {
+      color: $inputText;
+    }
+  }*/
 }
 .modal-container .close {
   position: absolute;
@@ -63,6 +82,28 @@
   border-left: 1px solid #e9ecef;
 }
 .modal-container input[type=text]::placeholder {
+  color: #b3bac5;
+}
+.modal-container textarea.text_message {
+  width: 100%;
+  height: 60px;
+  font-size: 16px;
+  color: #38c585;
+  margin: 24px 0;
+  background-color: #f8f9fa;
+  padding: 12px;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  resize: none;
+  white-space: pre-wrap;
+  overflow: hidden;
+  border-top: 1px solid #e9ecef;
+  border-right: 1px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
+  border-left: 1px solid #e9ecef;
+}
+.modal-container textarea.text_message::placeholder {
   color: #b3bac5;
 }
 .modal-container .btn {

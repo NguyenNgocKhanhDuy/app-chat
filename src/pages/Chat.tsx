@@ -1,26 +1,57 @@
 import '../assets/css/chat.scss'
 import avatar from  '../assets/img/avatar.png';
 import Button from "../component/Button";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import ChatWelcome from "../component/ChatWelcome";
 import ChatContent from "../component/ChatContent";
 import ModalRoom from "../component/ModalRoom";
-import NewChat from "../component/NewChat";
 
+import {useSelector} from "react-redux";
+
+import webSocketService from "../webSocket/webSocketService";
+import WebSocketService from "../webSocket/webSocketService";
+import ModalChat from "../component/ModalChat";
+
+
+interface User {
+    name: string;
+    type: number;
+    actionTime: string;
+    mes: string;
+}
 export default function Chat() {
-    const [isChatOpen, setIsChatOpen] = useState(false);
 
-    const toggleChat = () => setIsChatOpen(true);
+
+    const [isChatOpen, setIsChatOpen] = useState(false);
+    const [username, setUsername] = useState("");
+    const [users, setUsers] = useState<User[]>([]);
+    const toggleChat = (username : string) => {
+        setUsername(username)
+        setIsChatOpen(true);
+    }
 
     const [isModalRoomOpen, setIsModalRoomOpen] = useState(false);
     const [modalRoomText, setModalRoomText] = useState("");
     const [modalRoomBtnText, setModalRoomBtnText] = useState("");
-    const [isNewChatOpen, setIsNewChatOpen] = useState(false);
+
+    const [isModalChatOpen, setIsModalChatOpen] = useState(false);
+    const [modalChatText, setModalChatText] = useState("");
+    const [modalChatBtnText, setModalChatBtnText] = useState("");
+
+
     const handleCreateModalRoom = () => {
         setModalRoomText("Create Room");
         setModalRoomBtnText("Create");
         setIsModalRoomOpen(!isModalRoomOpen);
     }
+
+    const handleCreateModalChat=()=>{
+        setModalChatText("Create New Chat");
+        setModalChatBtnText("Send");
+        setIsModalChatOpen(!isModalChatOpen);
+
+    }
+
 
     const handleJoinModalRoom = () => {
         setModalRoomText("Join Room");
@@ -31,11 +62,37 @@ export default function Chat() {
     const handleCloseModal = () => {
         setIsModalRoomOpen(!isModalRoomOpen);
     }
+    const  handleCloseModalChat=()=>{
+        setIsModalChatOpen(!isModalChatOpen);
+    }
 
-    const handleCreateNewChat = () => {
-        setIsModalRoomOpen(false);
-        setIsNewChatOpen(true);
-    };
+
+    const userHost = useSelector((state:any) => state.user);
+
+
+    useEffect(() => {
+
+        const handleGetUserList = () => {
+            WebSocketService.sendMessage(
+                {
+                    "action": "onchat",
+                    "data": {
+                        "event": "GET_USER_LIST"
+                    }
+                }
+            )
+        }
+        handleGetUserList();
+        WebSocketService.registerCallback('GET_USER_LIST', (data : any) => {
+            console.log(`Login response: ${data}`)
+            const userData: User[] = data;
+            setUsers(userData);
+        })
+    }, []);
+
+
+
+
     return(
         <div className={"chat"}>
             <div className="left">
@@ -52,134 +109,28 @@ export default function Chat() {
                     <i className="fa-solid fa-magnifying-glass"></i>
                 </div>
                 <div className="chat-list">
-                    <div className="item" onClick={toggleChat}>
-                        <div className="item-info">
-                            <img src={avatar} className="item-img"/>
-                            <div className="item-content">
-                                <div className="title">
-                                    <p className="name">Welcome to Picnic</p>
-                                    <i className="fa-regular fa-comment-dots"></i>
+                    {users.length > 0 ? (
+                        users.map((user) => (
+                            <div className="item" onClick={() => toggleChat(user.name)} key={user.name}>
+                                <div className="item-info">
+                                    <img src={avatar} className="item-img" alt="Avatar"/>
+                                    <div className="item-content">
+                                        <div className="title">
+                                            <p className="name">{user.name}</p>
+                                            <i className="fa-regular fa-comment-dots"></i>
+                                        </div>
+                                        <p className="desc">{user.mes}</p>
+                                    </div>
                                 </div>
-                                <p className="desc">I want to ask about the group chat</p>
-                            </div>
-                        </div>
-                        <div className="item-status">
-                            <p className="time">Just now</p>
-                            <p className="amount">1</p>
-                        </div>
-                    </div>
-                    <div className="item" onClick={toggleChat}>
-                        <div className="item-info">
-                            <img src={avatar} className="item-img"/>
-                            <div className="item-content">
-                                <div className="title">
-                                    <p className="name">Welcome to Picnic</p>
-                                    <i className="fa-regular fa-comment-dots"></i>
+                                <div className="item-status">
+                                    <p className="time">Just now</p>
+                                    <p className="amount">1</p>
                                 </div>
-                                <p className="desc">I want to ask about the group chat</p>
                             </div>
-                        </div>
-                        <div className="item-status">
-                            <p className="time">Just now</p>
-                            <p className="amount">1</p>
-                        </div>
-                    </div>
-                    <div className="item" onClick={toggleChat}>
-                        <div className="item-info">
-                            <img src={avatar} className="item-img"/>
-                            <div className="item-content">
-                                <div className="title">
-                                    <p className="name">Welcome to Picnic</p>
-                                    <i className="fa-regular fa-comment-dots"></i>
-                                </div>
-                                <p className="desc">I want to ask about the group chat</p>
-                            </div>
-                        </div>
-                        <div className="item-status">
-                            <p className="time">Just now</p>
-                            <p className="amount">1</p>
-                        </div>
-                    </div>
-                    <div className="item" onClick={toggleChat}>
-                        <div className="item-info">
-                            <img src={avatar} className="item-img"/>
-                            <div className="item-content">
-                                <div className="title">
-                                    <p className="name">Welcome to Picnic</p>
-                                    <i className="fa-regular fa-comment-dots"></i>
-                                </div>
-                                <p className="desc">I want to ask about the group chat</p>
-                            </div>
-                        </div>
-                        <div className="item-status">
-                            <p className="time">Just now</p>
-                            <p className="amount">1</p>
-                        </div>
-                    </div>
-                    <div className="item" onClick={toggleChat}>
-                        <div className="item-info">
-                            <img src={avatar} className="item-img"/>
-                            <div className="item-content">
-                                <div className="title">
-                                    <p className="name">Welcome to Picnic</p>
-                                    <i className="fa-regular fa-comment-dots"></i>
-                                </div>
-                                <p className="desc">I want to ask about the group chat</p>
-                            </div>
-                        </div>
-                        <div className="item-status">
-                            <p className="time">Just now</p>
-                            <p className="amount">1</p>
-                        </div>
-                    </div>
-                    <div className="item" onClick={toggleChat}>
-                        <div className="item-info">
-                            <img src={avatar} className="item-img"/>
-                            <div className="item-content">
-                                <div className="title">
-                                    <p className="name">Welcome to Picnic</p>
-                                    <i className="fa-regular fa-comment-dots"></i>
-                                </div>
-                                <p className="desc">I want to ask about the group chat</p>
-                            </div>
-                        </div>
-                        <div className="item-status">
-                            <p className="time">Just now</p>
-                            <p className="amount">1</p>
-                        </div>
-                    </div>
-                    <div className="item" onClick={toggleChat}>
-                        <div className="item-info">
-                            <img src={avatar} className="item-img"/>
-                            <div className="item-content">
-                                <div className="title">
-                                    <p className="name">Welcome to Picnic</p>
-                                    <i className="fa-regular fa-comment-dots"></i>
-                                </div>
-                                <p className="desc">I want to ask about the group chat</p>
-                            </div>
-                        </div>
-                        <div className="item-status">
-                            <p className="time">Just now</p>
-                            <p className="amount">1</p>
-                        </div>
-                    </div>
-                    <div className="item" onClick={toggleChat}>
-                        <div className="item-info">
-                            <img src={avatar} className="item-img"/>
-                            <div className="item-content">
-                                <div className="title">
-                                    <p className="name">Welcome to Picnic</p>
-                                    <i className="fa-regular fa-comment-dots"></i>
-                                </div>
-                                <p className="desc">I want to ask about the group chat</p>
-                            </div>
-                        </div>
-                        <div className="item-status">
-                            <p className="time">Just now</p>
-                            <p className="amount">1</p>
-                        </div>
-                    </div>
+                        ))
+                    ) : (
+                        <p>No users available</p>
+                    )}
                 </div>
             </div>
             <div className={`right ${isChatOpen ? "rightCalc" : "rightFull"}`}>
@@ -187,8 +138,7 @@ export default function Chat() {
                     <div className="action">
                         <Button text={"New Room"} className={"chat-room"} onClick={handleCreateModalRoom}/>
                         <Button text={"Join Room"} className={"chat-room"} onClick={handleJoinModalRoom}/>
-                        <Button text={"New Chat"} className={"chat-room"} onClick={handleCreateModalRoom}/>
-
+                        <Button text={"New Chat"} className={"chat-room"} onClick={handleCreateModalChat}/>
                         <Button text={"Events"} className={"event"}/>
                     </div>
                     <div className="location">
@@ -203,14 +153,13 @@ export default function Chat() {
                     </div>
                 </div>
                 <div className="chat-content">
-                    {/*{isChatOpen ? <ChatContent/> : <ChatWelcome/>}*/}
-                    {isNewChatOpen ? <NewChat/> : (isChatOpen ? <ChatContent /> : <ChatWelcome />)}
+                    {isChatOpen ? <ChatContent user={userHost} userChatTo={username}/> : <ChatWelcome/>}
                 </div>
             </div>
 
-            {isModalRoomOpen ? <ModalRoom onClose={handleCloseModal} modalText={modalRoomText} btnText={modalRoomBtnText}
-                                          onConfirm={handleCreateNewChat} /> : ""}
+            {isModalRoomOpen ? <ModalRoom onClose={handleCloseModal} modalText={modalRoomText} btnText={modalRoomBtnText}/> : ""}
 
+            {isModalChatOpen ? <ModalChat onClose={handleCloseModalChat} modalText={modalChatText} btnText={modalChatBtnText}/> : ""}
         </div>
     )
 }
