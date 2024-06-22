@@ -1,6 +1,6 @@
 import avatar from "../assets/img/avatar.png";
 import Button from "./Button";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import "../assets/css/chatContent.scss"
 import WebSocketService from "../webSocket/webSocketService";
 
@@ -8,11 +8,14 @@ export default function ChatContent(props : any) {
     const chatListRef = useRef<HTMLDivElement>(null);
     const user = props.user.user;
     const userChatTo = props.userChatTo;
-    console.log("UsẻrCghatTo: "+userChatTo)
+    // const listUsers = props.listUsers;
+    // console.log("UsẻrCghatTo: "+userChatTo)
+    // const [usersList, setUsersList] = useState(props.listUsers);
+    // console.log(listUsers)
 
     useEffect(() => {
         WebSocketService.registerCallback('GET_PEOPLE_CHAT_MES', (data : any) => {
-            console.log(data)
+            // console.log(data)
 
             var htmlItem = ``
 
@@ -46,6 +49,7 @@ export default function ChatContent(props : any) {
 
         WebSocketService.registerCallback('SEND_CHAT', (data: any) => {
             handleGetChat()
+            handleUpdateListUser(data.name)
         })
 
 
@@ -54,15 +58,11 @@ export default function ChatContent(props : any) {
         }
     }, []);
 
-    const handleGetChat = () => {
-        // var host = ""
-        // if (user == "21130035") {
-        //     host = "duy035"
-        //     console.log("host")
-        // }else {
-        //    host = "21130035"
-        // }
+    const handleUpdateListUser = (username : string)=>{
+        props.onUpdateUser(username);
+    }
 
+    const handleGetChat = () => {
         WebSocketService.sendMessage(
             {
                 action: 'onchat',
@@ -82,12 +82,6 @@ export default function ChatContent(props : any) {
 
     const inputMessRef = useRef<HTMLInputElement>(null);
     const handleSendChat = () => {
-        // var userChatTo = ""
-        // if (user == "21130035") {
-        //     userChatTo = "duy035"
-        // }else {
-        //     userChatTo = "21130035"
-        // }
         var mess = ""
         if (inputMessRef.current) {
             mess = inputMessRef.current.value
