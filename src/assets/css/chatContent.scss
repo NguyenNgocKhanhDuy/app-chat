@@ -5,13 +5,19 @@
 //}
 
 .chat-content {
+  //display: flex;
+  //flex-direction: column;
   height: 100%;
 
   .wrapper {
-    height: 100%;
+    display: flex;
+    flex-direction: column;
+    //height: 100%;
+    height: calc(100% + 100px);
   }
 
   .header {
+    //flex-shrink: 0;
     padding: 0 16px;
     display: flex;
     align-items: center;
@@ -64,8 +70,9 @@
 
 
   .content {
+    //flex: 1;
     padding: 16px;
-    height: 100%;
+    height: calc(100% - 100px);
     overflow-y: auto;
     background-color: $noneBg;
     display: flex;
@@ -148,7 +155,8 @@
 
 
   .chat-action {
-    height: 50px;
+    max-height: 100px;
+    //height: 50px;
     padding: 16px;
     position: absolute;
     bottom: 0;
@@ -162,7 +170,8 @@
 
     .holder {
       width: calc(100% - 80px);
-      height: 50px;
+      max-height: 100px;
+      height: auto;
       padding: 0 16px;
       border-radius: 4px;
       display: flex;
@@ -171,13 +180,15 @@
       gap: 16px;
       background-color: $input;
 
-      input[type="text"] {
+      .input-mess {
+        resize: none;
         width: 100%;
-        height: 100%;
         border: none;
         outline: none;
         background-color: transparent;
         font-size: 16px;
+        overflow-y: auto;
+        max-height: 100px;
 
         &::placeholder {
           color: $inputText;

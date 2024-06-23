@@ -149,8 +149,21 @@ export default function ChatContent(props : any) {
         }
     }
 
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const wrapperRef = useRef<HTMLDivElement>(null);
+
+    const handleInput = () => {
+        const textarea = textareaRef.current;
+        if (textarea && wrapperRef.current) {
+            textarea.style.height = 'auto';
+            const newHeight = Math.min(textarea.scrollHeight, 100);
+            textarea.style.height = `${newHeight}px`;
+            wrapperRef.current.style.height = "calc(100% + 50px)"
+        }
+    };
+
     return (
-        <div className="wrapper">
+        <div className="wrapper" ref={wrapperRef}>
             <div className="header">
                 <div className="info">
                     <img src={avatar}/>
@@ -175,7 +188,8 @@ export default function ChatContent(props : any) {
 
             <div className="chat-action">
                 <div className="holder">
-                    <input type="text" placeholder={"Type here"} ref={inputMessRef} onClick={handleSeenInputClick}/>
+                    <textarea ref={textareaRef} onInput={handleInput} className={"input-mess"} onClick={handleSeenInputClick} placeholder={"Type here"}></textarea>
+                    {/*<input type="text" placeholder={"Type here"} ref={inputMessRef} onClick={handleSeenInputClick}/>*/}
                     <i className="fa-solid fa-paperclip"></i>
                 </div>
                 <Button text={"Send"} className={"send"} onClick={handleSendChat}/>
