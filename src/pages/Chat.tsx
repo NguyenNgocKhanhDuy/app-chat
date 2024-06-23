@@ -85,18 +85,19 @@ export default function Chat() {
 
     const userHost = useSelector((state:any) => state.user)
 
+    const handleGetUserList = () => {
+        WebSocketService.sendMessage(
+            {
+                "action": "onchat",
+                "data": {
+                    "event": "GET_USER_LIST"
+                }
+            }
+        )
+    }
     useEffect(() => {
 
-        const handleGetUserList = () => {
-            WebSocketService.sendMessage(
-                {
-                    "action": "onchat",
-                    "data": {
-                        "event": "GET_USER_LIST"
-                    }
-                }
-            )
-        }
+
         handleGetUserList();
         WebSocketService.registerCallback('GET_USER_LIST', (data : any) => {
             const userData: User[] = data;
@@ -150,6 +151,11 @@ export default function Chat() {
         });
     }
 
+    const handleGetNewChat = (username:string) => {
+        setUsername(username)
+        setIsChatOpen(true)
+    }
+
     return(
         <div className={"chat"}>
             <div className="left">
@@ -168,7 +174,7 @@ export default function Chat() {
                 <div className="chat-list">
                     {users.length > 0 ? (
                         users.map((user) => (
-                            <div className="item" onClick={() => toggleChat(user.name)} key={user.name}>
+                            <div className={`item ${user.name == username ? "isUserSelect" : ""}`} onClick={() => toggleChat(user.name)} key={user.name}>
                                 <div className="item-info">
                                     <img src={avatar} className="item-img" alt="Avatar"/>
                                     <div className="item-content">
@@ -220,7 +226,7 @@ export default function Chat() {
 
             {isModalRoomOpen ? <ModalRoom onClose={handleCloseModal} modalText={modalRoomText} btnText={modalRoomBtnText}/> : ""}
 
-            {isModalChatOpen ? <ModalChat onClose={handleCloseModalChat} modalText={modalChatText} btnText={modalChatBtnText}/> : ""}
+            {isModalChatOpen ? <ModalChat onHandleGetChat={(user:string)=>handleGetNewChat(user)} user={userHost} onUpdateListUser={handleGetUserList} onUpdateUser={(usern : string) => updateUsersList(usern)} onClose={handleCloseModalChat} modalText={modalChatText} btnText={modalChatBtnText}/> : ""}
         </div>
     )
 }
