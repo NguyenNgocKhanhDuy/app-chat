@@ -8,9 +8,9 @@ import ModalRoom from "../component/ModalRoom";
 
 import {useSelector} from "react-redux";
 
-import webSocketService from "../webSocket/webSocketService";
 import WebSocketService from "../webSocket/webSocketService";
 import ModalChat from "../component/ModalChat";
+import {removeChat} from "../Store/LocalStorage";
 
 
 interface User {
@@ -21,12 +21,15 @@ interface User {
 }
 export default function Chat() {
 
-
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [username, setUsername] = useState("");
     const [users, setUsers] = useState<User[]>([]);
     const toggleChat = (username : string) => {
+
         setUsername(username)
+
+        removeChat(username, userHost)
+
         setNewestChat(preList=> {
             const existingUserIndex = preList.findIndex(user => user.name === username);
             if (existingUserIndex !== -1) {
@@ -38,6 +41,7 @@ export default function Chat() {
             }
         });
         setIsChatOpen(true);
+
     }
 
     const [isModalRoomOpen, setIsModalRoomOpen] = useState(false);
@@ -47,6 +51,8 @@ export default function Chat() {
     const [isModalChatOpen, setIsModalChatOpen] = useState(false);
     const [modalChatText, setModalChatText] = useState("");
     const [modalChatBtnText, setModalChatBtnText] = useState("");
+
+    const [newestChat, setNewestChat] = useState<User[]>([]);
 
 
     const handleCreateModalRoom = () => {
@@ -77,21 +83,21 @@ export default function Chat() {
     }
 
 
-    const userHost = useSelector((state:any) => state.user);
+    const userHost = useSelector((state:any) => state.user)
 
-
+    const handleGetUserList = () => {
+        WebSocketService.sendMessage(
+            {
+                "action": "onchat",
+                "data": {
+                    "event": "GET_USER_LIST"
+                }
+            }
+        )
+    }
     useEffect(() => {
 
-        const handleGetUserList = () => {
-            WebSocketService.sendMessage(
-                {
-                    "action": "onchat",
-                    "data": {
-                        "event": "GET_USER_LIST"
-                    }
-                }
-            )
-        }
+
         handleGetUserList();
         WebSocketService.registerCallback('GET_USER_LIST', (data : any) => {
             const userData: User[] = data;
@@ -99,17 +105,14 @@ export default function Chat() {
         })
 
     }, []);
-
     useEffect(() => {
         WebSocketService.registerCallback('SEND_CHAT', (data: any) => {
             const userNewChat = data.name;
-            console.log("new chat: "+userNewChat)
             updateUsersList(userNewChat)
-
         })
-    }, [users]);
+    }, [users, newestChat]);
 
-    const [newestChat, setNewestChat] = useState<User[]>([]);
+
 
     const updateUsersList = (userNewChat: string) => {
         setUsers(prevUsers => {
@@ -134,8 +137,24 @@ export default function Chat() {
                 return preList
             }
         });
+    };
+
+    const removeFromNewest = (username:string) => {
+        setNewestChat(preList=> {
+            const existingUserIndex = preList.findIndex(user => user.name === username);
+            if (existingUserIndex != -1) {
+                const [newChat] = newestChat.splice(existingUserIndex, 1);
+                return [...preList, newChat];
+            } else {
+                return preList
+            }
+        });
     }
 
+    const handleGetNewChat = (username:string) => {
+        setUsername(username)
+        setIsChatOpen(true)
+    }
 
     return(
         <div className={"chat"}>
@@ -155,7 +174,7 @@ export default function Chat() {
                 <div className="chat-list">
                     {users.length > 0 ? (
                         users.map((user) => (
-                            <div className="item" onClick={() => toggleChat(user.name)} key={user.name}>
+                            <div className={`item ${user.name == username ? "isUserSelect" : ""}`} onClick={() => toggleChat(user.name)} key={user.name}>
                                 <div className="item-info">
                                     <img src={avatar} className="item-img" alt="Avatar"/>
                                     <div className="item-content">
@@ -201,13 +220,13 @@ export default function Chat() {
                     </div>
                 </div>
                 <div className="chat-content">
-                    {isChatOpen ? <ChatContent onUpdateUser={(usern : string) => updateUsersList(usern)} listUsers={users} user={userHost} userChatTo={username}/> : <ChatWelcome/>}
+                    {isChatOpen ? <ChatContent onRemoveFromNewestChat={(usrn:string)=>removeFromNewest(usrn)} newestChat={newestChat} onUpdateUser={(usern : string) => updateUsersList(usern)} listUsers={users} user={userHost} userChatTo={username}/> : <ChatWelcome/>}
                 </div>
             </div>
 
             {isModalRoomOpen ? <ModalRoom onClose={handleCloseModal} modalText={modalRoomText} btnText={modalRoomBtnText}/> : ""}
 
-            {isModalChatOpen ? <ModalChat onClose={handleCloseModalChat} modalText={modalChatText} btnText={modalChatBtnText}/> : ""}
+            {isModalChatOpen ? <ModalChat onHandleGetChat={(user:string)=>handleGetNewChat(user)} user={userHost} onUpdateListUser={handleGetUserList} onUpdateUser={(usern : string) => updateUsersList(usern)} onClose={handleCloseModalChat} modalText={modalChatText} btnText={modalChatBtnText}/> : ""}
         </div>
     )
 }

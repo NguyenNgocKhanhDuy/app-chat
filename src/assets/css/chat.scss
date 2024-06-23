@@ -76,6 +76,10 @@
     }
   }
 
+  .isUserSelect {
+    background-color: #f0f0f0;
+  }
+
   .chat-list {
     @include line(1, 0, 0, 0);
     height: 100%;

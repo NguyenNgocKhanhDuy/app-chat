@@ -2,17 +2,21 @@ import Button from "./Button";
 import '../assets/css/modalRoom.scss';
 import {useEffect, useRef} from "react";
 import WebSocketService from "../webSocket/webSocketService";
-import avatar from "../assets/img/avatar.png";
+import {saveChat} from "../Store/LocalStorage";
 
 export default function ModalChat(props : any) {
     const  inputMessRef = useRef<HTMLTextAreaElement>(null);
     const  inputNameRef = useRef<HTMLInputElement>(null);
-
+    const user = props.user;
 
     useEffect(() => {
 
         WebSocketService.registerCallback('SEND_CHAT', (data: any) => {
-
+            if (data.status == 'error'){
+                console.log('error')
+            }else {
+                props.onUpdateUser()
+            }
         })
 
     }, []);
@@ -35,13 +39,21 @@ export default function ModalChat(props : any) {
                     }
                 }
             )
+            saveChat(user, name)
+            props.onUpdateListUser()
+            handleGetNewChat(name)
         }
+
             // inputMessRef.current.value = ""
         // handleGetChat()
         else {
             console.log("Input null")
         }
         handleCloseModal();
+    }
+
+    const handleGetNewChat = (user:string) => {
+        props.onHandleGetChat(user)
     }
 
     const handleCloseModal = () => {

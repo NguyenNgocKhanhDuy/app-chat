@@ -99,7 +99,7 @@
 }
 .chat-content .content .item .text .time {
   display: none;
-  width: 100px;
+  width: 30px;
   height: 10px;
   position: absolute;
   top: 0;
@@ -126,6 +126,10 @@
   right: auto;
   left: 0;
   transform: translateX(calc(-100% - 4px));
+}
+.chat-content .content .status {
+  margin-left: auto;
+  margin-bottom: 6px;
 }
 .chat-content .chat-action {
   height: 50px;
