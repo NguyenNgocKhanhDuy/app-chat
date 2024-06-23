@@ -127,6 +127,10 @@
   left: 0;
   transform: translateX(calc(-100% - 4px));
 }
+.chat-content .content .status {
+  margin-left: auto;
+  margin-bottom: 6px;
+}
 .chat-content .chat-action {
   height: 50px;
   padding: 16px;

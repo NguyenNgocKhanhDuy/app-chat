@@ -8,9 +8,9 @@ import ModalRoom from "../component/ModalRoom";
 
 import {useSelector} from "react-redux";
 
-import webSocketService from "../webSocket/webSocketService";
 import WebSocketService from "../webSocket/webSocketService";
 import ModalChat from "../component/ModalChat";
+import {removeChat} from "../Store/LocalStorage";
 
 
 interface User {
@@ -21,12 +21,15 @@ interface User {
 }
 export default function Chat() {
 
-
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [username, setUsername] = useState("");
     const [users, setUsers] = useState<User[]>([]);
     const toggleChat = (username : string) => {
+
         setUsername(username)
+
+        removeChat(username, userHost)
+
         setNewestChat(preList=> {
             const existingUserIndex = preList.findIndex(user => user.name === username);
             if (existingUserIndex !== -1) {
@@ -38,6 +41,7 @@ export default function Chat() {
             }
         });
         setIsChatOpen(true);
+
     }
 
     const [isModalRoomOpen, setIsModalRoomOpen] = useState(false);
@@ -47,6 +51,8 @@ export default function Chat() {
     const [isModalChatOpen, setIsModalChatOpen] = useState(false);
     const [modalChatText, setModalChatText] = useState("");
     const [modalChatBtnText, setModalChatBtnText] = useState("");
+
+    const [newestChat, setNewestChat] = useState<User[]>([]);
 
 
     const handleCreateModalRoom = () => {
@@ -77,8 +83,7 @@ export default function Chat() {
     }
 
 
-    const userHost = useSelector((state:any) => state.user);
-
+    const userHost = useSelector((state:any) => state.user)
 
     useEffect(() => {
 
@@ -99,17 +104,14 @@ export default function Chat() {
         })
 
     }, []);
-
     useEffect(() => {
         WebSocketService.registerCallback('SEND_CHAT', (data: any) => {
             const userNewChat = data.name;
-            console.log("new chat: "+userNewChat)
             updateUsersList(userNewChat)
-
         })
-    }, [users]);
+    }, [users, newestChat]);
 
-    const [newestChat, setNewestChat] = useState<User[]>([]);
+
 
     const updateUsersList = (userNewChat: string) => {
         setUsers(prevUsers => {
@@ -134,8 +136,19 @@ export default function Chat() {
                 return preList
             }
         });
-    }
+    };
 
+    const removeFromNewest = (username:string) => {
+        setNewestChat(preList=> {
+            const existingUserIndex = preList.findIndex(user => user.name === username);
+            if (existingUserIndex != -1) {
+                const [newChat] = newestChat.splice(existingUserIndex, 1);
+                return [...preList, newChat];
+            } else {
+                return preList
+            }
+        });
+    }
 
     return(
         <div className={"chat"}>
@@ -201,7 +214,7 @@ export default function Chat() {
                     </div>
                 </div>
                 <div className="chat-content">
-                    {isChatOpen ? <ChatContent onUpdateUser={(usern : string) => updateUsersList(usern)} listUsers={users} user={userHost} userChatTo={username}/> : <ChatWelcome/>}
+                    {isChatOpen ? <ChatContent onRemoveFromNewestChat={(usrn:string)=>removeFromNewest(usrn)} newestChat={newestChat} onUpdateUser={(usern : string) => updateUsersList(usern)} listUsers={users} user={userHost} userChatTo={username}/> : <ChatWelcome/>}
                 </div>
             </div>
 
