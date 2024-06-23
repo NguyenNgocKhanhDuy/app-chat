@@ -5,10 +5,7 @@ import {useEffect, useState} from "react";
 import ChatWelcome from "../component/ChatWelcome";
 import ChatContent from "../component/ChatContent";
 import ModalRoom from "../component/ModalRoom";
-
 import {useSelector} from "react-redux";
-
-import webSocketService from "../webSocket/webSocketService";
 import WebSocketService from "../webSocket/webSocketService";
 import ModalChat from "../component/ModalChat";
 
@@ -21,7 +18,7 @@ interface User {
 }
 export default function Chat() {
 
-
+    const [modalInputValue, setModalInputValue] = useState("");
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [username, setUsername] = useState("");
     const [users, setUsers] = useState<User[]>([]);
@@ -76,6 +73,36 @@ export default function Chat() {
         setIsModalChatOpen(!isModalChatOpen);
     }
 
+    const handleButtonClick=(inputValue : string)=> {
+        setModalInputValue(inputValue);
+        handleCreateRoom(inputValue)
+        WebSocketService.registerCallback('CREATE_ROOM', (data: any) => {
+            const newUser: User = {
+                name: data.name,
+                type: 1,
+                actionTime: "",
+                mes: "",
+            };
+            setUsers(prevUsers => [newUser, ...prevUsers]);
+
+
+        })
+    }
+
+    const handleCreateRoom = (name:string) => {
+        WebSocketService.sendMessage(
+            {
+                "action": "onchat",
+                "data": {
+                    "event": "CREATE_ROOM",
+                    "data": {
+                        "name": name
+                    }
+                }
+            }
+        )
+
+    }
 
     const userHost = useSelector((state:any) => state.user);
 
@@ -135,7 +162,6 @@ export default function Chat() {
             }
         });
     }
-
 
     return(
         <div className={"chat"}>
@@ -205,7 +231,7 @@ export default function Chat() {
                 </div>
             </div>
 
-            {isModalRoomOpen ? <ModalRoom onClose={handleCloseModal} modalText={modalRoomText} btnText={modalRoomBtnText}/> : ""}
+            {isModalRoomOpen ? <ModalRoom onClose={handleCloseModal} modalText={modalRoomText} btnText={modalRoomBtnText} onButtonClick={handleButtonClick}/> : ""}
 
             {isModalChatOpen ? <ModalChat onClose={handleCloseModalChat} modalText={modalChatText} btnText={modalChatBtnText}/> : ""}
         </div>
