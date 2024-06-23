@@ -1,36 +1,23 @@
-// import {createReducer} from "@reduxjs/toolkit";
-//
-// const initState= {
-//     user: "",
-// };
-//
-// export const root= createReducer(initState,{
-//     'user.get': (state, action) => ({
-//         ...state,
-//         user: action.payload.user
-//     }),
-//
-//     'user.set': (state, action) => ({
-//         ...state,
-//         user: action.payload
-//     }),
-// })
-//
-//
+import {createReducer} from "@reduxjs/toolkit";
 
-
-import { createReducer } from "@reduxjs/toolkit";
 
 const initState = {
     user: "",
-};
+    code: "",
+}
 
 export const root = createReducer(initState, (builder) => {
     builder
         .addCase('user.get', (state, action) => {
-            state.user = action.payload.user;
+            return { ...state, user: action.payload.user }
         })
         .addCase('user.set', (state, action) => {
-            state.user = action.payload;
+            return { ...state, user: action.payload.user }
+        })
+        .addCase('code.get', (state, action) => {
+            return { ...state, code: action.payload.code }
+        })
+        .addCase('code.set', (state, action) => {
+            return { ...state, code: action.payload.code }
         });
 });

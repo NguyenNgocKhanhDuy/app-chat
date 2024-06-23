@@ -4,20 +4,22 @@ import '../assets/css/login.scss'
 import {useEffect} from "react";
 import WebSocketService from "../webSocket/webSocketService";
 import {useDispatch} from "react-redux";
-import {setUser} from "../Store/Action";
+import {setCode, setUser} from "../Store/Action";
 
 
 export default function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const handleSetUser = (data : String) => {
-        dispatch(setUser(data));
+    const handleSetUser = (username : string, code : string) => {
+        dispatch(setUser(username));
+        dispatch(setCode(code))
     };
 
     useEffect(() => {
         WebSocketService.connect("ws://140.238.54.136:8080/chat/chat")
         WebSocketService.registerCallback('LOGIN', (data : any) => {
             // console.log(`Login response: ${data}`)
+            const code = data
             const error = document.querySelector(".error") as HTMLDivElement;
             const errorText = document.querySelector(".error .error-text") as HTMLParagraphElement;
             data = data.substring(0, 3) == 'nlu' ? '' : data;
@@ -27,7 +29,7 @@ export default function Login() {
             }else {
                 const inputUserName = document.querySelector("#username") as HTMLInputElement;
                 const username = inputUserName.value;
-                handleSetUser(username);
+                handleSetUser(username, code);
                 navigate('/chat')
             }
         })

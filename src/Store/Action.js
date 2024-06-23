@@ -16,3 +16,20 @@ export const setUser = (data) => {
     }
 }
 
+export const getCode = (data) => {
+    return {
+        type: 'code.get',
+        payload: {
+            code: data
+        }
+    }
+}
+
+export const setCode = (data) => {
+    return {
+        type: 'code.set',
+        payload: {
+            code: data
+        }
+    }
+}
