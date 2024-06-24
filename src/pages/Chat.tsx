@@ -1,9 +1,10 @@
 import '../assets/css/chat.scss'
 import avatar from  '../assets/img/avatar.png';
 import Button from "../component/Button";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import ChatWelcome from "../component/ChatWelcome";
 import ChatContent from "../component/ChatContent";
+import RoomChatContent from "../component/RoomChatContent";
 import ModalRoom from "../component/ModalRoom";
 import {useSelector} from "react-redux";
 import WebSocketService from "../webSocket/webSocketService";
@@ -23,9 +24,10 @@ export default function Chat() {
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [username, setUsername] = useState("");
     const [users, setUsers] = useState<User[]>([]);
-    const toggleChat = (username : string) => {
+    const toggleChat = (username : string, type:number) => {
 
-        setUsername(username)
+        (type == 1) ? isRoom(true) : isRoom(false);
+        setUsername(username);
 
         removeChat(username, userHost)
 
@@ -53,6 +55,8 @@ export default function Chat() {
 
     const [newestChat, setNewestChat] = useState<User[]>([]);
 
+    const [room, isRoom] = useState(false)
+
 
     const handleCreateModalRoom = () => {
         setModalRoomText("Create Room");
@@ -67,7 +71,7 @@ export default function Chat() {
 
     }
 
-    console.log(users)
+    // console.log(users)
     const handleJoinModalRoom = () => {
         setModalRoomText("Join Room");
         setModalRoomBtnText("Join");
@@ -223,7 +227,7 @@ export default function Chat() {
                 <div className="chat-list">
                     {users.length > 0 ? (
                         users.map((user) => (
-                            <div className={`item ${user.name == username ? "isUserSelect" : ""}`} onClick={() => toggleChat(user.name)} key={user.name}>
+                            <div className={`item ${user.name == username ? "isUserSelect" : ""}`} onClick={() => toggleChat(user.name, user.type)} key={user.name}>
                                 <div className="item-info">
                                     <img src={avatar} className="item-img" alt="Avatar"/>
                                     <div className="item-content">
@@ -269,7 +273,14 @@ export default function Chat() {
                     </div>
                 </div>
                 <div className="chat-content">
-                    {isChatOpen ? <ChatContent page={1} onRemoveFromNewestChat={(usrn:string)=>removeFromNewest(usrn)} newestChat={newestChat} onUpdateUser={(usern : string) => updateUsersList(usern)} listUsers={users} user={userHost} userChatTo={username}/> : <ChatWelcome/>}
+                    {isChatOpen ?
+                        (room ?
+                            <RoomChatContent page={1} onRemoveFromNewestChat={(usrn:string)=>removeFromNewest(usrn)} newestChat={newestChat} onUpdateUser={(usern : string) => updateUsersList(usern)} listUsers={users} user={userHost} userChatTo={username}/>
+                                :
+                            <ChatContent page={1} onRemoveFromNewestChat={(usrn:string)=>removeFromNewest(usrn)} newestChat={newestChat} onUpdateUser={(usern : string) => updateUsersList(usern)} listUsers={users} user={userHost} userChatTo={username}/>
+                        )
+
+                        : <ChatWelcome/>}
                 </div>
             </div>
 
