@@ -83,20 +83,40 @@ export default function Chat() {
 
     const handleButtonClick=(inputValue : string)=> {
         setModalInputValue(inputValue);
-        handleCreateRoom(inputValue)
-        WebSocketService.registerCallback('CREATE_ROOM', (data: any) => {
-            const newUser: User = {
-                name: data.name,
-                type: 1,
-                actionTime: "",
-                mes: "",
-            };
-            setUsers(prevUsers => [newUser, ...prevUsers]);
+        let action: string;
+        if(modalRoomText === "Create Room") {
+        handleCreateRoom(inputValue);
+        action = "CREATE_ROOM"
+        } else  {
+            action = "JOIN_ROOM"
+            handleJoinRoom(inputValue);
+        }
+    WebSocketService.registerCallback(action, (data: any) => {
+        const newUser: User = {
+            name: data.name,
+            type: 1,
+            actionTime: "",
+            mes: "",
+        };
+        setUsers(prevUsers => [newUser, ...prevUsers]);
+    })
 
-
-        })
     }
 
+    const handleJoinRoom = (name:string) => {
+        WebSocketService.sendMessage(
+            {
+                "action": "onchat",
+                "data": {
+                    "event": "JOIN_ROOM",
+                    "data": {
+                        "name": name
+                    }
+                }
+            }
+        )
+
+    }
     const handleCreateRoom = (name:string) => {
         WebSocketService.sendMessage(
             {
