@@ -1,5 +1,6 @@
 import '../assets/css/chat.scss'
 import avatar from  '../assets/img/avatar.png';
+import roomchat from '../assets/img/roomchat.png';
 import Button from "../component/Button";
 import React, {useEffect, useState} from "react";
 import ChatWelcome from "../component/ChatWelcome";
@@ -243,7 +244,11 @@ export default function Chat() {
                         users.map((user) => (
                             <div className={`item ${user.name == username ? "isUserSelect" : ""}`} onClick={() => toggleChat(user.name, user.type)} key={user.name}>
                                 <div className="item-info">
+                                    {user.type === 0 ? (
                                     <img src={avatar} className="item-img" alt="Avatar"/>
+                                    ) : (
+                                        <img src={roomchat} className="item-img" alt="Avatar"/>
+                                    )}
                                     <div className="item-content">
                                         <div className="title">
                                             <p className="name">{user.name}</p>
