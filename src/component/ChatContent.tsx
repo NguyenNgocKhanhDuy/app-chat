@@ -13,6 +13,8 @@ export default function ChatContent(props : any) {
     const newestChat = props.newestChat;
     var isSeen = true;
 
+
+
     useEffect(() => {
         const handleStorageChange = () => {
             console.log("storage")
