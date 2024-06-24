@@ -67,7 +67,7 @@ export default function Chat() {
 
     }
 
-
+    console.log(users)
     const handleJoinModalRoom = () => {
         setModalRoomText("Join Room");
         setModalRoomBtnText("Join");
@@ -249,7 +249,7 @@ export default function Chat() {
                     </div>
                 </div>
                 <div className="chat-content">
-                    {isChatOpen ? <ChatContent onRemoveFromNewestChat={(usrn:string)=>removeFromNewest(usrn)} newestChat={newestChat} onUpdateUser={(usern : string) => updateUsersList(usern)} listUsers={users} user={userHost} userChatTo={username}/> : <ChatWelcome/>}
+                    {isChatOpen ? <ChatContent page={1} onRemoveFromNewestChat={(usrn:string)=>removeFromNewest(usrn)} newestChat={newestChat} onUpdateUser={(usern : string) => updateUsersList(usern)} listUsers={users} user={userHost} userChatTo={username}/> : <ChatWelcome/>}
                 </div>
             </div>
 
