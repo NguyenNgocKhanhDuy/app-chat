@@ -26,9 +26,7 @@ export default function ChatContent(props : any) {
     const userChatTo = props.userChatTo;
     const newestChat = props.newestChat;
     var isSeen = true;
-    console.log("chat: "+userChatTo)
-
-
+    console.log("room: "+userChatTo)
 
     useEffect(() => {
         const handleStorageChange = () => {
@@ -52,7 +50,7 @@ export default function ChatContent(props : any) {
         // page2.current = 1;
 
         WebSocketService.registerCallback('GET_PEOPLE_CHAT_MES', (data : any) => {
-            // console.log(data.length)
+            console.log(data.length)
             if (data.length > 0) {
                 setMess((preData) => {
                     return [...preData, ...data]

@@ -47,7 +47,7 @@ export default function ModalChat(props : any) {
             // inputMessRef.current.value = ""
         // handleGetChat()
         else {
-            console.log("Input null")
+            console.log("Input null modal")
         }
         handleCloseModal();
     }
