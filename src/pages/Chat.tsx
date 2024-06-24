@@ -10,6 +10,7 @@ import {useSelector} from "react-redux";
 import WebSocketService from "../webSocket/webSocketService";
 import ModalChat from "../component/ModalChat";
 import {removeChat} from "../Store/LocalStorage";
+import {useNavigate} from "react-router-dom";
 
 
 interface User {
@@ -19,7 +20,7 @@ interface User {
     mes: string;
 }
 export default function Chat() {
-
+    const navigate = useNavigate();
     const [modalInputValue, setModalInputValue] = useState("");
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [username, setUsername] = useState("");
@@ -208,6 +209,19 @@ export default function Chat() {
         setUsername(username)
         setIsChatOpen(true)
     }
+    const handleLogOut = () => {
+        WebSocketService.sendMessage(
+            {
+                "action": "onchat",
+                "data": {
+                    "event": "LOGOUT"
+                }
+            }
+        )
+        WebSocketService.registerCallback("LOGOUT", (data: any) => {
+            navigate('/login')
+        })
+    }
 
     return(
         <div className={"chat"}>
@@ -260,6 +274,8 @@ export default function Chat() {
                         <Button text={"Join Room"} className={"chat-room"} onClick={handleJoinModalRoom}/>
                         <Button text={"New Chat"} className={"chat-room"} onClick={handleCreateModalChat}/>
                         <Button text={"Events"} className={"event"}/>
+                        <Button text={"log out"} className={"logout"} onClick={handleLogOut}/>
+
                     </div>
                     <div className="location">
                         <div className="info">
