@@ -19,112 +19,67 @@ export default function ChatContent(props : any) {
 
 
     const chatListRef = useRef<HTMLDivElement>(null);
-    const [page, setPage] = useState(1);
 
     const [mess, setMess] = useState<ChatMessage[]>([]);
-    const user = props.user;
+     const user = props.user;
     const userChatTo = props.userChatTo;
     const newestChat = props.newestChat;
     var isSeen = true;
-    console.log("chat: "+userChatTo)
+    const page2Ref = useRef(1);
+    let isFirst = true;
+    const [end, isEnd] = useState(false)
+
+
+    // useEffect(() => {
+    //     const handleStorageChange = () => {
+    //         handleGetChat()
+    //     };
+    //
+    //     window.addEventListener('storage', handleStorageChange);
+    //
+    //     return () => {
+    //         window.removeEventListener('storage', handleStorageChange);
+    //     };
+    // }, []);
 
     useEffect(() => {
-        const handleStorageChange = () => {
-            console.log("storage")
+        if (isFirst) {
+            console.log(userChatTo)
+            console.log(mess)
+            console.log("start")
+            page2Ref.current = 1
+            // setMess([])
+            isFirst = false
             handleGetChat()
-        };
-
-        window.addEventListener('storage', handleStorageChange);
-
-        return () => {
-            window.removeEventListener('storage', handleStorageChange);
-        };
-    }, []);
+        }
+    }, [userChatTo]);
 
 
-    let page2 = 1;
-    // console.log("Prop: "+props.page)
-    // console.log("Pageoy:"+page2)
     useEffect(() => {
-        handleGetChat()
-        // page2.current = 1;
 
         WebSocketService.registerCallback('GET_PEOPLE_CHAT_MES', (data : any) => {
-            // console.log(data.length)
+            console.log("LEN :"+data.length)
             if (data.length > 0) {
-                setMess((preData) => {
-                    return [...preData, ...data]
-                })
-                // console.log("Page: "+page2)
-                // console.log(data)
-                // console.log(mess)
-            //
-                page2++;
-                handleGetChat()
-            }else {
-                // console.log("ok")
-                // console.log(mess)
-                // console.log("Page OK: "+page2)
-            //     handleAddInHtml(mess)
+                if (isFirst) {
+                    isFirst = false
+                    console.log("first false")
+                }else {
+                    console.log("userchatto: "+userChatTo)
+                    console.log('ok')
+                    setMess((preData) => [...preData, ...data]);
+                    console.log("PAGE1: " + page2Ref.current);
+                    page2Ref.current++;
+                    console.log("PAGE2: " + page2Ref.current);
+                    handleGetChat()
+                }
+            } else {
+                isEnd(!end)
+                console.log(end)
+                console.log("No more data available for page " + page2Ref.current);
             }
+
         })
 
-        // WebSocketService.registerCallback('GET_PEOPLE_CHAT_MES', (data : any) => {
-        //     console.log(data.length)
-        //     if (data.length > 0) {
-        //         setMess(data)
-        //
-        //         plus()
-        //         handleGetChat()
-        //     }else {
-        //         console.log("ok")
-        //         handleAddInHtml(mess)
-        //     }
-        //     // isSeen = getChat(user, userChatTo) == "" ? true : false;
-        //     // var htmlItem = ``
-        //     //
-        //     // for (let i = 0; i < data.length; i++) {
-        //     //     var time =  getHourMinute(convertTime(data[i].createAt))
-        //     //
-        //     //     if (data[i].to != user){
-        //     //         if (i==0) {
-        //     //             if (isSeen) {
-        //     //                 htmlItem += "<div class='status'>Đã xem</div>"
-        //     //             }else {
-        //     //                 htmlItem += "<div class='status'>Đã gửi</div>"
-        //     //             }
-        //     //         }
-        //     //         console.log("U: "+user)
-        //     //         htmlItem += `<div class="item my-chat">
-        //     //                         <div class="text">
-        //     //                             ${data[i].mes}
-        //     //                             <span class="time">${time}</span>
-        //     //                         </div>
-        //     //                     </div>`
-        //     //     }else {
-        //     //         htmlItem += `<div class="item">
-        //     //                         <div class="user">
-        //     //                             <img src=${avatar} class="avatar"/>
-        //     //                             <p class="name">${data[i].name}</p>
-        //     //                         </div>
-        //     //                         <div class="text">
-        //     //                             ${data[i].mes}
-        //     //                             <span class="time">${time}</span>
-        //     //                         </div>
-        //     //                     </div>`
-        //     //     }
-        //     //     if ((i < data.length - 1) && (data[i].createAt.substring(0, 10) != data[i+1].createAt.substring(0, 10))) {
-        //     //         htmlItem += `<span class="date">${data[i].createAt.substring(0, 10)}</span>`
-        //     //     }else if (i == data.length - 1) {
-        //     //         htmlItem += `<span class="date">${data[i].createAt.substring(0, 10)}</span>`
-        //     //     }
-        //     //
-        //     // }
-        //     //
-        //     // if (chatListRef.current) {
-        //     //     chatListRef.current.innerHTML = htmlItem;
-        //     // }
-        // })
 
         WebSocketService.registerCallback('SEND_CHAT', (data: any) => {
             handleGetChat()
@@ -136,17 +91,24 @@ export default function ChatContent(props : any) {
         if (chatListRef.current) {
             chatListRef.current.scrollTo({ top: chatListRef.current.scrollHeight });
         }
-    }, []);
 
-    useEffect(() => {
-        // console.log("Updated messages: ", mess);
-        handleAddInHtml(mess);
-    }, [mess]);
+        return () => {
+            WebSocketService.registerCallback('GET_PEOPLE_CHAT_MES', ()=>{})
+        };
 
-    useEffect(() => {
-        setMess([]);
-        handleGetChat();
     }, [userChatTo]);
+
+
+
+    useEffect(() => {
+        if (mess.length > 0) {
+            handleAddInHtml(mess)
+            setMess([])
+        }
+    }, [end]);
+
+
+
 
     const handleAddInHtml = (data : ChatMessage[]) => {
         isSeen = getChat(user, userChatTo) == "" ? true : false;
@@ -163,7 +125,6 @@ export default function ChatContent(props : any) {
                         htmlItem += "<div class='status'>Đã gửi</div>"
                     }
                 }
-                console.log("U: "+user)
                 htmlItem += `<div class="item my-chat">
                                     <div class="text">
                                         ${data[i].mes}
@@ -193,6 +154,7 @@ export default function ChatContent(props : any) {
         if (chatListRef.current) {
             chatListRef.current.innerHTML = htmlItem;
         }
+
     }
 
     const handleUpdateListUser = (username : string)=>{
@@ -209,12 +171,12 @@ export default function ChatContent(props : any) {
                     event: 'GET_PEOPLE_CHAT_MES',
                     data: {
                         name: userChatTo,
-                        page:page2
+                        page: page2Ref.current
                     }
                 }
             }
         )
-        // console.log("PageGet: "+page2)
+        // page2++;
     }
 
 
@@ -228,6 +190,7 @@ export default function ChatContent(props : any) {
             props.onRemoveFromNewestChat(userChatTo)
         }
     }
+
 
     const handleSendChat = () => {
         var mess = ""
@@ -267,6 +230,9 @@ export default function ChatContent(props : any) {
                 const newHeight = Math.min(textarea.scrollHeight, 100);
                 textarea.style.height = `${newHeight}px`;
                 wrapperRef.current.style.height = "calc(100% + 50px)"
+            }else {
+                textarea.style.height = 'auto';
+                wrapperRef.current.style.height = "calc(100% + 100px)"
             }
         }
     };

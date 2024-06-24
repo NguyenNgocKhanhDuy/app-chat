@@ -27,6 +27,8 @@
         callbacks[event] = callback;
     };
 
+
+
     const sendMessage = (message) => {
         try {
             socket.send(JSON.stringify(message));
