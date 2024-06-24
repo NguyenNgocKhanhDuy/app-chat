@@ -1,5 +1,6 @@
 import '../assets/css/chat.scss'
 import avatar from  '../assets/img/avatar.png';
+import roomchat from '../assets/img/roomchat.png';
 import Button from "../component/Button";
 import React, {useEffect, useState} from "react";
 import ChatWelcome from "../component/ChatWelcome";
@@ -10,6 +11,7 @@ import {useSelector} from "react-redux";
 import WebSocketService from "../webSocket/webSocketService";
 import ModalChat from "../component/ModalChat";
 import {removeChat} from "../Store/LocalStorage";
+import {useNavigate} from "react-router-dom";
 
 
 interface User {
@@ -19,7 +21,7 @@ interface User {
     mes: string;
 }
 export default function Chat() {
-
+    const navigate = useNavigate();
     const [modalInputValue, setModalInputValue] = useState("");
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [username, setUsername] = useState("");
@@ -208,6 +210,19 @@ export default function Chat() {
         setUsername(username)
         setIsChatOpen(true)
     }
+    const handleLogOut = () => {
+        WebSocketService.sendMessage(
+            {
+                "action": "onchat",
+                "data": {
+                    "event": "LOGOUT"
+                }
+            }
+        )
+        WebSocketService.registerCallback("LOGOUT", (data: any) => {
+            navigate('/login')
+        })
+    }
 
     return(
         <div className={"chat"}>
@@ -229,7 +244,11 @@ export default function Chat() {
                         users.map((user) => (
                             <div className={`item ${user.name == username ? "isUserSelect" : ""}`} onClick={() => toggleChat(user.name, user.type)} key={user.name}>
                                 <div className="item-info">
+                                    {user.type === 0 ? (
                                     <img src={avatar} className="item-img" alt="Avatar"/>
+                                    ) : (
+                                        <img src={roomchat} className="item-img" alt="Avatar"/>
+                                    )}
                                     <div className="item-content">
                                         <div className="title">
                                             <p className="name">{user.name}</p>
@@ -260,6 +279,8 @@ export default function Chat() {
                         <Button text={"Join Room"} className={"chat-room"} onClick={handleJoinModalRoom}/>
                         <Button text={"New Chat"} className={"chat-room"} onClick={handleCreateModalChat}/>
                         <Button text={"Events"} className={"event"}/>
+                        <Button text={"log out"} className={"logout"} onClick={handleLogOut}/>
+
                     </div>
                     <div className="location">
                         <div className="info">

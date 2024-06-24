@@ -173,6 +173,9 @@
   background-color: #e9ecef;
   color: #96a1af;
 }
+.right .top .action .logout {
+  background-color: red;
+}
 .right .top .location {
   display: flex;
   align-items: center;
