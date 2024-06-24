@@ -10,6 +10,7 @@ import {useSelector} from "react-redux";
 import WebSocketService from "../webSocket/webSocketService";
 import ModalChat from "../component/ModalChat";
 import {removeChat} from "../Store/LocalStorage";
+import webSocketService from "../webSocket/webSocketService";
 
 
 interface User {
@@ -95,15 +96,15 @@ export default function Chat() {
             action = "JOIN_ROOM"
             handleJoinRoom(inputValue);
         }
-    WebSocketService.registerCallback(action, (data: any) => {
-        const newUser: User = {
-            name: data.name,
-            type: 1,
-            actionTime: "",
-            mes: "",
-        };
-        setUsers(prevUsers => [newUser, ...prevUsers]);
-    })
+        WebSocketService.registerCallback(action, (data: any) => {
+            const newUser: User = {
+                name: data.name,
+                type: 1,
+                actionTime: "",
+                mes: "",
+            };
+            setUsers(prevUsers => [newUser, ...prevUsers]);
+        })
 
     }
 
@@ -119,7 +120,6 @@ export default function Chat() {
                 }
             }
         )
-
     }
     const handleCreateRoom = (name:string) => {
         WebSocketService.sendMessage(
@@ -133,8 +133,9 @@ export default function Chat() {
                 }
             }
         )
-
     }
+
+
 
     const userHost = useSelector((state:any) => state.user)
 
@@ -208,6 +209,8 @@ export default function Chat() {
         setUsername(username)
         setIsChatOpen(true)
     }
+
+
 
     return(
         <div className={"chat"}>

@@ -16,8 +16,6 @@ interface ChatMessage {
 
 export default function ChatContent(props : any) {
 
-
-
     const chatListRef = useRef<HTMLDivElement>(null);
 
     const [mess, setMess] = useState<ChatMessage[]>([]);
@@ -28,6 +26,7 @@ export default function ChatContent(props : any) {
     const page2Ref = useRef(1);
     let isFirst = true;
     const [end, isEnd] = useState(false)
+    const [isOnline, setOnline] = useState(false)
 
 
     // useEffect(() => {
@@ -87,6 +86,11 @@ export default function ChatContent(props : any) {
 
         })
 
+        WebSocketService.registerCallback('CHECK_USER', (data:any) => {
+            console.log(data)
+            setOnline(data.status)
+        })
+
 
         if (chatListRef.current) {
             chatListRef.current.scrollTo({ top: chatListRef.current.scrollHeight });
@@ -107,6 +111,35 @@ export default function ChatContent(props : any) {
         }
     }, [end]);
 
+    useEffect(() => {
+        handleCheckOnline()
+    });
+
+    const onlineRef = useRef<HTMLParagraphElement>(null);
+    const handleSetOnlineUI = () => {
+        if (onlineRef.current) {
+            onlineRef.current.innerHTML = isOnline ? "Online" : 'Offline';
+        }
+    }
+
+    useEffect(() => {
+        console.log('set')
+        handleSetOnlineUI()
+    }, [isOnline]);
+
+    const handleCheckOnline = () => {
+        WebSocketService.sendMessage(
+            {
+                action: "onchat",
+                data: {
+                    event: "CHECK_USER",
+                    data: {
+                        user: userChatTo
+                    }
+                }
+            }
+        )
+    }
 
 
 
@@ -237,6 +270,7 @@ export default function ChatContent(props : any) {
         }
     };
 
+
     
 
     return (
@@ -251,6 +285,7 @@ export default function ChatContent(props : any) {
                             <i className="fa-solid fa-location-dot"></i>
                             San Juan, Puerto Rico
                         </p>
+                        <p ref={onlineRef}></p>
                     </div>
                 </div>
                 <div className="action">
