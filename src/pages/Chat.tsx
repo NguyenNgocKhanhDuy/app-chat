@@ -29,6 +29,15 @@ export default function Chat() {
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [username, setUsername] = useState("");
     const [users, setUsers] = useState<User[]>([]);
+    const [isModalRoomOpen, setIsModalRoomOpen] = useState(false);
+    const [modalRoomText, setModalRoomText] = useState("");
+    const [modalRoomBtnText, setModalRoomBtnText] = useState("");
+    const [isModalChatOpen, setIsModalChatOpen] = useState(false);
+    const [modalChatText, setModalChatText] = useState("");
+    const [modalChatBtnText, setModalChatBtnText] = useState("");
+    const [newestChat, setNewestChat] = useState<User[]>([]);
+    const [room, isRoom] = useState(false)
+    const [searchInput, setSearchInput] = useState("");
     const toggleChat = (username : string, type:number) => {
 
         (type == 1) ? isRoom(true) : isRoom(false);
@@ -49,19 +58,6 @@ export default function Chat() {
         setIsChatOpen(true);
 
     }
-
-    const [isModalRoomOpen, setIsModalRoomOpen] = useState(false);
-    const [modalRoomText, setModalRoomText] = useState("");
-    const [modalRoomBtnText, setModalRoomBtnText] = useState("");
-
-    const [isModalChatOpen, setIsModalChatOpen] = useState(false);
-    const [modalChatText, setModalChatText] = useState("");
-    const [modalChatBtnText, setModalChatBtnText] = useState("");
-
-    const [newestChat, setNewestChat] = useState<User[]>([]);
-
-    const [room, isRoom] = useState(false)
-
 
     const handleCreateModalRoom = () => {
         setModalRoomText("Create Room");
@@ -142,7 +138,7 @@ export default function Chat() {
 
 
     const userHost = useSelector((state:any) => state.user)
-
+    console.log("this is name  " +userHost)
     const handleGetUserList = () => {
         WebSocketService.sendMessage(
             {
@@ -154,6 +150,7 @@ export default function Chat() {
         )
     }
     useEffect(() => {
+        console.log( searchUsers)
 
 
         handleGetUserList();
@@ -229,6 +226,11 @@ export default function Chat() {
 
 
 
+    const searchUsers = users.filter(user =>
+        user.name.toLowerCase().includes(searchInput.toLowerCase())
+    );
+    console.log( searchUsers)
+
     return(
         <div className={"chat"}>
             <div className="left">
@@ -241,9 +243,10 @@ export default function Chat() {
                     </div>
                 </div>
                 <div className="search">
-                    <input type="text" placeholder={"Search for groups and events"}/>
+                    <input type="text" placeholder={"Search for groups and events"} value={searchInput} onChange={e => setSearchInput(e.target.value)}/>
                     <i className="fa-solid fa-magnifying-glass"></i>
                 </div>
+                {searchInput ==="" ? (
                 <div className="chat-list">
                     {users.length > 0 ? (
                         users.map((user) => (
@@ -256,15 +259,23 @@ export default function Chat() {
                                     )}
                                     <div className="item-content">
                                         <div className="title">
-                                            <p className="name">{user.name}</p>
-                                            <i className="fa-regular fa-comment-dots"></i>
+                                                {user.name !== userHost ? (
+                                                        <p className="name">
+                                                    {user.name}
+                                                        </p>
+                                                ) : (
+                                                    <p className="name">
+                                                        {"Myself"}
+                                                    </p>
+                                                )}
+                                                <i className="fa-regular fa-comment-dots"></i>
                                         </div>
                                         <p className="desc">{user.mes}</p>
                                     </div>
                                 </div>
                                 <div className="item-status">
                                     {/*<p className="time">Just now</p>*/}
-                                    {newestChat.length > 0 ? (
+                                    {newestChat.length > 0   ? (
                                         newestChat.map((u) => (
                                             u.name == user.name ? <p className="amount"></p> : ""
                                         ))
@@ -276,6 +287,49 @@ export default function Chat() {
                         <p>No users available</p>
                     )}
                 </div>
+                ) : (
+                    <div className="chat-list">
+                        {searchUsers.length > 0 ? (
+                            searchUsers.map((user) => (
+                                <div className={`item ${user.name == username ? "isUserSelect" : ""}`}
+                                     onClick={() => toggleChat(user.name, user.type)} key={user.name}>
+                                    <div className="item-info">
+                                        {user.type === 0 ? (
+                                            <img src={avatar} className="item-img" alt="Avatar"/>
+                                        ) : (
+                                            <img src={roomchat} className="item-img" alt="Avatar"/>
+                                        )}
+                                        <div className="item-content">
+                                            <div className="title">
+                                                {user.name !== userHost ? (
+                                                    <p className="name">
+                                                        {user.name}
+                                                    </p>
+                                                ) : (
+                                                    <p className="name">
+                                                        {"Myself"}
+                                                    </p>
+                                                )}
+                                                <i className="fa-regular fa-comment-dots"></i>
+                                            </div>
+                                            <p className="desc">{user.mes}</p>
+                                        </div>
+                                    </div>
+                                    <div className="item-status">
+                                        {/*<p className="time">Just now</p>*/}
+                                        {newestChat.length > 0 ? (
+                                            newestChat.map((u) => (
+                                                u.name == user.name ? <p className="amount"></p> : ""
+                                            ))
+                                        ) : ""}
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p>Not found users</p>
+                        )}
+                    </div>
+                )}
             </div>
             <div className={`right ${isChatOpen ? "rightCalc" : "rightFull"}`}>
                 <div className="top">
@@ -301,18 +355,28 @@ export default function Chat() {
                 <div className="chat-content">
                     {isChatOpen ?
                         (room ?
-                            <RoomChatContent page={1} onRemoveFromNewestChat={(usrn:string)=>removeFromNewest(usrn)} newestChat={newestChat} onUpdateUser={(usern : string) => updateUsersList(usern)} listUsers={users} user={userHost} userChatTo={username}/>
+                                <RoomChatContent page={1}
+                                                 onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
+                                                 newestChat={newestChat}
+                                                 onUpdateUser={(usern: string) => updateUsersList(usern)}
+                                                 listUsers={users} user={userHost} userChatTo={username}/>
                                 :
-                            <ChatContent page={1} onRemoveFromNewestChat={(usrn:string)=>removeFromNewest(usrn)} newestChat={newestChat} onUpdateUser={(usern : string) => updateUsersList(usern)} listUsers={users} user={userHost} userChatTo={username}/>
+                                <ChatContent page={1} onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
+                                             newestChat={newestChat}
+                                             onUpdateUser={(usern: string) => updateUsersList(usern)} listUsers={users}
+                                             user={userHost} userChatTo={username}/>
                         )
 
                         : <ChatWelcome/>}
                 </div>
             </div>
 
-            {isModalRoomOpen ? <ModalRoom onClose={handleCloseModal} modalText={modalRoomText} btnText={modalRoomBtnText} onButtonClick={handleButtonClick}/> : ""}
+            {isModalRoomOpen ?
+                <ModalRoom onClose={handleCloseModal} modalText={modalRoomText} btnText={modalRoomBtnText}
+                           onButtonClick={handleButtonClick}/> : ""}
 
-            {isModalChatOpen ? <ModalChat onHandleGetChat={(user:string)=>handleGetNewChat(user)} user={userHost} onUpdateListUser={handleGetUserList} onUpdateUser={(usern : string) => updateUsersList(usern)} onClose={handleCloseModalChat} modalText={modalChatText} btnText={modalChatBtnText}/> : ""}
+            {isModalChatOpen ? <ModalChat onHandleGetChat={(user: string) => handleGetNewChat(user)} user={userHost}
+                                          onUpdateListUser={handleGetUserList} onUpdateUser={(usern : string) => updateUsersList(usern)} onClose={handleCloseModalChat} modalText={modalChatText} btnText={modalChatBtnText}/> : ""}
         </div>
     )
 }
