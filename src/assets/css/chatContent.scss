@@ -180,10 +180,11 @@
       justify-content: space-between;
       gap: 16px;
       background-color: $input;
+      position: relative;
 
       .input-mess {
         resize: none;
-        width: 100%;
+        width: 96%;
         border: none;
         outline: none;
         background-color: transparent;
@@ -191,10 +192,27 @@
         overflow-y: auto;
         max-height: 100px;
 
+
         &::placeholder {
           color: $inputText;
         }
 
+      }
+
+
+      i {
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+        font-size: 24px;
+        cursor: pointer;
+      }
+
+      .emoji {
+        position: absolute;
+        bottom: 40px;
+        right: 0px;
+        box-shadow: 0 0 4px 3px $lightGray;
       }
     }
 

@@ -19,10 +19,3 @@ export function getChat(send, to) {
     }
 }
 
-export function getReceive(send, to) {
-    var key = send +':'+to;
-    if (localStorage.getItem(key)) {
-        var to = JSON.stringify(localStorage.getItem(key)).split(":")[1]
-        return to;
-    }
-}
