@@ -139,7 +139,7 @@ export default function Chat() {
     }
 
     const userHost = useSelector((state:any) => state.user)
-
+    console.log("this is name  " +userHost)
     const handleGetUserList = () => {
         WebSocketService.sendMessage(
             {
@@ -251,15 +251,23 @@ export default function Chat() {
                                     )}
                                     <div className="item-content">
                                         <div className="title">
-                                            <p className="name">{user.name}</p>
-                                            <i className="fa-regular fa-comment-dots"></i>
+                                                {user.name !== userHost ? (
+                                                        <p className="name">
+                                                    {user.name}
+                                                        </p>
+                                                ) : (
+                                                    <p className="name">
+                                                        {"Myself"}
+                                                    </p>
+                                                )}
+                                                <i className="fa-regular fa-comment-dots"></i>
                                         </div>
                                         <p className="desc">{user.mes}</p>
                                     </div>
                                 </div>
                                 <div className="item-status">
                                     {/*<p className="time">Just now</p>*/}
-                                    {newestChat.length > 0 ? (
+                                    {newestChat.length > 0   ? (
                                         newestChat.map((u) => (
                                             u.name == user.name ? <p className="amount"></p> : ""
                                         ))
