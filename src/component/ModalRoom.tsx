@@ -6,12 +6,7 @@ import {useState} from "react";
 
 export default function ModalRoom(props : any) {
     const [inputValue, setInputValue] = useState("");
-    interface ModalRoomProps {
-        onClose: () => void;
-        modalText: string;
-        btnText: string;
-        onButtonClick: (inputValue: string) => void;
-    }
+
 
     const handleCloseModal = () => {
         props.onClose();
