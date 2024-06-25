@@ -23,7 +23,10 @@ export default function ChatContent(props : any) {
 
     const [mess, setMess] = useState<ChatMessage[]>([]);
     const user = props.user;
-    const userChatTo = props.userChatTo;
+    // const userChatTo = props.userChatTo;
+
+    const userChatTo = "abcd";
+
     const newestChat = props.newestChat;
     var isSeen = true;
     console.log("room: "+userChatTo)
@@ -49,14 +52,14 @@ export default function ChatContent(props : any) {
         handleGetChat()
         // page2.current = 1;
 
-        WebSocketService.registerCallback('GET_PEOPLE_CHAT_MES', (data : any) => {
+        WebSocketService.registerCallback('GET_ROOM_CHAT_MES', (data : any) => {
             console.log(data.length)
             if (data.length > 0) {
                 setMess((preData) => {
                     return [...preData, ...data]
                 })
                 // console.log("Page: "+page2)
-                // console.log(data)
+                console.log(data)
                 // console.log(mess)
             //
                 page2++;
@@ -206,15 +209,17 @@ export default function ChatContent(props : any) {
             {
                 action: 'onchat',
                 data: {
-                    event: 'GET_PEOPLE_CHAT_MES',
+                    // event: 'GET_PEOPLE_CHAT_MES',
+                    event: 'GET_ROOM_CHAT_MES',
                     data: {
+
                         name: userChatTo,
-                        page:page2
+                        page:1
                     }
                 }
             }
         )
-        // console.log("PageGet: "+page2)
+        console.log("PageGet: "+page2)
     }
 
 
@@ -239,8 +244,8 @@ export default function ChatContent(props : any) {
                     data: {
                         event: "SEND_CHAT",
                         data: {
-                            type: "people",
-                            to: userChatTo,
+                            type: "room",
+                            to: "abcd",
                             mes: mess
                         }
                     }
