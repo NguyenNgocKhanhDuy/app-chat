@@ -46,6 +46,8 @@ export default function ChatContent(props : any) {
         };
     }, []);
 
+
+
     useEffect(() => {
         if (isFirst) {
             handleReset()
