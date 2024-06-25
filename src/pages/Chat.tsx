@@ -11,6 +11,9 @@ import {useSelector} from "react-redux";
 import WebSocketService from "../webSocket/webSocketService";
 import ModalChat from "../component/ModalChat";
 import {removeChat} from "../Store/LocalStorage";
+
+import webSocketService from "../webSocket/webSocketService";
+
 import {useNavigate} from "react-router-dom";
 
 
@@ -93,15 +96,15 @@ export default function Chat() {
             action = "JOIN_ROOM"
             handleJoinRoom(inputValue);
         }
-    WebSocketService.registerCallback(action, (data: any) => {
-        const newUser: User = {
-            name: data.name,
-            type: 1,
-            actionTime: "",
-            mes: "",
-        };
-        setUsers(prevUsers => [newUser, ...prevUsers]);
-    })
+        WebSocketService.registerCallback(action, (data: any) => {
+            const newUser: User = {
+                name: data.name,
+                type: 1,
+                actionTime: "",
+                mes: "",
+            };
+            setUsers(prevUsers => [newUser, ...prevUsers]);
+        })
 
     }
 
@@ -117,7 +120,6 @@ export default function Chat() {
                 }
             }
         )
-
     }
     const handleCreateRoom = (name:string) => {
         WebSocketService.sendMessage(
@@ -131,8 +133,9 @@ export default function Chat() {
                 }
             }
         )
-
     }
+
+
 
     const userHost = useSelector((state:any) => state.user)
     console.log("this is name  " +userHost)
@@ -221,10 +224,13 @@ export default function Chat() {
         })
     }
 
+
+
     const searchUsers = users.filter(user =>
         user.name.toLowerCase().includes(searchInput.toLowerCase())
     );
     console.log( searchUsers)
+
     return(
         <div className={"chat"}>
             <div className="left">
