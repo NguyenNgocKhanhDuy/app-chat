@@ -76,7 +76,7 @@ body {
   }
 }
 
-.error, .error-password-confirm {
+.error {
   display: none;
   align-items: center;
   justify-content: left;
@@ -84,6 +84,7 @@ body {
   margin: 16px 0;
   color: $warning;
 }
+
 
 .accept{
   margin-bottom: 12px;

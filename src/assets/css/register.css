@@ -71,7 +71,7 @@ body {
   outline: none;
 }
 
-.error, .error-password-confirm {
+.error {
   display: none;
   align-items: center;
   justify-content: left;
