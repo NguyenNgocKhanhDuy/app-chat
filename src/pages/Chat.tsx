@@ -138,7 +138,7 @@ export default function Chat() {
 
 
     const userHost = useSelector((state:any) => state.user)
-    console.log("this is name  " +userHost)
+    // console.log("this is name  " +userHost)
     const handleGetUserList = () => {
         WebSocketService.sendMessage(
             {
@@ -150,7 +150,7 @@ export default function Chat() {
         )
     }
     useEffect(() => {
-        console.log( searchUsers)
+        // console.log( searchUsers)
 
 
         handleGetUserList();
@@ -229,7 +229,7 @@ export default function Chat() {
     const searchUsers = users.filter(user =>
         user.name.toLowerCase().includes(searchInput.toLowerCase())
     );
-    console.log( searchUsers)
+    // console.log( searchUsers)
 
     return(
         <div className={"chat"}>
