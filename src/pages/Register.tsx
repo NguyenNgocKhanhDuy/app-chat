@@ -12,12 +12,12 @@ export default function Register() {
             console.log(`Register response: ${data}`)
             const error = document.querySelector(".error") as HTMLDivElement;
             const errorText = document.querySelector(".error .error-text") as HTMLParagraphElement;
-            data = data.substring(0, 3) == 'nlu' ? '' : data;
-            if (data != '') {
+            const success = document.querySelector(".success") as HTMLDivElement;
+            if (data !== 'Creating a successful account') {
                 errorText.innerText = data;
                 error.style.display = "flex"
             } else {
-                navigate('/chat')
+                navigate('/login')
             }
         })
     }, []);
@@ -115,6 +115,10 @@ export default function Register() {
                     <i className="fa-solid fa-circle-info"></i>
                     <p className={"error-text"}>Password and confirm password do not match. Please try again.</p>
                 </div>
+                <div className="success">
+                    <i className="fa-solid fa-circle-info"></i>
+                    <p className={"error-text"}>Creating a successful account.</p>
+                </div>
                 <div className="accept">
                     <p>I accept the <Link to={"register"}>Terms of service</Link> and <Link to={"register"}>Privacy
                         policy</Link></p>
@@ -128,4 +132,5 @@ export default function Register() {
                 </div>
             </div>
         </div>
-    );}
+    );
+}
