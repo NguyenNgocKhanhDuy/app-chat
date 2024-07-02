@@ -12,12 +12,11 @@ export default function Register() {
             console.log(`Register response: ${data}`)
             const error = document.querySelector(".error") as HTMLDivElement;
             const errorText = document.querySelector(".error .error-text") as HTMLParagraphElement;
-            data = data.substring(0, 3) == 'nlu' ? '' : data;
-            if (data != '') {
+            if (data !== 'Creating a successful account') {
                 errorText.innerText = data;
                 error.style.display = "flex"
             } else {
-                navigate('/chat')
+                navigate('/login')
             }
         })
     }, []);
@@ -43,32 +42,35 @@ export default function Register() {
         const inputPass = document.querySelector("#password") as HTMLInputElement;
         const inputConfirmPass = document.querySelector("#confirmPassword") as HTMLInputElement;
         const inputemail = document.querySelector("#email") as HTMLInputElement;
-
         const error = document.querySelector(".error") as HTMLDivElement
-        const errorConfirmPassword = document.querySelector(".error-password-confirm") as HTMLDivElement;
-
         const username = inputUserName.value;
         const pass = inputPass.value;
         const confirmPass = inputConfirmPass.value;
         const email = inputemail.value;
-
-
+        const errorText = document.querySelector(".error .error-text") as HTMLParagraphElement;
         if (username.length == 0 || pass.length == 0 || email.length == 0) {
+            errorText.innerHTML ="Please enter register information."
             error.style.display = "flex";
         } else if (pass !== confirmPass) {
-            errorConfirmPassword.style.display = "flex";
-
+            errorText.innerHTML ="Password and confirm password do not match. Please try again."
+            error.style.display = "flex";
+        } else if (pass.length < 6) {
+            errorText.innerHTML ="Password too short."
+            error.style.display = "flex";
+        } else if (!validateEmail(email)) {
+            errorText.innerHTML = "Invalid email format."
+            error.style.display = "flex";
         } else {
             handlerRegister(username, pass)
         }
     }
-
+    const validateEmail = (email : string) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
+    };
     const handleHideError = () => {
         const error = document.querySelector(".error") as HTMLDivElement;
-        const errorConfirmPassword = document.querySelector(".error-password-confirm") as HTMLDivElement;
         error.style.display = "none"
-        errorConfirmPassword.style.display = "none";
-
     }
     return (
         <div className={"container"}>
@@ -111,10 +113,6 @@ export default function Register() {
                     <i className="fa-solid fa-circle-info"></i>
                     <p className={"error-text"}>Please enter register information.</p>
                 </div>
-                <div className="error-password-confirm">
-                    <i className="fa-solid fa-circle-info"></i>
-                    <p className={"error-text"}>Password and confirm password do not match. Please try again.</p>
-                </div>
                 <div className="accept">
                     <p>I accept the <Link to={"register"}>Terms of service</Link> and <Link to={"register"}>Privacy
                         policy</Link></p>
@@ -128,4 +126,5 @@ export default function Register() {
                 </div>
             </div>
         </div>
-    );}
+    );
+}

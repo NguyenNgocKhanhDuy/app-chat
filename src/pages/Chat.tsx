@@ -373,7 +373,7 @@ export default function Chat() {
 
             {isModalRoomOpen ?
                 <ModalRoom onClose={handleCloseModal} modalText={modalRoomText} btnText={modalRoomBtnText}
-                           onButtonClick={handleButtonClick}/> : ""}
+                           onButtonClick={handleButtonClick} modalRoomText={modalRoomText}/> : ""}
 
             {isModalChatOpen ? <ModalChat onHandleGetChat={(user: string) => handleGetNewChat(user)} user={userHost}
                                           onUpdateListUser={handleGetUserList} onUpdateUser={(usern : string) => updateUsersList(usern)} onClose={handleCloseModalChat} modalText={modalChatText} btnText={modalChatBtnText}/> : ""}

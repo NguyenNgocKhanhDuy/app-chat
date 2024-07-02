@@ -110,5 +110,13 @@
 .modal-container .btn {
   font-size: 16px;
 }
+.modal .error {
+  display: none;
+  align-items: center;
+  justify-content: left;
+  gap: 8px;
+  margin: 16px 0;
+  color: #e75f5f;
+}
 
 /*# sourceMappingURL=modalRoom.css.map */
