@@ -151,8 +151,6 @@ export default function Chat() {
     }
     useEffect(() => {
         // console.log( searchUsers)
-
-
         handleGetUserList();
         WebSocketService.registerCallback('GET_USER_LIST', (data : any) => {
             const userData: User[] = data;
