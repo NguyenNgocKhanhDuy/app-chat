@@ -17,7 +17,6 @@ export default function ModalRoom(props : any) {
         error.style.display = "none"
     };
     const handleButtonClick = () => {
-        props.onButtonClick(inputValue);
         const modalRoomText = props.modalRoomText
         let action =""
         if(modalRoomText==="Create Room") {
@@ -35,6 +34,8 @@ export default function ModalRoom(props : any) {
                 handleCloseModal()
             }
         })
+        props.onButtonClick(inputValue);
+
 
     }
 
