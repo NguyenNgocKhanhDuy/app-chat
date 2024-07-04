@@ -5,8 +5,9 @@ import "../assets/css/chatContent.scss"
 import WebSocketService from "../webSocket/webSocketService";
 import convertTime, {getHourMinute} from "../utils/convertTime";
 import {getChat, removeChat, saveChat} from "../Store/LocalStorage";
-import EmojiPicker, {Emoji} from "emoji-picker-react";
-import ReactDOM from "react-dom/client";
+// import EmojiPicker from "emoji-picker-react";
+import EmojiPicker from "emoji-picker-react";
+// import ReactDOM from "react-dom/client";
 
 
 
