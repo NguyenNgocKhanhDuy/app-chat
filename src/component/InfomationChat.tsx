@@ -48,38 +48,6 @@ export default function InfomationChat(props : any) {
                         </div>
                     </div>
                 </div>
-                <div className={"item"}>
-                    <div className="item-info">
-                        <img src={avatar} className="item-img" alt="Avatar"/>
-                        <div className="title">
-                            <p className="name">Member</p>
-                        </div>
-                    </div>
-                </div>
-                <div className={"item"}>
-                    <div className="item-info">
-                        <img src={avatar} className="item-img" alt="Avatar"/>
-                        <div className="title">
-                            <p className="name">Member</p>
-                        </div>
-                    </div>
-                </div>
-                <div className={"item"}>
-                    <div className="item-info">
-                        <img src={avatar} className="item-img" alt="Avatar"/>
-                        <div className="title">
-                            <p className="name">Member</p>
-                        </div>
-                    </div>
-                </div>
-                <div className={"item"}>
-                    <div className="item-info">
-                        <img src={avatar} className="item-img" alt="Avatar"/>
-                        <div className="title">
-                            <p className="name">Member</p>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     )

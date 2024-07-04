@@ -7,10 +7,11 @@
 }
 
 .info-chat-room {
-  height: 137%;
+  height: 120%;
   width: 30%;
   background-color: #e9ecef;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
 }
@@ -19,6 +20,7 @@
   width: auto;
   height: 45px;
   background-color: #96a1af;
+  position: fixed;
 }
 .info-chat-room .chat-bar i {
   font-size: 20px;
@@ -49,15 +51,15 @@
   font-size: 15px;
   color: #e75f5f;
   position: absolute;
-  right: 40px;
-  top: 80px;
+  right: 0;
+  top: 0;
 }
 .info-chat-room .avatar-chat {
   width: 70px;
   height: 70px;
   border-radius: 100%;
   background-color: #fff;
-  margin: 20px auto 10px auto;
+  margin: 70px auto 10px auto;
 }
 .info-chat-room .avatar-chat img {
   width: 60px;
