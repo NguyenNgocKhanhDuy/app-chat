@@ -66,7 +66,9 @@ export default function ModalChat(props : any) {
                 <i className="fa-solid fa-xmark close" onClick={handleCloseModal}></i>
                 <h2 className={"title"}>{props.modalText}</h2>
                 <input ref={inputNameRef} type="text" placeholder={"Input username"}/>
-                <textarea ref={inputMessRef} className={"text_message"} placeholder="Type your message here..."></textarea>
+
+                <textarea ref={inputMessRef} className={"text_message"}
+                          placeholder="Type your message here..."></textarea>
                 <Button className="btn" text={props.btnText} onClick={handleSendChat}/>
             </div>
         </div>

@@ -243,7 +243,7 @@ export default function ChatContent(props : any) {
     }
 
     const handleUpdateListUser = (username : string)=>{
-        props.onUpdateUser(username);
+        props.onUpdateUser(username, 0);
     }
 
 
