@@ -164,6 +164,7 @@
   position: relative;
 }
 .chat-content .chat-action .holder .input-mess {
+  padding-top: 10px;
   resize: none;
   width: 96%;
   border: none;
@@ -178,7 +179,7 @@
 }
 .chat-content .chat-action .holder i {
   position: absolute;
-  bottom: 8px;
+  bottom: 10px;
   right: 8px;
   font-size: 24px;
   cursor: pointer;

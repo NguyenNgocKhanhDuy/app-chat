@@ -7,6 +7,8 @@ import convertTime, {getHourMinute} from "../utils/convertTime";
 import {getChat, removeChat, saveChat} from "../Store/LocalStorage";
 import EmojiPicker, {Emoji} from "emoji-picker-react";
 import ReactDOM from "react-dom/client";
+import {Simulate} from "react-dom/test-utils";
+import input = Simulate.input;
 
 
 
@@ -369,6 +371,14 @@ const [iconFirst, setIconFirst] = useState(false)
     }
 
 
+    function handleKeyPress(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+        if(e.key === 'Enter' && chatMess.trim() !==""){
+            e.preventDefault();
+            handleSendChat()
+        }
+
+    }
+
     return (
         <div className="wrapper" ref={wrapperRef}>
             <div className="header">
@@ -397,13 +407,13 @@ const [iconFirst, setIconFirst] = useState(false)
 
             <div className="chat-action">
                 <div className="holder">
-                    <textarea ref={textareaRef} onInput={handleInput} className={"input-mess"}
-                              onClick={handleSeenInputClick} placeholder={"Type here"}></textarea>
+                    <textarea  ref={textareaRef} onInput={handleInput} className={"input-mess"}
+                              onClick={handleSeenInputClick} placeholder={"Type here"} onKeyPress={handleKeyPress}></textarea>
                     {/*<input type="text" placeholder={"Type here"} ref={inputMessRef} onClick={handleSeenInputClick}/>*/}
                     <i className="fa-regular fa-face-smile" onClick={()=>{setShowEmoji(!showEmoji)}}></i>
                     {showEmoji ? <EmojiPicker className={"emoji"} onEmojiClick={handleGetEmoji}/> : ""}
                 </div>
-                <Button text={"Send"} className={"send"} onClick={handleSendChat}/>
+                <Button text={"Send"} className={"send"} onClick={handleSendChat} />
             </div>
         </div>
     );
