@@ -15,6 +15,7 @@ import {removeChat} from "../Store/LocalStorage";
 import webSocketService from "../webSocket/webSocketService";
 
 import {useNavigate} from "react-router-dom";
+import internal from "node:stream";
 
 
 interface User {
@@ -97,13 +98,15 @@ export default function Chat() {
             handleJoinRoom(inputValue);
         }
         WebSocketService.registerCallback(action, (data: any) => {
-            const newUser: User = {
-                name: data.name,
-                type: 1,
-                actionTime: "",
-                mes: "",
-            };
-            setUsers(prevUsers => [newUser, ...prevUsers]);
+            // const newUser: User = {
+            //     name: data.name,
+            //     type: 1,
+            //     actionTime: "",
+            //     mes: "",
+            // };
+            console.log("ham nay duoc goi")
+            updateUsersList(data.name, 1)
+            handleCloseModal()
         })
 
     }
@@ -138,7 +141,7 @@ export default function Chat() {
 
 
     const userHost = useSelector((state:any) => state.user)
-    console.log("this is name  " +userHost)
+    // console.log("this is name  " +userHost)
     const handleGetUserList = () => {
         WebSocketService.sendMessage(
             {
@@ -150,9 +153,7 @@ export default function Chat() {
         )
     }
     useEffect(() => {
-        console.log( searchUsers)
-
-
+        // console.log( searchUsers)
         handleGetUserList();
         WebSocketService.registerCallback('GET_USER_LIST', (data : any) => {
             const userData: User[] = data;
@@ -163,13 +164,13 @@ export default function Chat() {
     useEffect(() => {
         WebSocketService.registerCallback('SEND_CHAT', (data: any) => {
             const userNewChat = data.name;
-            updateUsersList(userNewChat)
+            updateUsersList(userNewChat, 0)
         })
     }, [users, newestChat]);
 
 
 
-    const updateUsersList = (userNewChat: string) => {
+    const updateUsersList = (userNewChat: string, userType: number) => {
         setUsers(prevUsers => {
             const existingUserIndex = prevUsers.findIndex(user => user.name === userNewChat);
             if (existingUserIndex !== -1) {
@@ -178,7 +179,7 @@ export default function Chat() {
                 updatedUsers.unshift(user);
                 return updatedUsers;
             } else {
-                const newUser = { name: userNewChat, type: 0, actionTime: "", mes: "" };
+                const newUser = { name: userNewChat, type: userType, actionTime: "", mes: "" };
                 return [newUser, ...prevUsers];
             }
         });
@@ -186,7 +187,7 @@ export default function Chat() {
         setNewestChat(preList=> {
             const existingUserIndex = preList.findIndex(user => user.name === userNewChat);
             if (existingUserIndex == -1) {
-                const newUser = { name: userNewChat, type: 0, actionTime: "", mes: "" };
+                const newUser = { name: userNewChat, type: userType, actionTime: "", mes: "" };
                 return [...preList, newUser];
             } else {
                 return preList
@@ -229,7 +230,7 @@ export default function Chat() {
     const searchUsers = users.filter(user =>
         user.name.toLowerCase().includes(searchInput.toLowerCase())
     );
-    console.log( searchUsers)
+    // console.log( searchUsers)
 
     return(
         <div className={"chat"}>
@@ -358,12 +359,12 @@ export default function Chat() {
                                 <RoomChatContent page={1}
                                                  onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
                                                  newestChat={newestChat}
-                                                 onUpdateUser={(usern: string) => updateUsersList(usern)}
+                                                 onUpdateUser={(usern: string) => updateUsersList(usern, 1)}
                                                  listUsers={users} user={userHost} userChatTo={username}/>
                                 :
                                 <ChatContent page={1} onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
                                              newestChat={newestChat}
-                                             onUpdateUser={(usern: string) => updateUsersList(usern)} listUsers={users}
+                                             onUpdateUser={(usern: string) => updateUsersList(usern, 0)} listUsers={users}
                                              user={userHost} userChatTo={username}/>
                         )
 
@@ -373,10 +374,10 @@ export default function Chat() {
 
             {isModalRoomOpen ?
                 <ModalRoom onClose={handleCloseModal} modalText={modalRoomText} btnText={modalRoomBtnText}
-                           onButtonClick={handleButtonClick}/> : ""}
+                           onButtonClick={handleButtonClick} modalRoomText={modalRoomText}/> : ""}
 
             {isModalChatOpen ? <ModalChat onHandleGetChat={(user: string) => handleGetNewChat(user)} user={userHost}
-                                          onUpdateListUser={handleGetUserList} onUpdateUser={(usern : string) => updateUsersList(usern)} onClose={handleCloseModalChat} modalText={modalChatText} btnText={modalChatBtnText}/> : ""}
+                                          onUpdateListUser={handleGetUserList} onUpdateUser={(usern : string) => updateUsersList(usern, 0)} onClose={handleCloseModalChat} modalText={modalChatText} btnText={modalChatBtnText}/> : ""}
         </div>
     )
 }
