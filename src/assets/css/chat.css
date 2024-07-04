@@ -206,5 +206,12 @@
 .right .top .location .info .desc .locate {
   font-size: 14px;
 }
+.right .chat-content {
+  display: flex;
+  height: 100%;
+}
+.right .chat-content .main-chat-content {
+  width: 70%;
+}
 
 /*# sourceMappingURL=chat.css.map */

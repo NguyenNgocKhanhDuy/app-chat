@@ -9,6 +9,7 @@ import EmojiPicker, {Emoji} from "emoji-picker-react";
 import ReactDOM from "react-dom/client";
 import {Simulate} from "react-dom/test-utils";
 import input = Simulate.input;
+import InfomationChat from "./InfomationChat";
 
 
 
@@ -400,21 +401,25 @@ const [iconFirst, setIconFirst] = useState(false)
                     <i className="fa-solid fa-ellipsis-vertical"></i>
                 </div>
             </div>
-            <div className="content" ref={chatListRef}>
-
-            </div>
-
 
             <div className="chat-action">
                 <div className="holder">
-                    <textarea  ref={textareaRef} onInput={handleInput} className={"input-mess"}
-                              onClick={handleSeenInputClick} placeholder={"Type here"} onKeyPress={handleKeyPress}></textarea>
+                    <textarea ref={textareaRef} onInput={handleInput} className={"input-mess"}
+                              onClick={handleSeenInputClick} placeholder={"Type here"}
+                              onKeyPress={handleKeyPress}></textarea>
                     {/*<input type="text" placeholder={"Type here"} ref={inputMessRef} onClick={handleSeenInputClick}/>*/}
-                    <i className="fa-regular fa-face-smile" onClick={()=>{setShowEmoji(!showEmoji)}}></i>
+                    <i className="fa-regular fa-face-smile" onClick={() => {
+                        setShowEmoji(!showEmoji)
+                    }}></i>
                     {showEmoji ? <EmojiPicker className={"emoji"} onEmojiClick={handleGetEmoji}/> : ""}
                 </div>
-                <Button text={"Send"} className={"send"} onClick={handleSendChat} />
+                <Button text={"Send"} className={"send"} onClick={handleSendChat}/>
+            </div>
+            <div className="info-content" ref={chatListRef}>
+                <InfomationChat/>
             </div>
         </div>
-    );
+
+    )
+        ;
 }
