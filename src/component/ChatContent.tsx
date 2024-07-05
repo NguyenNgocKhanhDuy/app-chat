@@ -203,7 +203,7 @@ export default function ChatContent(props : any) {
                                     <div class="text">
                                         ${check ?
                                         `${mesChat1} <img src="${mesChat2}" alt="grin" class="epr-emoji-img epr_-a3ewa5 epr_-tul3d0 epr_xfdx0l epr_-u8wwnq epr_dkrjwv __EmojiPicker__ epr_-dyxviy epr_-w2g3k2 epr_-8yncdp epr_szp4ut" loading="eager" style="font-size: 32px; height: 32px; width: 32px;">` 
-                                        : data[i].mes
+                                        : `<p>${data[i].mes}</p>`
                                         }
                                         <span class="time">${time}</span>
                                     </div>
@@ -215,7 +215,10 @@ export default function ChatContent(props : any) {
                                         <p class="name">${data[i].name}</p>
                                     </div>
                                     <div class="text">
-                                        ${data[i].mes}
+                                        ${check ?
+                                        `${mesChat1} <img src="${mesChat2}" alt="grin" class="epr-emoji-img epr_-a3ewa5 epr_-tul3d0 epr_xfdx0l epr_-u8wwnq epr_dkrjwv __EmojiPicker__ epr_-dyxviy epr_-w2g3k2 epr_-8yncdp epr_szp4ut" loading="eager" style="font-size: 32px; height: 32px; width: 32px;">`
+                                        : `<p>${data[i].mes}</p>`
+                                        }
                                         <span class="time">${time}</span>
                                     </div>
                                 </div>`
