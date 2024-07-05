@@ -105,7 +105,7 @@ export default function Chat() {
             //     mes: "",
             // };
             console.log("ham nay duoc goi")
-            updateUsersList(data.name, 1)
+            updateUsersList(data.name, "",1)
             handleCloseModal()
         })
 
@@ -164,13 +164,14 @@ export default function Chat() {
     useEffect(() => {
         WebSocketService.registerCallback('SEND_CHAT', (data: any) => {
             const userNewChat = data.name;
-            updateUsersList(userNewChat, 0)
+            const userNewChatTo = data.to;
+            updateUsersList(userNewChat, userNewChatTo, data.type)
         })
     }, [users, newestChat]);
 
 
 
-    const updateUsersList = (userNewChat: string, userType: number) => {
+    const updateUsersList = (userNewChat: string, userNewChatTo:string, userType: number) => {
         setUsers(prevUsers => {
             const existingUserIndex = prevUsers.findIndex(user => user.name === userNewChat);
             if (existingUserIndex !== -1) {
@@ -359,12 +360,12 @@ export default function Chat() {
                                 <RoomChatContent page={1}
                                                  onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
                                                  newestChat={newestChat}
-                                                 onUpdateUser={(usern: string) => updateUsersList(usern, 1)}
+                                                 onUpdateUser={(usern: string) => updateUsersList(usern,"", 1)}
                                                  listUsers={users} user={userHost} userChatTo={username}/>
                                 :
                                 <ChatContent page={1} onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
                                              newestChat={newestChat}
-                                             onUpdateUser={(usern: string) => updateUsersList(usern, 0)} listUsers={users}
+                                             onUpdateUser={(usern: string) => updateUsersList(usern, "",0)} listUsers={users}
                                              user={userHost} userChatTo={username}/>
                         )
 
@@ -377,7 +378,7 @@ export default function Chat() {
                            onButtonClick={handleButtonClick} modalRoomText={modalRoomText}/> : ""}
 
             {isModalChatOpen ? <ModalChat onHandleGetChat={(user: string) => handleGetNewChat(user)} user={userHost}
-                                          onUpdateListUser={handleGetUserList} onUpdateUser={(usern : string) => updateUsersList(usern, 0)} onClose={handleCloseModalChat} modalText={modalChatText} btnText={modalChatBtnText}/> : ""}
+                                          onUpdateListUser={handleGetUserList} onUpdateUser={(usern : string) => updateUsersList(usern,"", 0)} onClose={handleCloseModalChat} modalText={modalChatText} btnText={modalChatBtnText}/> : ""}
         </div>
     )
 }

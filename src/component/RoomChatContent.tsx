@@ -59,6 +59,9 @@ export default function ChatContent(props : any) {
         // console.log(mess)
         // console.log("start")
         page2Ref.current = 1
+        if (chatListRef.current) {
+            chatListRef.current.innerHTML = "";
+        }
         // setMess([])
         isFirst = false
         handleGetChat()
@@ -96,7 +99,7 @@ export default function ChatContent(props : any) {
 
 
         WebSocketService.registerCallback('SEND_CHAT', (data: any) => {
-            handleGetChat()
+            handleReset()
             handleUpdateListUser(data.name)
 
         })
@@ -126,7 +129,7 @@ export default function ChatContent(props : any) {
             handleAddInHtml(mess)
             setMess([])
         }
-    }, [end]);
+    }, [mess]);
 
     useEffect(() => {
         // console.log('End state changed:', end);
@@ -233,7 +236,7 @@ export default function ChatContent(props : any) {
 
 
         if (chatListRef.current) {
-            chatListRef.current.innerHTML = htmlItem;
+            chatListRef.current.innerHTML += htmlItem;
         }
 
     }
