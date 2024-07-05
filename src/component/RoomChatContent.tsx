@@ -70,15 +70,15 @@ export default function ChatContent(props : any) {
 
     useEffect(() => {
         const handleAddChat = (data:any) => {
-            console.log(data)
+            // console.log(data)
             // console.log("LEN :"+data.length)
             if (data.chatData.length > 0) {
                 if (isFirst) {
                     isFirst = false
-                    console.log("first false")
+                    // console.log("first false")
                 }else {
                     // console.log("userchatto: "+userChatTo)
-                    console.log('ok')
+                    // console.log('ok')
                     // var chatData = data.chatData
                     setMess((preData) => [...preData, ...data.chatData]);
                     // console.log("PAGE1: " + page2Ref.current);
@@ -88,7 +88,7 @@ export default function ChatContent(props : any) {
                 }
             } else {
                 // console.log("end1: "+end)
-                console.log("No more data available for page " + page2Ref.current);
+                // console.log("No more data available for page " + page2Ref.current);
                 isEnd(!end)
                 // console.log("end2: "+end)
             }
@@ -100,7 +100,7 @@ export default function ChatContent(props : any) {
 
         WebSocketService.registerCallback('SEND_CHAT', (data: any) => {
             handleReset()
-            handleUpdateListUser(data.name)
+            handleUpdateListUser(data.name, data.to)
 
         })
 
@@ -123,9 +123,9 @@ export default function ChatContent(props : any) {
 
 
     useEffect(() => {
-        console.log("MESS: "+mess.length)
+        // console.log("MESS: "+mess.length)
         if (mess.length > 0) {
-            console.log('update')
+            // console.log('update')
             handleAddInHtml(mess)
             setMess([])
         }
@@ -134,7 +134,7 @@ export default function ChatContent(props : any) {
     useEffect(() => {
         // console.log('End state changed:', end);
         if (end) {
-            console.log('Reached end, no more data to fetch');
+            // console.log('Reached end, no more data to fetch');
             // Handle end of chat messages scenario
         }
     }, [end]);
@@ -247,8 +247,8 @@ export default function ChatContent(props : any) {
         return text.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/=/g, '&#61;');
     }
 
-    const handleUpdateListUser = (username : string)=>{
-        props.onUpdateUser(username, 1);
+    const handleUpdateListUser = (username : string, userChatTo:string)=>{
+        props.onUpdateUser(username, userChatTo,1);
     }
 
 

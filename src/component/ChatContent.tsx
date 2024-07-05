@@ -54,9 +54,9 @@ export default function ChatContent(props : any) {
     }, [userChatTo]);
 
     const handleReset = () => {
-        console.log(userChatTo)
+        // console.log(userChatTo)
         // console.log(mess)
-        console.log("start")
+        // console.log("start")
         if (chatListRef.current) {
             chatListRef.current.innerHTML = "";
         }
@@ -96,15 +96,15 @@ export default function ChatContent(props : any) {
 
 
         WebSocketService.registerCallback('GET_PEOPLE_CHAT_MES',  (data : any) => {
-            console.log("LEN :"+data.length)
-            console.log("u: "+userChatTo)
+            // console.log("LEN :"+data.length)
+            // console.log("u: "+userChatTo)
             if (data.length > 0) {
                 if (isFirst) {
                     isFirst = false
-                    console.log("first false")
+                    // console.log("first false")
                 }else {
                     // console.log("userchatto: "+userChatTo)
-                    console.log('ok')
+                    // console.log('ok')
                     setMess((preData) => [...preData, ...data]);
                     // console.log("PAGE1: " + page2Ref.current);
                     page2Ref.current++;
@@ -112,19 +112,19 @@ export default function ChatContent(props : any) {
                     handleGetChat()
                 }
             } else {
-                console.log("end1: "+end)
-                console.log("No more data available for page " + page2Ref.current);
+                // console.log("end1: "+end)
+                // console.log("No more data available for page " + page2Ref.current);
                 // isEnd(!end)
                 isEnd(true)
-                console.log("end2: "+end)
+                // console.log("end2: "+end)
 
             }
         })
 
 
         WebSocketService.registerCallback('SEND_CHAT',  (data: any) => {
-            console.log('SEND_CHAT')
-            console.log("EndSend: "+end)
+            // console.log('SEND_CHAT')
+            // console.log("EndSend: "+end)
              isEnd(false)
             // handleReset()
              handleReset();
@@ -152,18 +152,18 @@ export default function ChatContent(props : any) {
 
 
     useEffect(() => {
-        console.log("MESS: "+mess.length)
+        // console.log("MESS: "+mess.length)
         if (mess.length > 0) {
-            console.log('update')
+            // console.log('update')
             handleAddInHtml(mess)
             setMess([])
         }
     }, [mess]);
 
     useEffect(() => {
-        console.log('End state changed:', end);
+        // console.log('End state changed:', end);
         if (end) {
-            console.log('Reached end, no more data to fetch');
+            // console.log('Reached end, no more data to fetch');
             // Handle end of chat messages scenario
         }
     }, [end]);

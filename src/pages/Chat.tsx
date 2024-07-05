@@ -165,45 +165,90 @@ export default function Chat() {
         WebSocketService.registerCallback('SEND_CHAT', (data: any) => {
             const userNewChat = data.name;
             const userNewChatTo = data.to;
+            console.log("TEST: "+userNewChat +", "+userNewChatTo+", "+data.type);
             updateUsersList(userNewChat, userNewChatTo, data.type)
         })
     }, [users, newestChat]);
 
 
 
+
     const updateUsersList = (userNewChat: string, userNewChatTo:string, userType: number) => {
         setUsers(prevUsers => {
-            const existingUserIndex = prevUsers.findIndex(user => user.name === userNewChat);
-            if (existingUserIndex !== -1) {
-                const updatedUsers = [...prevUsers];
-                const [user] = updatedUsers.splice(existingUserIndex, 1);
-                updatedUsers.unshift(user);
-                return updatedUsers;
-            } else {
-                const newUser = { name: userNewChat, type: userType, actionTime: "", mes: "" };
-                return [newUser, ...prevUsers];
+            var existingUserIndex:number
+            // const existingUserIndex = prevUsers.findIndex(user => user.name === userNewChat);
+            if (userType == 0) {
+                existingUserIndex = prevUsers.findIndex(user => user.name === userNewChat);
+                if (existingUserIndex !== -1) {
+                    const updatedUsers = [...prevUsers];
+                    const [user] = updatedUsers.splice(existingUserIndex, 1);
+                    updatedUsers.unshift(user);
+                    return updatedUsers;
+                } else {
+                    const newUser = { name: userNewChat, type: userType, actionTime: "", mes: "" };
+                    return [newUser, ...prevUsers];
+                }
+            }else  {
+                existingUserIndex = prevUsers.findIndex(user => user.name === userNewChatTo);
+                if (existingUserIndex !== -1) {
+                    const updatedUsers = [...prevUsers];
+                    const [user] = updatedUsers.splice(existingUserIndex, 1);
+                    updatedUsers.unshift(user);
+                    return updatedUsers;
+                } else {
+                    const newUser = { name: userNewChatTo, type: userType, actionTime: "", mes: "" };
+                    return [newUser, ...prevUsers];
+                }
             }
+
         });
 
         setNewestChat(preList=> {
-            const existingUserIndex = preList.findIndex(user => user.name === userNewChat);
-            if (existingUserIndex == -1) {
-                const newUser = { name: userNewChat, type: userType, actionTime: "", mes: "" };
-                return [...preList, newUser];
-            } else {
-                return preList
+            var existingUserIndex:number;
+            // const existingUserIndex = preList.findIndex(user => user.name === userNewChat);
+            if (userType == 0) {
+                existingUserIndex = preList.findIndex(user => user.name === userNewChat);
+                if (existingUserIndex == -1) {
+                    const newUser = { name: userNewChat, type: userType, actionTime: "", mes: "" };
+                    return [...preList, newUser];
+                } else {
+                    return preList
+                }
+            }else  {
+                console.log("OK: "+userNewChatTo)
+                users.map(u=> {
+                    console.log(u.name)
+                })
+                existingUserIndex = preList.findIndex(user => user.name === userNewChatTo);
+                if (existingUserIndex == -1) {
+                    const newUser = { name: userNewChatTo, type: userType, actionTime: "", mes: "" };
+                    return [...preList, newUser];
+                } else {
+                    return preList
+                }
             }
+
         });
     };
 
     const removeFromNewest = (username:string) => {
+        // setNewestChat(preList=> {
+        //     const existingUserIndex = preList.findIndex(user => user.name === username);
+        //     if (existingUserIndex != -1) {
+        //         const [newChat] = newestChat.splice(existingUserIndex, 1);
+        //         return [...preList, newChat];
+        //     } else {
+        //         return preList
+        //     }
+        // });
         setNewestChat(preList=> {
             const existingUserIndex = preList.findIndex(user => user.name === username);
-            if (existingUserIndex != -1) {
-                const [newChat] = newestChat.splice(existingUserIndex, 1);
-                return [...preList, newChat];
+            if (existingUserIndex !== -1) {
+                const updatedUsers = [...preList];
+                const [user] = updatedUsers.splice(existingUserIndex, 1);
+                return updatedUsers;
             } else {
-                return preList
+                return preList;
             }
         });
     }
@@ -228,9 +273,23 @@ export default function Chat() {
 
 
 
-    const searchUsers = users.filter(user =>
-        user.name.toLowerCase().includes(searchInput.toLowerCase())
-    );
+
+    const [searchUsers, setSearchUsers] = useState<User[]>([]);
+
+    const handleSearch = (e:any) => {
+        console.log(e.target.value)
+        setSearchInput(e.target.value)
+        const filteredUsers = users.filter(user => {
+            return user.name.toLowerCase().includes(e.target.value.toLowerCase());
+        });
+        // searchUsers = users.filter(user => {
+        //     return user.name.toLowerCase().includes(searchInput.toLowerCase())
+        // });
+        // searchUsers.map(u => {
+        //     console.log(u.name)
+        // })
+        setSearchUsers(filteredUsers)
+    }
     // console.log( searchUsers)
 
     return(
@@ -245,7 +304,7 @@ export default function Chat() {
                     </div>
                 </div>
                 <div className="search">
-                    <input type="text" placeholder={"Search for groups and events"} value={searchInput} onChange={e => setSearchInput(e.target.value)}/>
+                    <input type="text" placeholder={"Search for groups and events"} value={searchInput} onChange={handleSearch}/>
                     <i className="fa-solid fa-magnifying-glass"></i>
                 </div>
                 {searchInput ==="" ? (
@@ -360,7 +419,7 @@ export default function Chat() {
                                 <RoomChatContent page={1}
                                                  onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
                                                  newestChat={newestChat}
-                                                 onUpdateUser={(usern: string) => updateUsersList(usern,"", 1)}
+                                                 onUpdateUser={(usern: string, usernTo:string) => updateUsersList(usern, usernTo, 1)}
                                                  listUsers={users} user={userHost} userChatTo={username}/>
                                 :
                                 <ChatContent page={1} onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
