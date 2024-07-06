@@ -21,6 +21,8 @@ interface ChatMessage {
     createAt: ""
 }
 
+
+
 export default function ChatContent(props : any) {
 
     const chatListRef = useRef<HTMLDivElement>(null);
@@ -401,7 +403,9 @@ const [iconFirst, setIconFirst] = useState(false)
                     <i className="fa-solid fa-ellipsis-vertical"></i>
                 </div>
             </div>
+            <div className="content" ref={chatListRef}>
 
+            </div>
             <div className="chat-action">
                 <div className="holder">
                     <textarea ref={textareaRef} onInput={handleInput} className={"input-mess"}
@@ -415,9 +419,7 @@ const [iconFirst, setIconFirst] = useState(false)
                 </div>
                 <Button text={"Send"} className={"send"} onClick={handleSendChat}/>
             </div>
-            <div className="info-content" ref={chatListRef}>
-                <InfomationChat/>
-            </div>
+
         </div>
 
     )

@@ -231,6 +231,18 @@ export default function Chat() {
     );
     // console.log( searchUsers)
 
+    const handleOpenInfo = function () {
+        const mainchat = document.querySelector(".main-chat-content") as HTMLDivElement;
+        const info = document.querySelector(".info-content") as HTMLDivElement;
+        mainchat.style.width = "75%";
+        info.style.width = "25%";
+    }
+    const handleCloseInfo = function () {
+        const mainchat = document.querySelector(".main-chat-content") as HTMLDivElement;
+        const info = document.querySelector(".info-content") as HTMLDivElement;
+        mainchat.style.width = "100%";
+        info.style.width = "0%";
+    }
     return(
         <div className={"chat"}>
             <div className="left">
@@ -356,26 +368,28 @@ export default function Chat() {
                 </div>
                 <div className="chat-content">
                     <div className={"main-chat-content"}>
-                    {isChatOpen ?
-                        (room ?
-                                <RoomChatContent page={1}
+                        {isChatOpen ?
+                            (room ?
+                                    <RoomChatContent page={1}
+                                                     onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
+                                                     newestChat={newestChat}
+                                                     onUpdateUser={(usern: string) => updateUsersList(usern, 1)}
+                                                     listUsers={users} user={userHost} userChatTo={username} handleOpenInfo={handleOpenInfo}/>
+                                    :
+                                    <ChatContent page={1}
                                                  onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
                                                  newestChat={newestChat}
-                                                 onUpdateUser={(usern: string) => updateUsersList(usern, 1)}
-                                                 listUsers={users} user={userHost} userChatTo={username}/>
-                                :
-                                <ChatContent page={1} onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
-                                             newestChat={newestChat}
-                                             onUpdateUser={(usern: string) => updateUsersList(usern, 0)}
-                                             listUsers={users}
-                                             user={userHost} userChatTo={username}/>
-                        )
+                                                 onUpdateUser={(usern: string) => updateUsersList(usern, 0)}
+                                                 listUsers={users}
+                                                 user={userHost} userChatTo={username} />
+                            )
 
-                        : <ChatWelcome/>}
+                            : <ChatWelcome/>}
                     </div>
 
-                        <InfomationChat nameOfUserChat={username}/>
-
+                    <div className="info-content">
+                        <InfomationChat handleCloseInfo={handleCloseInfo} />
+                    </div>
                 </div>
 
             </div>

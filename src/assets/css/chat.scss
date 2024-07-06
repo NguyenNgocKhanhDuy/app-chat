@@ -243,7 +243,10 @@
     height: 100%;
 
     .main-chat-content {
-      width: 70%;
+      width: 100%;
+    }
+    .info-content {
+      width: 0%;
     }
 
   }

@@ -211,7 +211,10 @@
   height: 100%;
 }
 .right .chat-content .main-chat-content {
-  width: 70%;
+  width: 100%;
+}
+.right .chat-content .info-content {
+  width: 0%;
 }
 
 /*# sourceMappingURL=chat.css.map */

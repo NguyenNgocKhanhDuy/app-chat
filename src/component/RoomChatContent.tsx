@@ -377,6 +377,10 @@ const [iconFirst, setIconFirst] = useState(false)
 
     }
 
+    const handleOpenInfo = () => {
+        props.handleOpenInfo()
+    }
+
     return (
         <div className="wrapper" ref={wrapperRef}>
             <div className="header">
@@ -395,7 +399,7 @@ const [iconFirst, setIconFirst] = useState(false)
                 <div className="action">
                     <i className="fa-solid fa-phone"></i>
                     <i className="fa-solid fa-magnifying-glass"></i>
-                    <i className="fa-solid fa-ellipsis-vertical"></i>
+                    <i className="fa-solid fa-ellipsis-vertical" onClick={handleOpenInfo}></i>
                 </div>
             </div>
             <div className="content" ref={chatListRef}>
