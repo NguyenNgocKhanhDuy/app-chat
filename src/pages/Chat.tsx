@@ -23,6 +23,11 @@ interface User {
     actionTime: string;
     mes: string;
 }
+interface UserRoom {
+    id: string
+    name: string;
+}
+
 export default function Chat() {
     const navigate = useNavigate();
     const [modalInputValue, setModalInputValue] = useState("");
@@ -39,8 +44,9 @@ export default function Chat() {
     const [room, isRoom] = useState(false)
     const [searchInput, setSearchInput] = useState("");
     const toggleChat = (username : string, type:number) => {
+        handleCloseInfo();
+        (type ===1 ? isRoom(true) : isRoom(false))
 
-        (type == 1) ? isRoom(true) : isRoom(false);
         setUsername(username);
 
         removeChat(username, userHost)
@@ -230,18 +236,47 @@ export default function Chat() {
         user.name.toLowerCase().includes(searchInput.toLowerCase())
     );
     // console.log( searchUsers)
+    const [ownRoom, setOwnRoom] = useState("");
+    const [usersRoom, setUsersRoom] = useState<UserRoom[]>([]);
+    const [nameRoom, setNameRoom] = useState("");
+    const [isInfoOpen, setIsInfoOpen] = useState(false);
 
     const handleOpenInfo = function () {
         const mainchat = document.querySelector(".main-chat-content") as HTMLDivElement;
         const info = document.querySelector(".info-content") as HTMLDivElement;
         mainchat.style.width = "75%";
         info.style.width = "25%";
+        handleGetListUserOfRoom(username)
+        WebSocketService.registerCallback("GET_ROOM_CHAT_MES", (data: any) => {
+            setOwnRoom(data.own)
+            setUsersRoom(data.userList)
+            setNameRoom(data.name)
+            setIsInfoOpen(true)
+        })
+
     }
     const handleCloseInfo = function () {
         const mainchat = document.querySelector(".main-chat-content") as HTMLDivElement;
         const info = document.querySelector(".info-content") as HTMLDivElement;
         mainchat.style.width = "100%";
         info.style.width = "0%";
+        setIsInfoOpen(false)
+
+    }
+
+    const handleGetListUserOfRoom = (nameRoom: string) => {
+        WebSocketService.sendMessage(
+            {
+                "action": "onchat",
+                "data": {
+                    "event": "GET_ROOM_CHAT_MES",
+                    "data": {
+                        "name": nameRoom,
+                        "page":1
+                    }
+                }
+            }
+        )
     }
     return(
         <div className={"chat"}>
@@ -386,9 +421,10 @@ export default function Chat() {
 
                             : <ChatWelcome/>}
                     </div>
-
                     <div className="info-content">
-                        <InfomationChat handleCloseInfo={handleCloseInfo} />
+                        {isInfoOpen && (
+                            <InfomationChat handleCloseInfo={handleCloseInfo} usersRoom={usersRoom} ownRoom={ownRoom} nameRoom={nameRoom} toggleChat={toggleChat}/>
+                        )}
                     </div>
                 </div>
 

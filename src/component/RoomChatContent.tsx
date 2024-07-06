@@ -374,11 +374,11 @@ const [iconFirst, setIconFirst] = useState(false)
             e.preventDefault();
             handleSendChat()
         }
-
     }
 
     const handleOpenInfo = () => {
         props.handleOpenInfo()
+
     }
 
     return (
