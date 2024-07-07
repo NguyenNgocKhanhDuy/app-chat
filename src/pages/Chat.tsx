@@ -39,9 +39,15 @@ export default function Chat() {
     const [newestChat, setNewestChat] = useState<User[]>([]);
     const [room, isRoom] = useState(false)
     const [searchInput, setSearchInput] = useState("");
+    const [isFirst, setIsFirst] = useState(false)
     const toggleChat = (username : string, type:number) => {
 
         (type == 1) ? isRoom(true) : isRoom(false);
+        if (!isChatOpen) {
+            setIsFirst(true)
+        }else {
+            setIsFirst(false)
+        }
         setUsername(username);
 
         removeChat(username, userHost)
@@ -429,7 +435,7 @@ export default function Chat() {
                                                  listUsers={users} user={userHost} userChatTo={username}/>
                                 :
                                 <ChatContent page={1} onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
-                                             newestChat={newestChat}
+                                             newestChat={newestChat} isFirst={true}
                                              onUpdateUser={(usern: string) => updateUsersList(usern, "",0)} listUsers={users}
                                              user={userHost} userChatTo={username} isStart={start}/>
                         )

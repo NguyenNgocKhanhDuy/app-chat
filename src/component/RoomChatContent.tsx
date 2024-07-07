@@ -23,7 +23,7 @@ export default function ChatContent(props : any) {
     const chatListRef = useRef<HTMLDivElement>(null);
 
     const [mess, setMess] = useState<ChatMessage[]>([]);
-     const user = props.user;
+    const user = props.user;
     const userChatTo = props.userChatTo;
     const newestChat = props.newestChat;
     var isSeen = true;
@@ -36,7 +36,7 @@ export default function ChatContent(props : any) {
 
     useEffect(() => {
         const handleStorageChange = () => {
-            handleGetChat()
+            handleGetChat(1)
         };
 
         window.addEventListener('storage', handleStorageChange);
@@ -47,60 +47,49 @@ export default function ChatContent(props : any) {
     }, []);
 
 
-
     useEffect(() => {
         if (isFirst) {
             handleReset()
         }
+
     }, [userChatTo]);
 
     const handleReset = () => {
-        // console.log(userChatTo)
+        console.log(userChatTo)
         // console.log(mess)
-        // console.log("start")
-        page2Ref.current = 1
+        console.log("start")
         if (chatListRef.current) {
             chatListRef.current.innerHTML = "";
         }
+        page2Ref.current = 1
+        console.log("ends: "+end)
         // setMess([])
         isFirst = false
-        handleGetChat()
+        handleGetChat(1)
     }
 
 
     useEffect(() => {
-        const handleAddChat = (data:any) => {
-            // console.log(data)
-            // console.log("LEN :"+data.length)
-            if (data.chatData.length > 0) {
+        WebSocketService.registerCallback('GET_PEOPLE_CHAT_MES',  (data : any) => {
+            console.log("LEN :"+data.length)
+            console.log("u: "+userChatTo)
+            if (data.length > 0) {
                 if (isFirst) {
                     isFirst = false
-                    // console.log("first false")
+                    console.log("first false")
                 }else {
-                    // console.log("userchatto: "+userChatTo)
-                    // console.log('ok')
-                    // var chatData = data.chatData
-                    setMess((preData) => [...preData, ...data.chatData]);
-                    // console.log("PAGE1: " + page2Ref.current);
-                    page2Ref.current++;
-                    // console.log("PAGE2: " + page2Ref.current);
-                    handleGetChat()
+                    console.log('ok')
+                    // setMess((preData) => [...preData, ...data]);
+                    handleAddInHtml(data)
                 }
-            } else {
-                // console.log("end1: "+end)
-                // console.log("No more data available for page " + page2Ref.current);
-                isEnd(!end)
-                // console.log("end2: "+end)
             }
-        }
+        })
 
 
-        WebSocketService.registerCallback('GET_ROOM_CHAT_MES', handleAddChat)
-
-
-        WebSocketService.registerCallback('SEND_CHAT', (data: any) => {
-            handleReset()
-            handleUpdateListUser(data.name, data.to)
+        WebSocketService.registerCallback('SEND_CHAT',  (data: any) => {
+            console.log('SEND_CHAT')
+            handleReset();
+            // handleUpdateListUser(data.name);
 
         })
 
@@ -115,29 +104,13 @@ export default function ChatContent(props : any) {
         }
 
         return () => {
-            WebSocketService.registerCallback('GET_ROOM_CHAT_MES', ()=>{})
+            WebSocketService.registerCallback('GET_PEOPLE_CHAT_MES', ()=>{})
         };
 
     }, [userChatTo]);
 
 
 
-    useEffect(() => {
-        // console.log("MESS: "+mess.length)
-        if (mess.length > 0) {
-            // console.log('update')
-            handleAddInHtml(mess)
-            setMess([])
-        }
-    }, [mess]);
-
-    useEffect(() => {
-        // console.log('End state changed:', end);
-        if (end) {
-            // console.log('Reached end, no more data to fetch');
-            // Handle end of chat messages scenario
-        }
-    }, [end]);
 
     useEffect(() => {
         handleCheckOnline()
@@ -151,7 +124,6 @@ export default function ChatContent(props : any) {
     }
 
     useEffect(() => {
-        // console.log('set')
         handleSetOnlineUI()
     }, [isOnline]);
 
@@ -176,24 +148,15 @@ export default function ChatContent(props : any) {
         var htmlItem = ``
 
         for (let i = 0; i < data.length; i++) {
-            // console.log("LI: "+data[i].mes)
             var time =  getHourMinute(convertTime(data[i].createAt))
-
-            var mesChat1 = data[i].mes.split("|")[0]
-            var mesChat2 = data[i].mes.split("|")[1]
-            // console.log("Mes1: "+mesChat1)
-            // console.log("Mes2: "+mesChat2)
-            var check = false;
-            var submes2 = ""
-            if (mesChat2 != undefined) {
-                console.log('Mes1: '+mesChat1)
-                submes2 = mesChat2.substring(0, 29)
-                if (submes2 == "https://cdn.jsdelivr.net/npm/") {
-                    check = true;
-                    console.log(check)
+            var messTokens = data[i].mes.split("|")
+            var mess = "";
+            for (let j = 0; j < messTokens.length; j++) {
+                if (messTokens[j].substring(0, 29) == "https://cdn.jsdelivr.net/npm/") {
+                    mess += `<img src="${messTokens[j]}" alt="grin" class="epr-emoji-img epr_-a3ewa5 epr_-tul3d0 epr_xfdx0l epr_-u8wwnq epr_dkrjwv __EmojiPicker__ epr_-dyxviy epr_-w2g3k2 epr_-8yncdp epr_szp4ut" loading="eager" style="font-size: 32px; height: 32px; width: 32px;"/>`
+                }else {
+                    mess += `<p>${messTokens[j]}</p>`;
                 }
-                console.log('submes2: '+submes2)
-                console.log("Mes2: "+mesChat2)
             }
 
             if (data[i].name == user){
@@ -206,10 +169,7 @@ export default function ChatContent(props : any) {
                 }
                 htmlItem += `<div class="item my-chat">
                                     <div class="text">
-                                        ${check ?
-                                        `${mesChat1} <img src="${mesChat2}" alt="grin" class="epr-emoji-img epr_-a3ewa5 epr_-tul3d0 epr_xfdx0l epr_-u8wwnq epr_dkrjwv __EmojiPicker__ epr_-dyxviy epr_-w2g3k2 epr_-8yncdp epr_szp4ut" loading="eager" style="font-size: 32px; height: 32px; width: 32px;">` 
-                                        : data[i].mes
-                                        }
+                                        ${mess}
                                         <span class="time">${time}</span>
                                     </div>
                                 </div>`
@@ -220,7 +180,7 @@ export default function ChatContent(props : any) {
                                         <p class="name">${data[i].name}</p>
                                     </div>
                                     <div class="text">
-                                        ${data[i].mes}
+                                        ${mess}
                                         <span class="time">${time}</span>
                                     </div>
                                 </div>`
@@ -241,11 +201,6 @@ export default function ChatContent(props : any) {
 
     }
 
-    // Function to convert Unicode codes to emojis
-
-    function convertSpecialCharacters(text:string) {
-        return text.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/=/g, '&#61;');
-    }
 
     const handleUpdateListUser = (username : string, userChatTo:string)=>{
         props.onUpdateUser(username, userChatTo,1);
@@ -253,7 +208,7 @@ export default function ChatContent(props : any) {
 
 
 
-    const handleGetChat = () => {
+    const handleGetChat = (page:number) => {
         WebSocketService.sendMessage(
             {
                 action: 'onchat',
@@ -261,17 +216,28 @@ export default function ChatContent(props : any) {
                     event: 'GET_ROOM_CHAT_MES',
                     data: {
                         name: userChatTo.toLowerCase(),
-                        page: page2Ref.current
+                        page: page
                     }
                 }
             }
         )
-        // page2++;
+    }
+
+    const handleScroll = () => {
+        console.log('scr')
+        if (chatListRef.current) {
+            console.log(chatListRef.current.scrollHeight)
+            console.log(chatListRef.current.scrollTop)
+            if (chatListRef.current.scrollHeight + chatListRef.current.scrollTop > 320 && chatListRef.current.scrollHeight + chatListRef.current.scrollTop < 330){
+                console.log('up')
+                page2Ref.current++
+                handleGetChat(page2Ref.current)
+            }
+        }
     }
 
 
 
-    // const inputMessRef = useRef<HTMLInputElement>(null);
 
     const handleSeenInputClick = () => {
         const existingUserIndex = newestChat.findIndex((user:any) => user.name == userChatTo);
@@ -289,14 +255,7 @@ export default function ChatContent(props : any) {
         if (textareaRef.current) {
 
             mess = chatMess
-            console.log("ME: "+mess)
-            // const emojiRegEx = /\[([^\]]+)\]/g;
-            // mess = mess.replace(emojiRegEx, (match, emojiChar) => {
-            //     const emojiUnicode = unicodeToUnified(emojiChar);
-            //     return emojiUnicode ? `<Emoji unified="1f9e5" size="25" />` : "ok";
-            // });
 
-            console.log("Me: "+ mess)
 
             WebSocketService.sendMessage(
                 {
@@ -313,14 +272,15 @@ export default function ChatContent(props : any) {
             )
             textareaRef.current.value = ""
             setChatMess("")
-            // if (showEmoji) {
-            //     setShowEmoji(!showEmoji)
-            // }
+            if (showEmoji) {
+                setShowEmoji(!showEmoji)
+            }
             saveChat(user, userChatTo)
             isEnd(!end)
-            console.log("End: "+end)
+            // console.log("End: "+end)
             handleReset()
             // setIconFirst(false)
+
         }else{
             console.log("Input null")
         }
@@ -350,29 +310,21 @@ export default function ChatContent(props : any) {
         }
     };
 
-const [iconFirst, setIconFirst] = useState(false)
 
 
     const handleGetEmoji = (e : any) => {
         if (textareaRef.current) {
-            console.log(e)
-            console.log("ChatM: "+chatMess)
             if (chatMess.length > 0) {
-                // console.log('1')
                 var value = chatMess + `|${e.imageUrl}`
                 setChatMess(value)
                 var valueShow = textareaRef.current.value
                 textareaRef.current.value = valueShow + e.emoji
             }else {
-                // console.log('2')
                 textareaRef.current.value = e.emoji
                 setChatMess(`|${e.imageUrl}`)
-                // setIconFirst(true)
             }
-            // console.log(e)
         }
     }
-
 
     return (
         <div className="wrapper" ref={wrapperRef}>
@@ -395,7 +347,7 @@ const [iconFirst, setIconFirst] = useState(false)
                     <i className="fa-solid fa-ellipsis-vertical"></i>
                 </div>
             </div>
-            <div className="content" ref={chatListRef}>
+            <div className="content" ref={chatListRef} onScroll={handleScroll} >
 
             </div>
 
