@@ -111,7 +111,6 @@ export default function Chat() {
             // };
             console.log("ham nay duoc goi")
             updateUsersList(data.name, 1)
-            handleCloseModal()
         })
 
     }
@@ -234,6 +233,7 @@ export default function Chat() {
 
     const searchUsers = users.filter(user =>
         user.name.toLowerCase().includes(searchInput.toLowerCase())
+
     );
     // console.log( searchUsers)
     const [ownRoom, setOwnRoom] = useState("");
@@ -432,7 +432,8 @@ export default function Chat() {
 
             {isModalRoomOpen ?
                 <ModalRoom onClose={handleCloseModal} modalText={modalRoomText} btnText={modalRoomBtnText}
-                           onButtonClick={handleButtonClick} modalRoomText={modalRoomText}/> : ""}
+                           onButtonClick={(inputUser: string) => handleButtonClick(inputUser)}
+                           modalRoomText={modalRoomText}/> : ""}
 
             {isModalChatOpen ? <ModalChat onHandleGetChat={(user: string) => handleGetNewChat(user)} user={userHost}
                                           onUpdateListUser={handleGetUserList}

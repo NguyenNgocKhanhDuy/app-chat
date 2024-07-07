@@ -24,6 +24,7 @@ export default function ModalRoom(props : any) {
         } else if (modalRoomText==="Join Room") {
             action ="JOIN_ROOM"
         }
+        props.onButtonClick(inputValue);
         WebSocketService.registerCallback(action, (data : any) => {
             const error = document.querySelector(".error") as HTMLDivElement;
             const errorText = document.querySelector(".error .error-text") as HTMLParagraphElement;
@@ -32,9 +33,9 @@ export default function ModalRoom(props : any) {
                 error.style.display = "flex"
             } else {
                 handleCloseModal()
+
             }
         })
-        props.onButtonClick(inputValue);
 
 
     }

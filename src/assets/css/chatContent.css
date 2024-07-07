@@ -99,15 +99,11 @@
   border-bottom: 1px solid #e9ecef;
   border-left: 1px solid #e9ecef;
 }
-
-.content .item .text .time {
-
-.chat-content .content .item .text p {
+.content .item .text p {
   text-align: justify;
   word-break: break-word;
 }
-.chat-content .content .item .text .time {
-
+.content .item .text .time {
   display: none;
   width: 30px;
   height: 10px;
