@@ -1,6 +1,6 @@
 import avatar from "../assets/img/avatar.png";
 import Button from "./Button";
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import "../assets/css/chatContent.scss"
 import WebSocketService from "../webSocket/webSocketService";
 import convertTime, {getHourMinute} from "../utils/convertTime";
@@ -350,6 +350,12 @@ export default function ChatContent(props : any) {
 const [iconFirst, setIconFirst] = useState(false)
 
 
+    const handeleKeyDown =(event: React.KeyboardEvent<HTMLElement>)=>{
+        if(event.key== 'Enter' && ! event.shiftKey){
+            event.preventDefault();
+            handleSendChat();
+        }
+    };
     const handleGetEmoji = (e : any) => {
         if (textareaRef.current) {
             console.log(e)
