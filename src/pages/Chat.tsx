@@ -161,14 +161,20 @@ export default function Chat() {
         })
 
     }, []);
+
+    const [start, isStart] = useState(false)
+
     useEffect(() => {
+        if (room == false && isChatOpen == false )
         WebSocketService.registerCallback('SEND_CHAT', (data: any) => {
             const userNewChat = data.name;
             const userNewChatTo = data.to;
             console.log("TEST: "+userNewChat +", "+userNewChatTo+", "+data.type);
             updateUsersList(userNewChat, userNewChatTo, data.type)
+            // // setUsername(userNewChatTo)
+            // isStart(true)
         })
-    }, [users, newestChat]);
+    }, [users]);
 
 
 
@@ -425,7 +431,7 @@ export default function Chat() {
                                 <ChatContent page={1} onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
                                              newestChat={newestChat}
                                              onUpdateUser={(usern: string) => updateUsersList(usern, "",0)} listUsers={users}
-                                             user={userHost} userChatTo={username}/>
+                                             user={userHost} userChatTo={username} isStart={start}/>
                         )
 
                         : <ChatWelcome/>}

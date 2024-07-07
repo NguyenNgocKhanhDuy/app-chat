@@ -31,44 +31,64 @@ export default function ChatContent(props : any) {
     const [end, isEnd] = useState(false)
     const [isOnline, setOnline] = useState(false)
     const [showEmoji, setShowEmoji] = useState(false)
+    var start = true;
+    // console.log("again")
+    var pageT = 1;
+    // console.log(pageT)
+    // console.log(start)
+
+
+
+    // useEffect(() => {
+    //     const handleStorageChange = () => {
+    //         // handleGetChat()
+    //     };
+    //
+    //     window.addEventListener('storage', handleStorageChange);
+    //
+    //     return () => {
+    //         window.removeEventListener('storage', handleStorageChange);
+    //     };
+    // }, []);
+
 
 
     useEffect(() => {
-        const handleStorageChange = () => {
-            handleGetChat()
-        };
+        // if (isFirst) {
+        //     handleReset()
+        // }
 
-        window.addEventListener('storage', handleStorageChange);
-
-        return () => {
-            window.removeEventListener('storage', handleStorageChange);
-        };
-    }, []);
-
-
-
-    useEffect(() => {
-        if (isFirst) {
-            handleReset()
+        if (chatListRef.current) {
+            chatListRef.current.innerHTML = "";
         }
+        pageT = 1
+        handleGetChat(pageT)
+
     }, [userChatTo]);
 
     const handleReset = () => {
         // console.log(userChatTo)
         // console.log(mess)
         // console.log("start")
-        if (chatListRef.current) {
-            chatListRef.current.innerHTML = "";
-        }
-        page2Ref.current = 1
-        console.log("ends: "+end)
+        // if (chatListRef.current) {
+        //     chatListRef.current.innerHTML = "";
+        // }
+        // page2Ref.current = 1
+        // // pageT = 1;
+        // // console.log("ends: "+end)
         // setMess([])
-        isFirst = false
-        handleGetChat()
+        // isFirst = false
+        // handleGetChat()
     }
+    // if (start) {
+    //     handleReset()
+    //     start = false;
+    // }
+
 
 
     useEffect(() => {
+        pageT = 1;
         const handleAddChat = (data:any) => {
             // console.log("LEN :"+data.length)
             // console.log("u: "+userChatTo)
@@ -96,40 +116,53 @@ export default function ChatContent(props : any) {
 
 
         WebSocketService.registerCallback('GET_PEOPLE_CHAT_MES',  (data : any) => {
-            // console.log("LEN :"+data.length)
-            // console.log("u: "+userChatTo)
+            console.log('u: '+userChatTo)
             if (data.length > 0) {
-                if (isFirst) {
-                    isFirst = false
-                    // console.log("first false")
-                }else {
-                    // console.log("userchatto: "+userChatTo)
-                    // console.log('ok')
-                    setMess((preData) => [...preData, ...data]);
-                    // console.log("PAGE1: " + page2Ref.current);
-                    page2Ref.current++;
-                    // console.log("PAGE2: " + page2Ref.current);
-                    handleGetChat()
-                }
-            } else {
-                // console.log("end1: "+end)
-                // console.log("No more data available for page " + page2Ref.current);
-                // isEnd(!end)
-                isEnd(true)
-                // console.log("end2: "+end)
-
+                handleAddInHtml(data)
             }
+            // console.log("u: "+userChatTo)
+            // console.log("P: "+pageT)
+            // console.log("T: "+start)
+            // if (data.length > 0) {
+            //     if (isFirst) {
+            //         isFirst = false
+            //         console.log("first false")
+            //     }else {
+            //         // console.log("userchatto: "+userChatTo)
+            //         console.log('ok')
+            //         setMess((preData) => [...preData, ...data]);
+            //         // console.log("PAGE1: " + page2Ref.current);
+            //         // console.log("PAGE1: " + pageT);
+            //         page2Ref.current++;
+            //         // pageT++;
+            //         // console.log("PAGE2: " + page2Ref.current);
+            //         handleGetChat()
+            //     }
+            // } else {
+            //     // console.log("end1: "+end)
+            //     // console.log("LEN :"+mess.length)
+            //     console.log("No more data available for page " + page2Ref.current);
+            //     // console.log("No more data available for page " + pageT);
+            //     // isEnd(!end)
+            //     // isEnd(true)
+            //     // console.log("end2: "+end)
+            //
+            // }
         })
 
 
         WebSocketService.registerCallback('SEND_CHAT',  (data: any) => {
-            // console.log('SEND_CHAT')
+            console.log('SEND_CHAT')
+            if (chatListRef.current) {
+                chatListRef.current.innerHTML = ""
+            }
+            handleGetChat(1)
             // console.log("EndSend: "+end)
-             isEnd(false)
+            //  isEnd(false)
             // handleReset()
-             handleReset();
-             handleUpdateListUser(data.name);
-            // handleUpdateListUser(data.name)
+            //  handleReset();
+            //  handleUpdateListUser(data.name);
+            handleUpdateListUser(data.name)
 
         })
 
@@ -149,24 +182,31 @@ export default function ChatContent(props : any) {
 
     }, [userChatTo]);
 
+    // useEffect(() => {
+    //     WebSocketService.registerCallback('SEND_CHAT',  (data: any) => {
+    //         console.log('SEND_CHAT2')
+    //         // console.log("EndSend: "+end)
+    //         //  isEnd(false)
+    //         // handleReset()
+    //         // handleReset();
+    //         // handleUpdateListUser(data.name);
+    //         // handleUpdateListUser(data.name)
+    //
+    //     })
+    // }, []);
 
 
-    useEffect(() => {
-        // console.log("MESS: "+mess.length)
-        if (mess.length > 0) {
-            // console.log('update')
-            handleAddInHtml(mess)
-            setMess([])
-        }
-    }, [mess]);
 
-    useEffect(() => {
-        // console.log('End state changed:', end);
-        if (end) {
-            // console.log('Reached end, no more data to fetch');
-            // Handle end of chat messages scenario
-        }
-    }, [end]);
+    // useEffect(() => {
+    //     console.log("MESS: "+mess.length)
+    //     if (mess.length > 0) {
+    //         console.log('update')
+    //         handleAddInHtml(mess)
+    //         setMess([])
+    //     }
+    // }, [mess]);
+
+
 
     useEffect(() => {
         handleCheckOnline()
@@ -264,9 +304,7 @@ export default function ChatContent(props : any) {
 
     // Function to convert Unicode codes to emojis
 
-    function convertSpecialCharacters(text:string) {
-        return text.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/=/g, '&#61;');
-    }
+
 
     const handleUpdateListUser = (username : string)=>{
         console.log("end end: " +end)
@@ -275,7 +313,7 @@ export default function ChatContent(props : any) {
 
 
 
-    const handleGetChat = () => {
+    const handleGetChat = (page:number) => {
         WebSocketService.sendMessage(
             {
                 action: 'onchat',
@@ -283,13 +321,15 @@ export default function ChatContent(props : any) {
                     event: 'GET_PEOPLE_CHAT_MES',
                     data: {
                         name: userChatTo,
-                        page: page2Ref.current
+                        page: page
                     }
                 }
             }
         )
-        // page2++;
     }
+    // handleGetChat(1)
+
+
 
 
 
@@ -337,10 +377,15 @@ export default function ChatContent(props : any) {
             if (showEmoji) {
                 setShowEmoji(!showEmoji)
             }
+
             saveChat(user, userChatTo)
-            isEnd(false)
+            if (chatListRef.current) {
+                chatListRef.current.innerHTML = ""
+            }
+            handleGetChat(1)
+            // isEnd(false)
             // console.log("End: "+end)
-            handleReset()
+            // handleReset()
             // setIconFirst(false)
         }else{
             console.log("Input null")
@@ -370,6 +415,20 @@ export default function ChatContent(props : any) {
             }
         }
     };
+
+    const handleScroll = () => {
+
+        if (chatListRef.current) {
+            // console.log(chatListRef.current.scrollHeight)
+            // console.log(chatListRef.current.scrollTop)
+            if (chatListRef.current.scrollHeight + chatListRef.current.scrollTop > 320 && chatListRef.current.scrollHeight + chatListRef.current.scrollTop < 330) {
+                // console.log("ok")
+                pageT++;
+                handleGetChat(pageT)
+            }
+        }
+
+    }
 
 
 
@@ -414,7 +473,7 @@ export default function ChatContent(props : any) {
                     <i className="fa-solid fa-ellipsis-vertical"></i>
                 </div>
             </div>
-            <div className="content" ref={chatListRef}>
+            <div className="content" ref={chatListRef} onScroll={handleScroll}>
 
             </div>
 
