@@ -43,6 +43,7 @@ export default function Chat() {
     const [newestChat, setNewestChat] = useState<User[]>([]);
     const [room, isRoom] = useState(false)
     const [searchInput, setSearchInput] = useState("");
+    const [isFirst, setIsFirst] = useState(false)
     const toggleChat = (username : string, type:number) => {
         handleCloseInfo();
         (type ===1 ? isRoom(true) : isRoom(false))
@@ -110,7 +111,7 @@ export default function Chat() {
             //     mes: "",
             // };
             console.log("ham nay duoc goi")
-            updateUsersList(data.name, 1)
+            updateUsersList(data.name, "",1)
             handleCloseModal()
         })
 
@@ -166,48 +167,100 @@ export default function Chat() {
         })
 
     }, []);
+
+    const [start, isStart] = useState(false)
+
     useEffect(() => {
+        if (room == false && isChatOpen == false )
         WebSocketService.registerCallback('SEND_CHAT', (data: any) => {
             const userNewChat = data.name;
-            updateUsersList(userNewChat, 0)
+            const userNewChatTo = data.to;
+            console.log("TEST: "+userNewChat +", "+userNewChatTo+", "+data.type);
+            updateUsersList(userNewChat, userNewChatTo, data.type)
+            // // setUsername(userNewChatTo)
+            // isStart(true)
         })
-    }, [users, newestChat]);
+    }, [users]);
 
 
 
-    const updateUsersList = (userNewChat: string, userType: number) => {
+
+    const updateUsersList = (userNewChat: string, userNewChatTo:string, userType: number) => {
         setUsers(prevUsers => {
-            const existingUserIndex = prevUsers.findIndex(user => user.name === userNewChat);
-            if (existingUserIndex !== -1) {
-                const updatedUsers = [...prevUsers];
-                const [user] = updatedUsers.splice(existingUserIndex, 1);
-                updatedUsers.unshift(user);
-                return updatedUsers;
-            } else {
-                const newUser = { name: userNewChat, type: userType, actionTime: "", mes: "" };
-                return [newUser, ...prevUsers];
+            var existingUserIndex:number
+            // const existingUserIndex = prevUsers.findIndex(user => user.name === userNewChat);
+            if (userType == 0) {
+                existingUserIndex = prevUsers.findIndex(user => user.name === userNewChat);
+                if (existingUserIndex !== -1) {
+                    const updatedUsers = [...prevUsers];
+                    const [user] = updatedUsers.splice(existingUserIndex, 1);
+                    updatedUsers.unshift(user);
+                    return updatedUsers;
+                } else {
+                    const newUser = { name: userNewChat, type: userType, actionTime: "", mes: "" };
+                    return [newUser, ...prevUsers];
+                }
+            }else  {
+                existingUserIndex = prevUsers.findIndex(user => user.name === userNewChatTo);
+                if (existingUserIndex !== -1) {
+                    const updatedUsers = [...prevUsers];
+                    const [user] = updatedUsers.splice(existingUserIndex, 1);
+                    updatedUsers.unshift(user);
+                    return updatedUsers;
+                } else {
+                    const newUser = { name: userNewChatTo, type: userType, actionTime: "", mes: "" };
+                    return [newUser, ...prevUsers];
+                }
             }
+
         });
 
         setNewestChat(preList=> {
-            const existingUserIndex = preList.findIndex(user => user.name === userNewChat);
-            if (existingUserIndex == -1) {
-                const newUser = { name: userNewChat, type: userType, actionTime: "", mes: "" };
-                return [...preList, newUser];
-            } else {
-                return preList
+            var existingUserIndex:number;
+            // const existingUserIndex = preList.findIndex(user => user.name === userNewChat);
+            if (userType == 0) {
+                existingUserIndex = preList.findIndex(user => user.name === userNewChat);
+                if (existingUserIndex == -1) {
+                    const newUser = { name: userNewChat, type: userType, actionTime: "", mes: "" };
+                    return [...preList, newUser];
+                } else {
+                    return preList
+                }
+            }else  {
+                console.log("OK: "+userNewChatTo)
+                users.map(u=> {
+                    console.log(u.name)
+                })
+                existingUserIndex = preList.findIndex(user => user.name === userNewChatTo);
+                if (existingUserIndex == -1) {
+                    const newUser = { name: userNewChatTo, type: userType, actionTime: "", mes: "" };
+                    return [...preList, newUser];
+                } else {
+                    return preList
+                }
             }
+
         });
     };
 
     const removeFromNewest = (username:string) => {
+        // setNewestChat(preList=> {
+        //     const existingUserIndex = preList.findIndex(user => user.name === username);
+        //     if (existingUserIndex != -1) {
+        //         const [newChat] = newestChat.splice(existingUserIndex, 1);
+        //         return [...preList, newChat];
+        //     } else {
+        //         return preList
+        //     }
+        // });
         setNewestChat(preList=> {
             const existingUserIndex = preList.findIndex(user => user.name === username);
-            if (existingUserIndex != -1) {
-                const [newChat] = newestChat.splice(existingUserIndex, 1);
-                return [...preList, newChat];
+            if (existingUserIndex !== -1) {
+                const updatedUsers = [...preList];
+                const [user] = updatedUsers.splice(existingUserIndex, 1);
+                return updatedUsers;
             } else {
-                return preList
+                return preList;
             }
         });
     }
@@ -232,9 +285,23 @@ export default function Chat() {
 
 
 
-    const searchUsers = users.filter(user =>
-        user.name.toLowerCase().includes(searchInput.toLowerCase())
-    );
+
+    const [searchUsers, setSearchUsers] = useState<User[]>([]);
+
+    const handleSearch = (e:any) => {
+        console.log(e.target.value)
+        setSearchInput(e.target.value)
+        const filteredUsers = users.filter(user => {
+            return user.name.toLowerCase().includes(e.target.value.toLowerCase());
+        });
+        // searchUsers = users.filter(user => {
+        //     return user.name.toLowerCase().includes(searchInput.toLowerCase())
+        // });
+        // searchUsers.map(u => {
+        //     console.log(u.name)
+        // })
+        setSearchUsers(filteredUsers)
+    }
     // console.log( searchUsers)
     const [ownRoom, setOwnRoom] = useState("");
     const [usersRoom, setUsersRoom] = useState<UserRoom[]>([]);
@@ -290,8 +357,9 @@ export default function Chat() {
                     </div>
                 </div>
                 <div className="search">
-                    <input type="text" placeholder={"Search for groups and events"} value={searchInput}
-                           onChange={e => setSearchInput(e.target.value)}/>
+
+                    <input type="text" placeholder={"Search for groups and events"} value={searchInput} onChange={handleSearch}/>
+
                     <i className="fa-solid fa-magnifying-glass"></i>
                 </div>
                 {searchInput === "" ? (
@@ -410,15 +478,11 @@ export default function Chat() {
                                                      newestChat={newestChat}
                                                      onUpdateUser={(usern: string) => updateUsersList(usern, 1)}
                                                      listUsers={users} user={userHost} userChatTo={username} handleOpenInfo={handleOpenInfo}/>
-                                    :
-                                    <ChatContent page={1}
-                                                 onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
-                                                 newestChat={newestChat}
-                                                 onUpdateUser={(usern: string) => updateUsersList(usern, 0)}
-                                                 listUsers={users}
-                                                 user={userHost} userChatTo={username} />
+                                    :<ChatContent page={1} onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
+                                             newestChat={newestChat} isFirst={true}
+                                             onUpdateUser={(usern: string) => updateUsersList(usern, "",0)} listUsers={users}
+                                             user={userHost} userChatTo={username} isStart={start}/>
                             )
-
                             : <ChatWelcome/>}
                     </div>
                     <div className="info-content">
@@ -434,11 +498,9 @@ export default function Chat() {
                 <ModalRoom onClose={handleCloseModal} modalText={modalRoomText} btnText={modalRoomBtnText}
                            onButtonClick={handleButtonClick} modalRoomText={modalRoomText}/> : ""}
 
-            {isModalChatOpen ? <ModalChat onHandleGetChat={(user: string) => handleGetNewChat(user)} user={userHost}
-                                          onUpdateListUser={handleGetUserList}
-                                          onUpdateUser={(usern: string) => updateUsersList(usern, 0)}
-                                          onClose={handleCloseModalChat} modalText={modalChatText}
-                                          btnText={modalChatBtnText}/> : ""}
+            {isModalChatOpen ? 
+                <ModalChat onHandleGetChat={(user: string) => handleGetNewChat(user)} user={userHost}
+                          onUpdateListUser={handleGetUserList} onUpdateUser={(usern : string) => updateUsersList(usern,"", 0)} onClose={handleCloseModalChat} modalText={modalChatText} btnText={modalChatBtnText}/> : ""}
         </div>
     )
 }
