@@ -1,0 +1,108 @@
+@import "~@fortawesome/fontawesome-free/css/all.css";
+* {
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+  font-family: Arial, Tahoma, sans-serif;
+}
+
+.info-chat-room {
+  height: 120%;
+  width: 100%;
+  background-color: #e9ecef;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+}
+.info-chat-room .chat-bar {
+  display: flex;
+  width: auto;
+  height: 45px;
+  background-color: #96a1af;
+  position: fixed;
+}
+.info-chat-room .chat-bar i {
+  font-size: 20px;
+  margin: 14px;
+  color: #e9ecef;
+}
+.info-chat-room .chat-bar p {
+  margin-top: 13px;
+  font-size: 18px;
+  color: #e9ecef;
+}
+.info-chat-room .chat-bar .leave-btn {
+  display: flex;
+  background-color: #e9ecef;
+  height: 15px;
+  width: 100px;
+  border-radius: 20px;
+  margin-top: 10px;
+  padding: 5px 0 0 10px;
+  margin-left: 10px;
+}
+.info-chat-room .chat-bar .leave-btn p {
+  margin-top: 0;
+  font-size: 10px;
+  color: #e75f5f;
+}
+.info-chat-room .chat-bar .leave-btn i {
+  font-size: 15px;
+  color: #e75f5f;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.info-chat-room .avatar-chat {
+  width: 70px;
+  height: 70px;
+  border-radius: 100%;
+  background-color: #fff;
+  margin: 70px auto 10px auto;
+}
+.info-chat-room .avatar-chat img {
+  width: 60px;
+  height: 60px;
+}
+.info-chat-room p {
+  font-size: 20px;
+  font-weight: bold;
+}
+.info-chat-room h4 {
+  font-weight: bold;
+  left: 0;
+  align-self: flex-start;
+  margin: 20px 0 10px 5px;
+  font-size: 15px;
+}
+.info-chat-room .item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.25s linear;
+  margin: 5px 10px;
+}
+.info-chat-room .item .item-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: space-between;
+}
+.info-chat-room .item .item-img {
+  width: 40px;
+  height: 40px;
+}
+.info-chat-room .item .title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.info-chat-room .item .title .name {
+  font-weight: 600;
+  font-size: 16px;
+  font-weight: normal;
+}
+
+/*# sourceMappingURL=infomationChat.css.map */

@@ -11,11 +11,10 @@ import {useSelector} from "react-redux";
 import WebSocketService from "../webSocket/webSocketService";
 import ModalChat from "../component/ModalChat";
 import {removeChat} from "../Store/LocalStorage";
-
 import webSocketService from "../webSocket/webSocketService";
-
 import {useNavigate} from "react-router-dom";
 import internal from "node:stream";
+import InfomationChat from "../component/InfomationChat";
 
 
 interface User {
@@ -24,6 +23,11 @@ interface User {
     actionTime: string;
     mes: string;
 }
+interface UserRoom {
+    id: string
+    name: string;
+}
+
 export default function Chat() {
     const navigate = useNavigate();
     const [modalInputValue, setModalInputValue] = useState("");
@@ -40,8 +44,9 @@ export default function Chat() {
     const [room, isRoom] = useState(false)
     const [searchInput, setSearchInput] = useState("");
     const toggleChat = (username : string, type:number) => {
+        handleCloseInfo();
+        (type ===1 ? isRoom(true) : isRoom(false))
 
-        (type == 1) ? isRoom(true) : isRoom(false);
         setUsername(username);
 
         removeChat(username, userHost)
@@ -231,7 +236,48 @@ export default function Chat() {
         user.name.toLowerCase().includes(searchInput.toLowerCase())
     );
     // console.log( searchUsers)
+    const [ownRoom, setOwnRoom] = useState("");
+    const [usersRoom, setUsersRoom] = useState<UserRoom[]>([]);
+    const [nameRoom, setNameRoom] = useState("");
+    const [isInfoOpen, setIsInfoOpen] = useState(false);
 
+    const handleOpenInfo = function () {
+        const mainchat = document.querySelector(".main-chat-content") as HTMLDivElement;
+        const info = document.querySelector(".info-content") as HTMLDivElement;
+        mainchat.style.width = "75%";
+        info.style.width = "25%";
+        handleGetListUserOfRoom(username)
+        WebSocketService.registerCallback("GET_ROOM_CHAT_MES", (data: any) => {
+            setOwnRoom(data.own)
+            setUsersRoom(data.userList)
+            setNameRoom(data.name)
+            setIsInfoOpen(true)
+        })
+
+    }
+    const handleCloseInfo = function () {
+        const mainchat = document.querySelector(".main-chat-content") as HTMLDivElement;
+        const info = document.querySelector(".info-content") as HTMLDivElement;
+        mainchat.style.width = "100%";
+        info.style.width = "0%";
+        setIsInfoOpen(false)
+
+    }
+
+    const handleGetListUserOfRoom = (nameRoom: string) => {
+        WebSocketService.sendMessage(
+            {
+                "action": "onchat",
+                "data": {
+                    "event": "GET_ROOM_CHAT_MES",
+                    "data": {
+                        "name": nameRoom,
+                        "page":1
+                    }
+                }
+            }
+        )
+    }
     return(
         <div className={"chat"}>
             <div className="left">
@@ -244,50 +290,52 @@ export default function Chat() {
                     </div>
                 </div>
                 <div className="search">
-                    <input type="text" placeholder={"Search for groups and events"} value={searchInput} onChange={e => setSearchInput(e.target.value)}/>
+                    <input type="text" placeholder={"Search for groups and events"} value={searchInput}
+                           onChange={e => setSearchInput(e.target.value)}/>
                     <i className="fa-solid fa-magnifying-glass"></i>
                 </div>
-                {searchInput ==="" ? (
-                <div className="chat-list">
-                    {users.length > 0 ? (
-                        users.map((user) => (
-                            <div className={`item ${user.name == username ? "isUserSelect" : ""}`} onClick={() => toggleChat(user.name, user.type)} key={user.name}>
-                                <div className="item-info">
-                                    {user.type === 0 ? (
-                                    <img src={avatar} className="item-img" alt="Avatar"/>
-                                    ) : (
-                                        <img src={roomchat} className="item-img" alt="Avatar"/>
-                                    )}
-                                    <div className="item-content">
-                                        <div className="title">
+                {searchInput === "" ? (
+                    <div className="chat-list">
+                        {users.length > 0 ? (
+                            users.map((user) => (
+                                <div className={`item ${user.name == username ? "isUserSelect" : ""}`}
+                                     onClick={() => toggleChat(user.name, user.type)} key={user.name}>
+                                    <div className="item-info">
+                                        {user.type === 0 ? (
+                                            <img src={avatar} className="item-img" alt="Avatar"/>
+                                        ) : (
+                                            <img src={roomchat} className="item-img" alt="Avatar"/>
+                                        )}
+                                        <div className="item-content">
+                                            <div className="title">
                                                 {user.name !== userHost ? (
-                                                        <p className="name">
-                                                    {user.name}
-                                                        </p>
+                                                    <p className="name">
+                                                        {user.name}
+                                                    </p>
                                                 ) : (
                                                     <p className="name">
                                                         {"Myself"}
                                                     </p>
                                                 )}
                                                 <i className="fa-regular fa-comment-dots"></i>
+                                            </div>
+                                            <p className="desc">{user.mes}</p>
                                         </div>
-                                        <p className="desc">{user.mes}</p>
+                                    </div>
+                                    <div className="item-status">
+                                        {/*<p className="time">Just now</p>*/}
+                                        {newestChat.length > 0 ? (
+                                            newestChat.map((u) => (
+                                                u.name == user.name ? <p className="amount"></p> : ""
+                                            ))
+                                        ) : ""}
                                     </div>
                                 </div>
-                                <div className="item-status">
-                                    {/*<p className="time">Just now</p>*/}
-                                    {newestChat.length > 0   ? (
-                                        newestChat.map((u) => (
-                                            u.name == user.name ? <p className="amount"></p> : ""
-                                        ))
-                                    ) : ""}
-                                </div>
-                            </div>
-                        ))
-                    ) : (
-                        <p>No users available</p>
-                    )}
-                </div>
+                            ))
+                        ) : (
+                            <p>No users available</p>
+                        )}
+                    </div>
                 ) : (
                     <div className="chat-list">
                         {searchUsers.length > 0 ? (
@@ -354,22 +402,32 @@ export default function Chat() {
                     </div>
                 </div>
                 <div className="chat-content">
-                    {isChatOpen ?
-                        (room ?
-                                <RoomChatContent page={1}
+                    <div className={"main-chat-content"}>
+                        {isChatOpen ?
+                            (room ?
+                                    <RoomChatContent page={1}
+                                                     onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
+                                                     newestChat={newestChat}
+                                                     onUpdateUser={(usern: string) => updateUsersList(usern, 1)}
+                                                     listUsers={users} user={userHost} userChatTo={username} handleOpenInfo={handleOpenInfo}/>
+                                    :
+                                    <ChatContent page={1}
                                                  onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
                                                  newestChat={newestChat}
-                                                 onUpdateUser={(usern: string) => updateUsersList(usern, 1)}
-                                                 listUsers={users} user={userHost} userChatTo={username}/>
-                                :
-                                <ChatContent page={1} onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
-                                             newestChat={newestChat}
-                                             onUpdateUser={(usern: string) => updateUsersList(usern, 0)} listUsers={users}
-                                             user={userHost} userChatTo={username}/>
-                        )
+                                                 onUpdateUser={(usern: string) => updateUsersList(usern, 0)}
+                                                 listUsers={users}
+                                                 user={userHost} userChatTo={username} />
+                            )
 
-                        : <ChatWelcome/>}
+                            : <ChatWelcome/>}
+                    </div>
+                    <div className="info-content">
+                        {isInfoOpen && (
+                            <InfomationChat handleCloseInfo={handleCloseInfo} usersRoom={usersRoom} ownRoom={ownRoom} nameRoom={nameRoom} toggleChat={toggleChat}/>
+                        )}
+                    </div>
                 </div>
+
             </div>
 
             {isModalRoomOpen ?
@@ -377,7 +435,10 @@ export default function Chat() {
                            onButtonClick={handleButtonClick} modalRoomText={modalRoomText}/> : ""}
 
             {isModalChatOpen ? <ModalChat onHandleGetChat={(user: string) => handleGetNewChat(user)} user={userHost}
-                                          onUpdateListUser={handleGetUserList} onUpdateUser={(usern : string) => updateUsersList(usern, 0)} onClose={handleCloseModalChat} modalText={modalChatText} btnText={modalChatBtnText}/> : ""}
+                                          onUpdateListUser={handleGetUserList}
+                                          onUpdateUser={(usern: string) => updateUsersList(usern, 0)}
+                                          onClose={handleCloseModalChat} modalText={modalChatText}
+                                          btnText={modalChatBtnText}/> : ""}
         </div>
     )
 }

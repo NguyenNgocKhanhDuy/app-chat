@@ -375,7 +375,17 @@ const [iconFirst, setIconFirst] = useState(false)
             // console.log(e)
         }
     }
+    function handleKeyPress(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+        if(e.key === 'Enter' && chatMess.trim() !==""){
+            e.preventDefault();
+            handleSendChat()
+        }
+    }
 
+    const handleOpenInfo = () => {
+        props.handleOpenInfo()
+
+    }
 
     return (
         <div className="wrapper" ref={wrapperRef}>
@@ -395,7 +405,7 @@ const [iconFirst, setIconFirst] = useState(false)
                 <div className="action">
                     <i className="fa-solid fa-phone"></i>
                     <i className="fa-solid fa-magnifying-glass"></i>
-                    <i className="fa-solid fa-ellipsis-vertical"></i>
+                    <i className="fa-solid fa-ellipsis-vertical" onClick={handleOpenInfo}></i>
                 </div>
             </div>
             <div className="content" ref={chatListRef}>
@@ -406,8 +416,7 @@ const [iconFirst, setIconFirst] = useState(false)
             <div className="chat-action">
                 <div className="holder">
                     <textarea ref={textareaRef} onInput={handleInput} className={"input-mess"}
-                              onClick={handleSeenInputClick} placeholder={"Type here"}
-                    onKeyDown={handeleKeyDown}></textarea>
+                              onClick={handleSeenInputClick} placeholder={"Type here"} onKeyPress={handleKeyPress}></textarea>
                     {/*<input type="text" placeholder={"Type here"} ref={inputMessRef} onClick={handleSeenInputClick}/>*/}
                     <i className="fa-regular fa-face-smile" onClick={()=>{setShowEmoji(!showEmoji)}}></i>
                     {showEmoji ? <EmojiPicker className={"emoji"} onEmojiClick={handleGetEmoji}/> : ""}

@@ -158,6 +158,10 @@
       }
 
     }
+    p {
+      font-size: 20px;
+      padding-top: 20px;
+    }
   }
 }
 
@@ -233,5 +237,17 @@
 
     }
   }
+  .chat-content {
+    display: flex;
+    //flex-direction: column;
+    height: 100%;
 
+    .main-chat-content {
+      width: 100%;
+    }
+    .info-content {
+      width: 0%;
+    }
+
+  }
 }

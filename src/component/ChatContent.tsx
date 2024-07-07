@@ -6,7 +6,14 @@ import "../assets/css/chatContent.scss"
 import WebSocketService from "../webSocket/webSocketService";
 import convertTime, {getHourMinute} from "../utils/convertTime";
 import {getChat, removeChat, saveChat} from "../Store/LocalStorage";
+
+import ReactDOM from "react-dom/client";
+import {Simulate} from "react-dom/test-utils";
+import input = Simulate.input;
+import InfomationChat from "./InfomationChat";
+
 import EmojiPicker from "emoji-picker-react";
+
 
 
 
@@ -17,6 +24,8 @@ interface ChatMessage {
     mes: "",
     createAt: ""
 }
+
+
 
 export default function ChatContent(props : any) {
 
@@ -365,6 +374,14 @@ export default function ChatContent(props : any) {
     }
 
 
+    function handleKeyPress(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+        if(e.key === 'Enter' && chatMess.trim() !==""){
+            e.preventDefault();
+            handleSendChat()
+        }
+
+    }
+
     return (
         <div className="wrapper" ref={wrapperRef}>
             <div className="header">
@@ -389,22 +406,21 @@ export default function ChatContent(props : any) {
             <div className="content" ref={chatListRef}>
 
             </div>
-
-
             <div className="chat-action">
                 <div className="holder">
                     <textarea ref={textareaRef} onInput={handleInput} className={"input-mess"}
                               onClick={handleSeenInputClick} placeholder={"Type here"}
-
                     onKeyDown={handeleKeyDown}>
-
                     </textarea>
                     {/*<input type="text" placeholder={"Type here"} ref={inputMessRef} onClick={handleSeenInputClick}/>*/}
-                    <i className="fa-regular fa-face-smile" onClick={()=>{setShowEmoji(!showEmoji)}}></i>
+                    <i className="fa-regular fa-face-smile" onClick={() => {
+                        setShowEmoji(!showEmoji)
+                    }}></i>
                     {showEmoji ? <EmojiPicker className={"emoji"} onEmojiClick={handleGetEmoji}/> : ""}
                 </div>
                 <Button text={"Send"} className={"send"} onClick={handleSendChat}/>
             </div>
+
         </div>
     );
 }
