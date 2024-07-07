@@ -168,6 +168,7 @@
   position: relative;
 }
 .chat-content .chat-action .holder .input-mess {
+  padding-top: 10px;
   resize: none;
   width: 96%;
   border: none;

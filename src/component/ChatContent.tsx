@@ -1,6 +1,7 @@
+
 import avatar from "../assets/img/avatar.png";
 import Button from "./Button";
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import "../assets/css/chatContent.scss"
 import WebSocketService from "../webSocket/webSocketService";
 import convertTime, {getHourMinute} from "../utils/convertTime";
@@ -22,7 +23,7 @@ export default function ChatContent(props : any) {
     const chatListRef = useRef<HTMLDivElement>(null);
 
     const [mess, setMess] = useState<ChatMessage[]>([]);
-     const user = props.user;
+    const user = props.user;
     const userChatTo = props.userChatTo;
     const newestChat = props.newestChat;
     var isSeen = true;
@@ -336,6 +337,13 @@ export default function ChatContent(props : any) {
     };
 
 
+    const handeleKeyDown =(event: React.KeyboardEvent<HTMLElement>)=>{
+        if(event.key== 'Enter' && ! event.shiftKey){
+            event.preventDefault();
+            handleSendChat();
+        }
+    };
+
 
     const handleGetEmoji = (e : any) => {
         if (textareaRef.current) {
@@ -386,7 +394,11 @@ export default function ChatContent(props : any) {
             <div className="chat-action">
                 <div className="holder">
                     <textarea ref={textareaRef} onInput={handleInput} className={"input-mess"}
-                              onClick={handleSeenInputClick} placeholder={"Type here"}></textarea>
+                              onClick={handleSeenInputClick} placeholder={"Type here"}
+
+                    onKeyDown={handeleKeyDown}>
+
+                    </textarea>
                     {/*<input type="text" placeholder={"Type here"} ref={inputMessRef} onClick={handleSeenInputClick}/>*/}
                     <i className="fa-regular fa-face-smile" onClick={()=>{setShowEmoji(!showEmoji)}}></i>
                     {showEmoji ? <EmojiPicker className={"emoji"} onEmojiClick={handleGetEmoji}/> : ""}
