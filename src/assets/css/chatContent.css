@@ -6,15 +6,13 @@
   font-family: Arial, Tahoma, sans-serif;
 }
 
-.chat-content {
-  height: 100%;
-}
-.chat-content .wrapper {
+.wrapper {
   display: flex;
   flex-direction: column;
   height: calc(100% + 100px);
 }
-.chat-content .header {
+
+.header {
   padding: 0 16px;
   display: flex;
   align-items: center;
@@ -26,16 +24,16 @@
   border-bottom: 1px solid #e9ecef;
   border-left: 0px solid #e9ecef;
 }
-.chat-content .header .info {
+.header .info {
   display: flex;
   align-items: center;
   gap: 12px;
 }
-.chat-content .header .info img {
+.header .info img {
   width: 40px;
   height: 40px;
 }
-.chat-content .header .info .title {
+.header .info .title {
   display: flex;
   flex-direction: column;
   height: 40px;
@@ -43,23 +41,24 @@
   justify-content: space-between;
   align-items: baseline;
 }
-.chat-content .header .info .title .name {
+.header .info .title .name {
   font-size: 16px;
   font-weight: 600;
 }
-.chat-content .header .info .title .locate {
+.header .info .title .locate {
   color: #b3bac5;
 }
-.chat-content .header .info .title .locate i {
+.header .info .title .locate i {
   margin-right: 8px;
 }
-.chat-content .header .action i {
+.header .action i {
   font-size: 16px;
 }
-.chat-content .header .action i:nth-child(2) {
+.header .action i:nth-child(2) {
   margin: 0 16px;
 }
-.chat-content .content {
+
+.content {
   padding: 16px;
   height: calc(100% - 100px);
   overflow-y: auto;
@@ -71,22 +70,22 @@
   border-bottom: 0px solid #e9ecef;
   border-left: 1px solid #e9ecef;
 }
-.chat-content .content .item {
+.content .item {
   width: 50%;
   margin: 12px 0;
 }
-.chat-content .content .item .user {
+.content .item .user {
   display: flex;
   gap: 8px;
 }
-.chat-content .content .item .user .avatar {
+.content .item .user .avatar {
   width: 30px;
   height: 30px;
 }
-.chat-content .content .item .user .name {
+.content .item .user .name {
   margin-top: 4px;
 }
-.chat-content .content .item .text {
+.content .item .text {
   margin-left: 38px;
   margin-top: -8px;
   width: fit-content;
@@ -100,11 +99,15 @@
   border-bottom: 1px solid #e9ecef;
   border-left: 1px solid #e9ecef;
 }
+
+.content .item .text .time {
+
 .chat-content .content .item .text p {
   text-align: justify;
   word-break: break-word;
 }
 .chat-content .content .item .text .time {
+
   display: none;
   width: 30px;
   height: 10px;
@@ -118,27 +121,28 @@
   background-color: rgba(0, 0, 0, 0.7);
   border-radius: 4px;
 }
-.chat-content .content .item .text:hover .time {
+.content .item .text:hover .time {
   display: block;
 }
-.chat-content .content .my-chat {
+.content .my-chat {
   margin: 8px 0 8px auto;
 }
-.chat-content .content .my-chat .text {
+.content .my-chat .text {
   background-color: #38c585;
   color: #fff;
   margin-left: auto;
 }
-.chat-content .content .my-chat .text .time {
+.content .my-chat .text .time {
   right: auto;
   left: 0;
   transform: translateX(calc(-100% - 4px));
 }
-.chat-content .content .status {
+.content .status {
   margin-left: auto;
   margin-bottom: 6px;
 }
-.chat-content .chat-action {
+
+.chat-action {
   max-height: 100px;
   padding: 16px;
   position: absolute;
@@ -154,7 +158,7 @@
   border-bottom: 0px solid #e9ecef;
   border-left: 1px solid #e9ecef;
 }
-.chat-content .chat-action .holder {
+.chat-action .holder {
   width: calc(100% - 80px);
   max-height: 100px;
   height: auto;
@@ -167,7 +171,8 @@
   background-color: #f8f9fa;
   position: relative;
 }
-.chat-content .chat-action .holder .input-mess {
+.chat-action .holder .input-mess {
+  padding-top: 20px;
   resize: none;
   width: 96%;
   border: none;
@@ -177,23 +182,23 @@
   overflow-y: auto;
   max-height: 100px;
 }
-.chat-content .chat-action .holder .input-mess::placeholder {
+.chat-action .holder .input-mess::placeholder {
   color: #b3bac5;
 }
-.chat-content .chat-action .holder i {
+.chat-action .holder i {
   position: absolute;
-  bottom: 8px;
+  bottom: 15px;
   right: 8px;
   font-size: 24px;
   cursor: pointer;
 }
-.chat-content .chat-action .holder .emoji {
+.chat-action .holder .emoji {
   position: absolute;
   bottom: 40px;
   right: 0px;
   box-shadow: 0 0 4px 3px #e9ecef;
 }
-.chat-content .chat-action .send {
+.chat-action .send {
   width: 80px;
   height: 50px;
   font-size: 16px;

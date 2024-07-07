@@ -4,10 +4,7 @@
 //  height: calc(100% - 80px - 50px - 50px - 80px) !important;
 //}
 
-.chat-content {
-  //display: flex;
-  //flex-direction: column;
-  height: 100%;
+
 
   .wrapper {
     display: flex;
@@ -188,6 +185,7 @@
       position: relative;
 
       .input-mess {
+        padding-top: 20px;
         resize: none;
         width: 96%;
         border: none;
@@ -207,7 +205,7 @@
 
       i {
         position: absolute;
-        bottom: 8px;
+        bottom: 15px;
         right: 8px;
         font-size: 24px;
         cursor: pointer;
@@ -228,4 +226,3 @@
     }
   }
 
-}

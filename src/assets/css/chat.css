@@ -140,6 +140,10 @@
   width: 10px;
   height: 10px;
 }
+.left .chat-list p {
+  font-size: 20px;
+  padding-top: 20px;
+}
 
 .show {
   display: block !important;
@@ -201,6 +205,16 @@
 }
 .right .top .location .info .desc .locate {
   font-size: 14px;
+}
+.right .chat-content {
+  display: flex;
+  height: 100%;
+}
+.right .chat-content .main-chat-content {
+  width: 100%;
+}
+.right .chat-content .info-content {
+  width: 0%;
 }
 
 /*# sourceMappingURL=chat.css.map */

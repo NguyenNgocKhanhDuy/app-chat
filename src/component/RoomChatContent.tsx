@@ -1,6 +1,6 @@
 import avatar from "../assets/img/avatar.png";
 import Button from "./Button";
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import "../assets/css/chatContent.scss"
 import WebSocketService from "../webSocket/webSocketService";
 import convertTime, {getHourMinute} from "../utils/convertTime";
@@ -312,6 +312,12 @@ export default function ChatContent(props : any) {
 
 
 
+    const handeleKeyDown =(event: React.KeyboardEvent<HTMLElement>)=>{
+        if(event.key== 'Enter' && ! event.shiftKey){
+            event.preventDefault();
+            handleSendChat();
+        }
+    };
     const handleGetEmoji = (e : any) => {
         if (textareaRef.current) {
             if (chatMess.length > 0) {
@@ -325,7 +331,17 @@ export default function ChatContent(props : any) {
             }
         }
     }
+    function handleKeyPress(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+        if(e.key === 'Enter' && chatMess.trim() !==""){
+            e.preventDefault();
+            handleSendChat()
+        }
+    }
 
+    const handleOpenInfo = () => {
+        props.handleOpenInfo()
+    }
+    
     return (
         <div className="wrapper" ref={wrapperRef}>
             <div className="header">
@@ -344,7 +360,7 @@ export default function ChatContent(props : any) {
                 <div className="action">
                     <i className="fa-solid fa-phone"></i>
                     <i className="fa-solid fa-magnifying-glass"></i>
-                    <i className="fa-solid fa-ellipsis-vertical"></i>
+                    <i className="fa-solid fa-ellipsis-vertical" onClick={handleOpenInfo}></i>
                 </div>
             </div>
             <div className="content" ref={chatListRef} onScroll={handleScroll} >
@@ -355,7 +371,7 @@ export default function ChatContent(props : any) {
             <div className="chat-action">
                 <div className="holder">
                     <textarea ref={textareaRef} onInput={handleInput} className={"input-mess"}
-                              onClick={handleSeenInputClick} placeholder={"Type here"}></textarea>
+                              onClick={handleSeenInputClick} placeholder={"Type here"} onKeyPress={handleKeyPress}></textarea>
                     {/*<input type="text" placeholder={"Type here"} ref={inputMessRef} onClick={handleSeenInputClick}/>*/}
                     <i className="fa-regular fa-face-smile" onClick={()=>{setShowEmoji(!showEmoji)}}></i>
                     {showEmoji ? <EmojiPicker className={"emoji"} onEmojiClick={handleGetEmoji}/> : ""}
