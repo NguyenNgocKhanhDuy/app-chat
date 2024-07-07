@@ -5,11 +5,14 @@ import "../assets/css/chatContent.scss"
 import WebSocketService from "../webSocket/webSocketService";
 import convertTime, {getHourMinute} from "../utils/convertTime";
 import {getChat, removeChat, saveChat} from "../Store/LocalStorage";
-import EmojiPicker, {Emoji} from "emoji-picker-react";
+
 import ReactDOM from "react-dom/client";
 import {Simulate} from "react-dom/test-utils";
 import input = Simulate.input;
 import InfomationChat from "./InfomationChat";
+
+import EmojiPicker from "emoji-picker-react";
+
 
 
 
@@ -178,23 +181,18 @@ export default function ChatContent(props : any) {
         for (let i = 0; i < data.length; i++) {
             // console.log("LI: "+data[i].mes)
             var time =  getHourMinute(convertTime(data[i].createAt))
-
-            var mesChat1 = data[i].mes.split("|")[0]
-            var mesChat2 = data[i].mes.split("|")[1]
-            // console.log("Mes1: "+mesChat1)
-            // console.log("Mes2: "+mesChat2)
-            var check = false;
-            var submes2 = ""
-            if (mesChat2 != undefined) {
-                console.log('Mes1: '+mesChat1)
-                submes2 = mesChat2.substring(0, 29)
-                if (submes2 == "https://cdn.jsdelivr.net/npm/") {
-                    check = true;
-                    console.log(check)
+            var messTokens = data[i].mes.split("|")
+            // console.log("MessTojken: "+messTokens)
+            var mess = "";
+            for (let j = 0; j < messTokens.length; j++) {
+                if (messTokens[j].substring(0, 29) == "https://cdn.jsdelivr.net/npm/") {
+                    console.log("j="+j+" "+messTokens[j])
+                    mess += `<img src="${messTokens[j]}" alt="grin" class="epr-emoji-img epr_-a3ewa5 epr_-tul3d0 epr_xfdx0l epr_-u8wwnq epr_dkrjwv __EmojiPicker__ epr_-dyxviy epr_-w2g3k2 epr_-8yncdp epr_szp4ut" loading="eager" style="font-size: 32px; height: 32px; width: 32px;"/>`
+                }else {
+                    mess += `<p>${messTokens[j]}</p>`;
                 }
-                console.log('submes2: '+submes2)
-                console.log("Mes2: "+mesChat2)
             }
+            console.log("AF: "+mess)
 
             if (data[i].to != user){
                 if (i==0) {
@@ -206,10 +204,7 @@ export default function ChatContent(props : any) {
                 }
                 htmlItem += `<div class="item my-chat">
                                     <div class="text">
-                                        ${check ?
-                                        `${mesChat1} <img src="${mesChat2}" alt="grin" class="epr-emoji-img epr_-a3ewa5 epr_-tul3d0 epr_xfdx0l epr_-u8wwnq epr_dkrjwv __EmojiPicker__ epr_-dyxviy epr_-w2g3k2 epr_-8yncdp epr_szp4ut" loading="eager" style="font-size: 32px; height: 32px; width: 32px;">` 
-                                        : data[i].mes
-                                        }
+                                        ${mess}
                                         <span class="time">${time}</span>
                                     </div>
                                 </div>`
@@ -220,7 +215,7 @@ export default function ChatContent(props : any) {
                                         <p class="name">${data[i].name}</p>
                                     </div>
                                     <div class="text">
-                                        ${data[i].mes}
+                                        ${mess}
                                         <span class="time">${time}</span>
                                     </div>
                                 </div>`
@@ -289,14 +284,13 @@ export default function ChatContent(props : any) {
         if (textareaRef.current) {
 
             mess = chatMess
-            console.log("ME: "+mess)
             // const emojiRegEx = /\[([^\]]+)\]/g;
             // mess = mess.replace(emojiRegEx, (match, emojiChar) => {
             //     const emojiUnicode = unicodeToUnified(emojiChar);
             //     return emojiUnicode ? `<Emoji unified="1f9e5" size="25" />` : "ok";
             // });
 
-            console.log("Me: "+ mess)
+            // console.log("Me: "+ mess)
 
             WebSocketService.sendMessage(
                 {
@@ -313,12 +307,12 @@ export default function ChatContent(props : any) {
             )
             textareaRef.current.value = ""
             setChatMess("")
-            // if (showEmoji) {
-            //     setShowEmoji(!showEmoji)
-            // }
+            if (showEmoji) {
+                setShowEmoji(!showEmoji)
+            }
             saveChat(user, userChatTo)
             isEnd(!end)
-            console.log("End: "+end)
+            // console.log("End: "+end)
             handleReset()
             // setIconFirst(false)
         }else{
@@ -333,7 +327,7 @@ export default function ChatContent(props : any) {
         const textarea = textareaRef.current;
         if (textarea && wrapperRef.current) {
 
-            console.log('ch')
+            // console.log('ch')
             var value = textarea.value;
             setChatMess(value)
 
@@ -350,13 +344,12 @@ export default function ChatContent(props : any) {
         }
     };
 
-const [iconFirst, setIconFirst] = useState(false)
 
 
     const handleGetEmoji = (e : any) => {
         if (textareaRef.current) {
-            console.log(e)
-            console.log("ChatM: "+chatMess)
+            // console.log(e)
+            // console.log("ChatM: "+chatMess)
             if (chatMess.length > 0) {
                 // console.log('1')
                 var value = chatMess + `|${e.imageUrl}`
@@ -367,7 +360,6 @@ const [iconFirst, setIconFirst] = useState(false)
                 // console.log('2')
                 textareaRef.current.value = e.emoji
                 setChatMess(`|${e.imageUrl}`)
-                // setIconFirst(true)
             }
             // console.log(e)
         }
