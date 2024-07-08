@@ -476,7 +476,7 @@ export default function Chat() {
                                     <RoomChatContent page={1}
                                                      onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
                                                      newestChat={newestChat}
-                                                     onUpdateUser={(usern: string) => updateUsersList(usern, 1)}
+                                                     onUpdateUser={(usern: string) => updateUsersList(usern, "",1)}
                                                      listUsers={users} user={userHost} userChatTo={username} handleOpenInfo={handleOpenInfo}/>
                                     :<ChatContent page={1} onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
                                              newestChat={newestChat} isFirst={true}

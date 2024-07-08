@@ -70,17 +70,18 @@ export default function ChatContent(props : any) {
 
 
     useEffect(() => {
-        WebSocketService.registerCallback('GET_PEOPLE_CHAT_MES',  (data : any) => {
-            console.log("LEN :"+data.length)
+        WebSocketService.registerCallback('GET_ROOM_CHAT_MES',  (data : any) => {
+            console.log(data)
+            console.log("LEN :"+data.chatDatalength)
             console.log("u: "+userChatTo)
-            if (data.length > 0) {
+            if (data.chatData.length > 0) {
                 if (isFirst) {
                     isFirst = false
                     console.log("first false")
                 }else {
                     console.log('ok')
                     // setMess((preData) => [...preData, ...data]);
-                    handleAddInHtml(data)
+                    handleAddInHtml(data.chatData)
                 }
             }
         })
@@ -103,9 +104,7 @@ export default function ChatContent(props : any) {
             chatListRef.current.scrollTo({ top: chatListRef.current.scrollHeight });
         }
 
-        return () => {
-            WebSocketService.registerCallback('GET_PEOPLE_CHAT_MES', ()=>{})
-        };
+
 
     }, [userChatTo]);
 
