@@ -186,6 +186,7 @@ export default function Chat() {
 
 
     const updateUsersList = (userNewChat: string, userNewChatTo:string, userType: number) => {
+        console.log('upChatList')
         setUsers(prevUsers => {
             var existingUserIndex:number
             // const existingUserIndex = prevUsers.findIndex(user => user.name === userNewChat);
