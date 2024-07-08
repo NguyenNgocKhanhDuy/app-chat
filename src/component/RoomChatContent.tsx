@@ -89,8 +89,8 @@ export default function ChatContent(props : any) {
 
         WebSocketService.registerCallback('SEND_CHAT',  (data: any) => {
             console.log('SEND_CHAT')
-            handleReset();
-            // handleUpdateListUser(data.name);
+            // handleReset();
+            handleUpdateListUser(data.name, data.to, data.type);
 
         })
 
@@ -143,6 +143,13 @@ export default function ChatContent(props : any) {
 
 
     const handleAddInHtml = (data : ChatMessage[]) => {
+        // console.log('update')
+        if (chatListRef.current) {
+            if (!(chatListRef.current.scrollHeight + chatListRef.current.scrollTop > 320 && chatListRef.current.scrollHeight + chatListRef.current.scrollTop < 330)){
+                chatListRef.current.innerHTML = ""
+            }
+            // console.log(chatListRef.current.textContent)
+        }
         isSeen = getChat(user, userChatTo) == "" ? true : false;
         var htmlItem = ``
 
@@ -195,14 +202,23 @@ export default function ChatContent(props : any) {
 
 
         if (chatListRef.current) {
+            // console.log('add in')
             chatListRef.current.innerHTML += htmlItem;
+            // console.log(chatListRef.current.textContent)
         }
 
     }
 
 
-    const handleUpdateListUser = (username : string, userChatTo:string)=>{
-        props.onUpdateUser(username, userChatTo,1);
+    const handleUpdateListUser = (username : string, userChatTo:string, type:number)=>{
+        if (chatListRef.current) {
+            console.log("end end: " + end)
+            // console.log(chatListRef.current.textContent)
+            chatListRef.current.innerHTML = "";
+            props.onUpdateUser(username, userChatTo, type);
+            chatListRef.current.innerHTML = "";
+            handleGetChat(1)
+        }
     }
 
 
@@ -223,12 +239,12 @@ export default function ChatContent(props : any) {
     }
 
     const handleScroll = () => {
-        console.log('scr')
+        // console.log('scr')
         if (chatListRef.current) {
-            console.log(chatListRef.current.scrollHeight)
-            console.log(chatListRef.current.scrollTop)
+            // console.log(chatListRef.current.scrollHeight)
+            // console.log(chatListRef.current.scrollTop)
             if (chatListRef.current.scrollHeight + chatListRef.current.scrollTop > 320 && chatListRef.current.scrollHeight + chatListRef.current.scrollTop < 330){
-                console.log('up')
+                // console.log('up')
                 page2Ref.current++
                 handleGetChat(page2Ref.current)
             }
@@ -292,7 +308,7 @@ export default function ChatContent(props : any) {
         const textarea = textareaRef.current;
         if (textarea && wrapperRef.current) {
 
-            console.log('ch')
+            // console.log('ch')
             var value = textarea.value;
             setChatMess(value)
 
