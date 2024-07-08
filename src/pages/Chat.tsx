@@ -186,6 +186,9 @@ export default function Chat() {
 
 
     const updateUsersList = (userNewChat: string, userNewChatTo:string, userType: number) => {
+        console.log('upChatList')
+        console.log("userNew: "+userNewChat)
+        console.log("userToNew: "+userNewChatTo)
         setUsers(prevUsers => {
             var existingUserIndex:number
             // const existingUserIndex = prevUsers.findIndex(user => user.name === userNewChat);
@@ -219,6 +222,9 @@ export default function Chat() {
             var existingUserIndex:number;
             // const existingUserIndex = preList.findIndex(user => user.name === userNewChat);
             if (userType == 0) {
+                console.log('0')
+                console.log("userNew0: "+userNewChat)
+                console.log("userToNew0: "+userNewChatTo)
                 existingUserIndex = preList.findIndex(user => user.name === userNewChat);
                 if (existingUserIndex == -1) {
                     const newUser = { name: userNewChat, type: userType, actionTime: "", mes: "" };
@@ -227,7 +233,10 @@ export default function Chat() {
                     return preList
                 }
             }else  {
-                console.log("OK: "+userNewChatTo)
+                console.log('1')
+                console.log("userNew1: "+userNewChat)
+                console.log("userToNew1: "+userNewChatTo)
+
                 users.map(u=> {
                     console.log(u.name)
                 })
@@ -476,11 +485,11 @@ export default function Chat() {
                                     <RoomChatContent page={1}
                                                      onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
                                                      newestChat={newestChat}
-                                                     onUpdateUser={(usern: string) => updateUsersList(usern, 1)}
+                                                     onUpdateUser={(usern: string, usernTo:string, type:number) => updateUsersList(usern, usernTo,type)}
                                                      listUsers={users} user={userHost} userChatTo={username} handleOpenInfo={handleOpenInfo}/>
                                     :<ChatContent page={1} onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
                                              newestChat={newestChat} isFirst={true}
-                                             onUpdateUser={(usern: string) => updateUsersList(usern, "",0)} listUsers={users}
+                                             onUpdateUser={(usern: string, usernTo:string, type:number) => updateUsersList(usern, usernTo,type)} listUsers={users}
                                              user={userHost} userChatTo={username} isStart={start}/>
                             )
                             : <ChatWelcome/>}

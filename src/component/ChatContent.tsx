@@ -65,14 +65,15 @@ export default function ChatContent(props : any) {
     }, [userChatTo]);
 
     const handleReset = () => {
-        console.log(userChatTo)
+        // console.log(userChatTo)
         // console.log(mess)
-        console.log("start")
+        // console.log("start")
         if (chatListRef.current) {
+            console.log(chatListRef.current)
             chatListRef.current.innerHTML = "";
         }
         page2Ref.current = 1
-        console.log("ends: "+end)
+        // console.log("ends: "+end)
         // setMess([])
         isFirst = false
         handleGetChat(1)
@@ -81,14 +82,15 @@ export default function ChatContent(props : any) {
 
     useEffect(() => {
         WebSocketService.registerCallback('GET_PEOPLE_CHAT_MES',  (data : any) => {
-            console.log("LEN :"+data.length)
-            console.log("u: "+userChatTo)
+            // console.log("LEN :"+data.length)
+            // console.log(data)
+            // console.log("u: "+userChatTo)
             if (data.length > 0) {
                 if (isFirst) {
                     isFirst = false
-                    console.log("first false")
+                    // console.log("first false")
                 }else {
-                    console.log('ok')
+                    // console.log('ok')
                     // setMess((preData) => [...preData, ...data]);
                     handleAddInHtml(data)
                 }
@@ -96,10 +98,10 @@ export default function ChatContent(props : any) {
         })
 
 
-        WebSocketService.registerCallback('SEND_CHAT',  (data: any) => {
-            console.log('SEND_CHAT')
-            handleReset();
-            // handleUpdateListUser(data.name);
+        WebSocketService.registerCallback('SEND_CHAT',   (data: any) => {
+            // console.log('SEND_CHAT')
+            handleUpdateListUser(data.name, data.to, data.type);
+            // await handleReset();
 
         })
 
@@ -164,6 +166,13 @@ export default function ChatContent(props : any) {
 
 
     const handleAddInHtml = (data : ChatMessage[]) => {
+        // console.log('update')
+        if (chatListRef.current) {
+            if (!(chatListRef.current.scrollHeight + chatListRef.current.scrollTop > 320 && chatListRef.current.scrollHeight + chatListRef.current.scrollTop < 330)){
+                chatListRef.current.innerHTML = ""
+            }
+            // console.log(chatListRef.current.textContent)
+        }
         isSeen = getChat(user, userChatTo) == "" ? true : false;
         var htmlItem = ``
 
@@ -220,14 +229,22 @@ export default function ChatContent(props : any) {
 
 
         if (chatListRef.current) {
+            // console.log('add in')
             chatListRef.current.innerHTML += htmlItem;
+            // console.log(chatListRef.current.textContent)
         }
 
     }
 
-    const handleUpdateListUser = (username : string)=>{
-        console.log("end end: " +end)
-        props.onUpdateUser(username, 0);
+    const handleUpdateListUser = (username : string, userChatTo:string, type:number)=>{
+        if (chatListRef.current) {
+            // console.log("end end: " +end)
+            // console.log(chatListRef.current.textContent)
+            chatListRef.current.innerHTML = "";
+            props.onUpdateUser(username, userChatTo, type);
+            chatListRef.current.innerHTML = "";
+            handleGetChat(1)
+        }
     }
 
 
@@ -249,10 +266,10 @@ export default function ChatContent(props : any) {
     }
 
     const handleScroll = () => {
-        console.log('scr')
+        // console.log('scr')
         if (chatListRef.current) {
-            console.log(chatListRef.current.scrollHeight)
-            console.log(chatListRef.current.scrollTop)
+            // console.log(chatListRef.current.scrollHeight)
+            // console.log(chatListRef.current.scrollTop)
             if (chatListRef.current.scrollHeight + chatListRef.current.scrollTop > 320 && chatListRef.current.scrollHeight + chatListRef.current.scrollTop < 330){
                 console.log('up')
                 page2Ref.current++
