@@ -281,18 +281,18 @@ export default function ChatContent(props : any) {
             if (chatListRef.current) {
                 const {scrollTop, scrollHeight, clientHeight} = chatListRef.current;
                 // Kiểm tra nếu người dùng đã cuộn lên trên một khoảng nhất định
-                if (scrollTop + clientHeight < scrollHeight - 100) {
+                if (scrollTop + clientHeight < scrollHeight - 200) {
                     setShowScrollToBottom(true);
                 } else {
                     setShowScrollToBottom(false);
                 }
 
-                // Logic tải thêm tin nhắn cũ
-                if (chatListRef.current.scrollTop < 10 && !end) {
-                    console.log('up');
-                    page2Ref.current++;
-                    handleGetChat(page2Ref.current);
-                }
+                // // Logic tải thêm tin nhắn cũ
+                // if (chatListRef.current.scrollTop < 10 && !end) {
+                //     console.log('up');
+                //     page2Ref.current++;
+                //     handleGetChat(page2Ref.current);
+                // }
             }
         }
     }
@@ -420,9 +420,15 @@ export default function ChatContent(props : any) {
 
     function scrollToBottom() {
         if (chatListRef.current) {
-            chatListRef.current.scrollTo({ top: chatListRef.current.scrollHeight, behavior: 'smooth' });
-            setShowScrollToBottom(false);
+            chatListRef.current.scrollTo({
+                top: chatListRef.current.scrollHeight,
+                behavior: 'smooth' });
         }
+        setTimeout(() => {
+            setShowScrollToBottom(false);
+        }, 1000);
+
+
     }
 
     return (

@@ -202,9 +202,11 @@
 
 .scroll-to-bottom {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #007bff;
+  bottom: 120px;
+  right: 580px;
+  width: 30px;
+  height: 30px;
+  background-color: #38c585;
   color: white;
   border-radius: 50%;
   padding: 10px;
@@ -217,6 +219,10 @@
 
 .scroll-to-bottom i {
   font-size: 20px;
+}
+
+.scroll-to-bottom:hover {
+  background-color: #32b177;
 }
 
 /*# sourceMappingURL=chatContent.css.map */
