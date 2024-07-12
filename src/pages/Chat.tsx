@@ -486,11 +486,13 @@ export default function Chat() {
                                                      onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
                                                      newestChat={newestChat}
                                                      onUpdateUser={(usern: string, usernTo:string, type:number) => updateUsersList(usern, usernTo,type)}
-                                                     listUsers={users} user={userHost} userChatTo={username} handleOpenInfo={handleOpenInfo}/>
+                                                     listUsers={users} user={userHost} userChatTo={username} handleOpenInfo={handleOpenInfo}
+                                                     updateUserList={handleGetUserList}/>
                                     :<ChatContent page={1} onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
                                              newestChat={newestChat} isFirst={true}
                                              onUpdateUser={(usern: string, usernTo:string, type:number) => updateUsersList(usern, usernTo,type)} listUsers={users}
-                                             user={userHost} userChatTo={username} isStart={start}/>
+                                             user={userHost} userChatTo={username} isStart={start}
+                                             updateUserList={handleGetUserList}/>
                             )
                             : <ChatWelcome/>}
                     </div>

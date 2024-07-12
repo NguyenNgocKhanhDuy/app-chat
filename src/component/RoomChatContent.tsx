@@ -18,7 +18,7 @@ interface ChatMessage {
     createAt: ""
 }
 
-export default function ChatContent(props : any) {
+export default function RoomChatContent(props : any) {
 
     const chatListRef = useRef<HTMLDivElement>(null);
 
@@ -294,6 +294,7 @@ export default function ChatContent(props : any) {
             isEnd(!end)
             // console.log("End: "+end)
             handleReset()
+            props.updateUserList();
             // setIconFirst(false)
 
         }else{
