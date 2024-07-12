@@ -294,7 +294,7 @@ export default function RoomChatContent(props : any) {
             isEnd(!end)
             // console.log("End: "+end)
             handleReset()
-            props.updateUserList();
+            props.updateUserList(userChatTo);
             // setIconFirst(false)
 
         }else{

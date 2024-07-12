@@ -354,6 +354,19 @@ export default function Chat() {
             }
         )
     }
+
+    const handleUpdateUserListForSend = (userChatTo:string) => {
+        console.log('spli')
+        setUsers(prevUsers => {
+            const existingUserIndex = prevUsers.findIndex(user => user.name === userChatTo);
+            const updatedUsers = [...prevUsers];
+            const [user] = updatedUsers.splice(existingUserIndex, 1);
+            updatedUsers.unshift(user);
+            return updatedUsers;
+        });
+    }
+
+
     return(
         <div className={"chat"}>
             <div className="left">
@@ -487,12 +500,12 @@ export default function Chat() {
                                                      newestChat={newestChat}
                                                      onUpdateUser={(usern: string, usernTo:string, type:number) => updateUsersList(usern, usernTo,type)}
                                                      listUsers={users} user={userHost} userChatTo={username} handleOpenInfo={handleOpenInfo}
-                                                     updateUserList={handleGetUserList}/>
+                                                     updateUserList={(u:string) => handleUpdateUserListForSend(u)}/>
                                     :<ChatContent page={1} onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
                                              newestChat={newestChat} isFirst={true}
                                              onUpdateUser={(usern: string, usernTo:string, type:number) => updateUsersList(usern, usernTo,type)} listUsers={users}
                                              user={userHost} userChatTo={username} isStart={start}
-                                             updateUserList={handleGetUserList}/>
+                                             updateUserList={(u:string) => handleUpdateUserListForSend(u)}/>
                             )
                             : <ChatWelcome/>}
                     </div>

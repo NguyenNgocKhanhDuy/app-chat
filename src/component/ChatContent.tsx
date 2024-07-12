@@ -332,7 +332,7 @@ export default function ChatContent(props : any) {
             // isEnd(false)
             // console.log("End: "+end)
             handleReset()
-            props.updateUserList();
+            props.updateUserList(userChatTo);
             // setIconFirst(false)
         }else{
             console.log("Input null")
