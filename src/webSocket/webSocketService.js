@@ -27,7 +27,14 @@
         callbacks[event] = callback;
     };
 
-
+        const unregisterCallback = (event) => {
+            if (event in callbacks) {
+                delete callbacks[event];
+                console.log(`Unregistered callback for event '${event}' successfully.`);
+            } else {
+                console.warn(`Callback for event '${event}' does not exist.`);
+            }
+        };
 
     const sendMessage = (message) => {
         try {
@@ -46,6 +53,7 @@
     return {
         connect,
         registerCallback,
+        unregisterCallback,
         sendMessage,
         close
     };
