@@ -369,6 +369,19 @@ export default function Chat() {
         )
     }
 
+
+    const handleUpdateUserListForSend = (userChatTo:string) => {
+        console.log('spli')
+        setUsers(prevUsers => {
+            const existingUserIndex = prevUsers.findIndex(user => user.name === userChatTo);
+            const updatedUsers = [...prevUsers];
+            const [user] = updatedUsers.splice(existingUserIndex, 1);
+            updatedUsers.unshift(user);
+            return updatedUsers;
+        });
+    }
+
+
     // const intervalId = setInterval(() => {
     //         handleCheckOnline(0);
     // }, 3000);
@@ -478,6 +491,7 @@ export default function Chat() {
     //  useEffect(() => {
     //      console.log("User online status changed:", userOnlineStatus);
     // }, [userOnlineStatus]);
+
 
     return(
         <div className={"chat"}>
@@ -651,23 +665,24 @@ export default function Chat() {
                             </div>
                             <i className="fa-solid fa-chevron-down"></i>
                         </div>
-                    </div>
-                    <div className="chat-content">
-                        <div className={"main-chat-content"}>
-                            {isChatOpen ?
-                                (room ?
-                                        <RoomChatContent page={1}
-                                                         onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
-                                                         newestChat={newestChat}
-                                                         onUpdateUser={(usern: string, usernTo:string, type:number) => updateUsersList(usern, usernTo,type)}
-                                                         listUsers={users} user={userHost} userChatTo={username} handleOpenInfo={handleOpenInfo}/>
-                                        :<ChatContent page={1} onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
-                                                      newestChat={newestChat} isFirst={true}
-                                                      onUpdateUser={(usern: string, usernTo:string, type:number) => updateUsersList(usern, usernTo,type)} listUsers={users}
-                                                      user={userHost} userChatTo={username} isStart={start}/>
-                                )
-                                : <ChatWelcome/>}
-                        </div>
+                </div>
+                <div className="chat-content">
+                    <div className={"main-chat-content"}>
+                        {isChatOpen ?
+                            (room ?
+                                    <RoomChatContent page={1}
+                                                     onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
+                                                     newestChat={newestChat}
+                                                     onUpdateUser={(usern: string, usernTo:string, type:number) => updateUsersList(usern, usernTo,type)}
+                                                     listUsers={users} user={userHost} userChatTo={username} handleOpenInfo={handleOpenInfo}
+                                                     updateUserList={(u:string) => handleUpdateUserListForSend(u)}/>
+                                    :<ChatContent page={1} onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
+                                             newestChat={newestChat} isFirst={true}
+                                             onUpdateUser={(usern: string, usernTo:string, type:number) => updateUsersList(usern, usernTo,type)} listUsers={users}
+                                             user={userHost} userChatTo={username} isStart={start}
+                                             updateUserList={(u:string) => handleUpdateUserListForSend(u)}/>
+                            )
+                            : <ChatWelcome/>}
                         <div className="info-content">
                             {isInfoOpen && (
                                 <InfomationChat handleCloseInfo={handleCloseInfo} usersRoom={usersRoom} ownRoom={ownRoom} nameRoom={nameRoom} toggleChat={toggleChat}/>
