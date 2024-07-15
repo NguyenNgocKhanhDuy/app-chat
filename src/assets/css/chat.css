@@ -119,7 +119,10 @@
   font-weight: 600;
   font-size: 16px;
 }
-.left .chat-list .item-content .title i {
+.left .chat-list .item-content .title #onl-false {
+  color: #96a1af;
+}
+.left .chat-list .item-content .title #onl-true {
   color: #38c585;
 }
 .left .chat-list .item-content .desc {

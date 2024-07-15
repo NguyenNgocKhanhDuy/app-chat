@@ -1,4 +1,5 @@
 
+
 import avatar from "../assets/img/avatar.png";
 import Button from "./Button";
 import React, {useEffect, useRef, useState} from "react";
@@ -41,6 +42,8 @@ export default function ChatContent(props : any) {
     const [end, isEnd] = useState(false)
     const [isOnline, setOnline] = useState(false)
     const [showEmoji, setShowEmoji] = useState(false)
+    const [showScrollToBottom, setShowScrollToBottom] = useState(false);
+
 
 
     useEffect(() => {
@@ -270,10 +273,27 @@ export default function ChatContent(props : any) {
         if (chatListRef.current) {
             // console.log(chatListRef.current.scrollHeight)
             // console.log(chatListRef.current.scrollTop)
-            if (chatListRef.current.scrollHeight + chatListRef.current.scrollTop > 320 && chatListRef.current.scrollHeight + chatListRef.current.scrollTop < 330){
+            if (chatListRef.current.scrollHeight + chatListRef.current.scrollTop > 320 && chatListRef.current.scrollHeight + chatListRef.current.scrollTop < 330) {
                 console.log('up')
                 page2Ref.current++
                 handleGetChat(page2Ref.current)
+            }
+
+            if (chatListRef.current) {
+                const {scrollTop, scrollHeight, clientHeight} = chatListRef.current;
+                // Kiểm tra nếu người dùng đã cuộn lên trên một khoảng nhất định
+                if (scrollTop + clientHeight < scrollHeight - 200) {
+                    setShowScrollToBottom(true);
+                } else {
+                    setShowScrollToBottom(false);
+                }
+
+                // // Logic tải thêm tin nhắn cũ
+                // if (chatListRef.current.scrollTop < 10 && !end) {
+                //     console.log('up');
+                //     page2Ref.current++;
+                //     handleGetChat(page2Ref.current);
+                // }
             }
         }
     }
@@ -400,6 +420,19 @@ export default function ChatContent(props : any) {
 
     }
 
+    function scrollToBottom() {
+        if (chatListRef.current) {
+            chatListRef.current.scrollTo({
+                top: chatListRef.current.scrollHeight,
+                behavior: 'smooth' });
+        }
+        setTimeout(() => {
+            setShowScrollToBottom(false);
+        }, 1000);
+
+
+    }
+
     return (
         <div className="wrapper" ref={wrapperRef}>
             <div className="header">
@@ -428,7 +461,7 @@ export default function ChatContent(props : any) {
                 <div className="holder">
                     <textarea ref={textareaRef} onInput={handleInput} className={"input-mess"}
                               onClick={handleSeenInputClick} placeholder={"Type here"}
-                    onKeyDown={handeleKeyDown}>
+                              onKeyDown={handeleKeyDown}>
                     </textarea>
                     {/*<input type="text" placeholder={"Type here"} ref={inputMessRef} onClick={handleSeenInputClick}/>*/}
                     <i className="fa-regular fa-face-smile" onClick={() => {
@@ -438,6 +471,11 @@ export default function ChatContent(props : any) {
                 </div>
                 <Button text={"Send"} className={"send"} onClick={handleSendChat}/>
             </div>
+            {showScrollToBottom && (
+                <div className="scroll-to-bottom" onClick={scrollToBottom}>
+                    <i className="fa-solid fa-arrow-down"></i>
+                </div>
+            )}
 
         </div>
     );
