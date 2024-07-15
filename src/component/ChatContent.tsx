@@ -1,4 +1,5 @@
 
+
 import avatar from "../assets/img/avatar.png";
 import Button from "./Button";
 import React, {useEffect, useRef, useState} from "react";
@@ -459,7 +460,7 @@ export default function ChatContent(props : any) {
                 <div className="holder">
                     <textarea ref={textareaRef} onInput={handleInput} className={"input-mess"}
                               onClick={handleSeenInputClick} placeholder={"Type here"}
-                    onKeyDown={handeleKeyDown}>
+                              onKeyDown={handeleKeyDown}>
                     </textarea>
                     {/*<input type="text" placeholder={"Type here"} ref={inputMessRef} onClick={handleSeenInputClick}/>*/}
                     <i className="fa-regular fa-face-smile" onClick={() => {

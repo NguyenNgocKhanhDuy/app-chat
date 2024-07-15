@@ -103,11 +103,13 @@
         align-items: center;
         gap: 16px;
         justify-content: space-between;
+
       }
 
       &-img {
         width: 40px;
         height: 40px;
+
       }
 
       &-content {
@@ -126,7 +128,10 @@
             font-size: 16px;
           }
 
-          i {
+          #onl-false {
+            color: $gray;
+          }
+          #onl-true {
             color: $green;
           }
         }

@@ -17,26 +17,7 @@ export default function ModalRoom(props : any) {
         error.style.display = "none"
     };
     const handleButtonClick = () => {
-        const modalRoomText = props.modalRoomText
-        let action =""
-        if(modalRoomText==="Create Room") {
-             action = "CREATE_ROOM"
-        } else if (modalRoomText==="Join Room") {
-            action ="JOIN_ROOM"
-        }
-        WebSocketService.registerCallback(action, (data : any) => {
-            const error = document.querySelector(".error") as HTMLDivElement;
-            const errorText = document.querySelector(".error .error-text") as HTMLParagraphElement;
-            if(data === "Room Exist" || data === "Room not found") {
-                errorText.innerText = data;
-                error.style.display = "flex"
-            } else {
-                handleCloseModal()
-            }
-        })
         props.onButtonClick(inputValue);
-
-
     }
 
     return (
