@@ -62,6 +62,8 @@ export default function Register() {
             error.style.display = "flex";
         } else {
             handlerRegister(username, pass)
+            alert('bạn đã đăng ký thành công !!!!\nVui lòng đăng nhập để truy cập ứng dụng');
+            navigate("/login")
         }
     }
     const validateEmail = (email : string) => {

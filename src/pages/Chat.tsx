@@ -48,7 +48,6 @@ export default function Chat() {
     const indexRef = useRef<number>(-1);
     const isInitialized = useRef(false);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null); // Sử dụng NodeJS.Timeout cho TypeScript
-
     const toggleChat = (username: string, type: number) => {
         handleCloseInfo();
         (type === 1 ? isRoom(true) : isRoom(false))
@@ -189,7 +188,6 @@ export default function Chat() {
         if (users.length > 0 && !isInitialized.current && indexRef.current !== -1) {
             handleCheckOnline();
             isInitialized.current = true; // Đánh dấu đã khởi tạo handleCheckOnline
-            console.log("gjeruighidfgnjidfhjidfnhkjndfjogndfognbkojdgnbkonfdghondgjkohnhnojfgnhojnfghjknfgjkhnfgkjhnjk")
         }
     }, [users]);
 
@@ -288,6 +286,10 @@ export default function Chat() {
         setIsChatOpen(true)
     }
     const handleLogOut = () => {
+        setUserOnlineStatus({});
+        setUsers([]);
+        indexRef.current = -1
+        isInitialized.current = false;
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
@@ -301,10 +303,8 @@ export default function Chat() {
             }
         )
         WebSocketService.registerCallback("LOGOUT", (data: any) => {
-            WebSocketService.unregisterCallback('CHECK_USER');
-            setUsers([]);
-            indexRef.current = -1
-            isInitialized.current = false;
+            // WebSocketService.unregisterCallback('CHECK_USER');
+
             navigate('/login')
 
         })
@@ -543,7 +543,7 @@ export default function Chat() {
                                                                 </>
                                                             )
                                                         ) : (
-                                                            <i className="fa-solid fa-circle" id="onl-false"></i>
+                                                            <div>Loading...</div>
                                                         )
                                                     ) : null}
                                                 </div>

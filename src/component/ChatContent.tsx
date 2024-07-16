@@ -1,7 +1,6 @@
 
 
 import avatar from "../assets/img/avatar.png";
-import Button from "./Button";
 import React, {useEffect, useRef, useState} from "react";
 import "../assets/css/chatContent.scss"
 import WebSocketService from "../webSocket/webSocketService";
@@ -12,8 +11,8 @@ import ReactDOM from "react-dom/client";
 import {Simulate} from "react-dom/test-utils";
 import input = Simulate.input;
 import InfomationChat from "./InfomationChat";
-
 import EmojiPicker from "emoji-picker-react";
+import Button from "./Button";
 
 
 
@@ -313,7 +312,6 @@ export default function ChatContent(props : any) {
 
     const [chatMess, setChatMess] = useState("")
 
-
     const handleSendChat = () => {
         var mess = ""
         if (textareaRef.current) {
@@ -411,13 +409,13 @@ export default function ChatContent(props : any) {
     }
 
 
-    function handleKeyPress(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-        if(e.key === 'Enter' && chatMess.trim() !==""){
-            e.preventDefault();
-            handleSendChat()
-        }
-
-    }
+    // function handleKeyPress(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    //     if(e.key === 'Enter' && chatMess.trim() !==""){
+    //         e.preventDefault();
+    //         handleSendChat()
+    //     }
+    //
+    // }
 
     function scrollToBottom() {
         if (chatListRef.current) {
