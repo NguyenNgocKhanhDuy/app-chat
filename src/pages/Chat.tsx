@@ -700,5 +700,6 @@ export default function Chat() {
                     <ModalChat onHandleGetChat={(user: string) => handleGetNewChat(user)} user={userHost}
                                onUpdateListUser={handleGetUserList} onUpdateUser={(usern : string) => updateUsersList(usern,"", 0)} onClose={handleCloseModalChat} modalText={modalChatText} btnText={modalChatBtnText}/> : ""}
             </div>
+        </div>
         )
     }
