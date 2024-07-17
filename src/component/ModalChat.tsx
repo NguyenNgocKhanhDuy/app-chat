@@ -49,7 +49,7 @@ export default function ModalChat(props: any) {
                     }
                 }
             )
-            saveChat(user, name)
+            // saveChat(user, name)
             props.onUpdateListUser()
             handleGetNewChat(name)
         }
