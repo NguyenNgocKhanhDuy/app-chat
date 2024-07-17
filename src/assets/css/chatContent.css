@@ -219,7 +219,7 @@
 .scroll-to-bottom {
   position: fixed;
   bottom: 120px;
-  right: 580px;
+  right: 35%;
   width: 30px;
   height: 30px;
   background-color: #38c585;

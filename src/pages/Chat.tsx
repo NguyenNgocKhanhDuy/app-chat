@@ -540,157 +540,155 @@ export default function Chat() {
                     <div className="chat-list">
                         {users.length > 0 ? (
                             // }
-                                users.map((user) => (
-                                    <div className={`item ${user.name == username ? "isUserSelect" : ""}`}
-                                         onClick={() => toggleChat(user.name, user.type)} key={user.name}>
-                                        <div className="item-info">
-                                            {user.type === 0 ? (
-                                                <img src={avatar} className="item-img" alt="Avatar"/>
-                                            ) : (
-                                                <img src={roomchat} className="item-img" alt="Avatar"/>
-                                            )}
-                                            <div className="item-content">
-                                                <div className="title">
-                                                    {user.name !== userHost ? (
-                                                        <p className="name">
-                                                            {user.name}
-                                                        </p>
-                                                    ) : (
-                                                        <p className="name">
-                                                            {"Myself"}
-                                                        </p>
-                                                    )}
-                                                    {/*<i className="fa-regular fa-comment-dots"></i>*/}
-                                                    {/*{user.type === 0 ? (*/}
-                                                    {/*    userOnlineStatus[user.name] ? (*/}
-                                                    {/*        // <i className="fa-solid fa-circle" id="onl-true"></i>*/}
-                                                    {/*        <div>{userOnlineStatus[user.name]}</div>*/}
+                            users.map((user) => (
+                                <div className={`item ${user.name == username ? "isUserSelect" : ""}`}
+                                     onClick={() => toggleChat(user.name, user.type)} key={user.name}>
+                                    <div className="item-info">
+                                        {user.type === 0 ? (
+                                            <img src={avatar} className="item-img" alt="Avatar"/>
+                                        ) : (
+                                            <img src={roomchat} className="item-img" alt="Avatar"/>
+                                        )}
+                                        <div className="item-content">
+                                            <div className="title">
+                                                {user.name !== userHost ? (
+                                                    <p className="name">
+                                                        {user.name}
+                                                    </p>
+                                                ) : (
+                                                    <p className="name">
+                                                        {"Myself"}
+                                                    </p>
+                                                )}
+                                                {/*<i className="fa-regular fa-comment-dots"></i>*/}
+                                                {/*{user.type === 0 ? (*/}
+                                                {/*    userOnlineStatus[user.name] ? (*/}
+                                                {/*        // <i className="fa-solid fa-circle" id="onl-true"></i>*/}
+                                                {/*        <div>{userOnlineStatus[user.name]}</div>*/}
 
-                                                    {/*    ) : (*/}
-                                                    {/*        // <i className="fa-solid fa-circle" id="onl-false"></i>*/}
-                                                    {/*        <div>{userOnlineStatus[user.name]}</div>*/}
-                                                    {/*    )*/}
-                                                    {/*) : null}*/}
-                                                    {user.type === 0 ? (
-                                                        userOnlineStatus[user.name] !== undefined ? (
-                                                            userOnlineStatus[user.name] ? (
-                                                                <>
-                                                                    <i className="fa-solid fa-circle" id="onl-true"></i>
-                                                                </>
-                                                            ) : (
-                                                                <>
-                                                                    <i className="fa-solid fa-circle" id="onl-false"></i>
-                                                                </>
-                                                            )
+                                                {/*    ) : (*/}
+                                                {/*        // <i className="fa-solid fa-circle" id="onl-false"></i>*/}
+                                                {/*        <div>{userOnlineStatus[user.name]}</div>*/}
+                                                {/*    )*/}
+                                                {/*) : null}*/}
+                                                {user.type === 0 ? (
+                                                    userOnlineStatus[user.name] !== undefined ? (
+                                                        userOnlineStatus[user.name] ? (
+                                                            <>
+                                                                <i className="fa-solid fa-circle" id="onl-true"></i>
+                                                            </>
                                                         ) : (
                                                             <div>Loading...</div>
                                                         )
-                                                    ) : null}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="item-status">
-                                            {/*<p className="time">Just now</p>*/}
-                                            {newestChat.length > 0 ? (
-                                                newestChat.map((u) => (
-                                                    u.name == user.name ? <p className="amount"></p> : ""
-                                                ))
-                                            ) : ""}
-                                        </div>
-                                    </div>
-                                ))
-                            ) : (
-                                <p>No users available</p>
-                            )}
-                        </div>
-                    ) : (
-                        <div className="chat-list">
-                            {searchUsers.length > 0 ? (
-                                searchUsers.map((user) => (
-                                    <div className={`item ${user.name == username ? "isUserSelect" : ""}`}
-                                         onClick={() => toggleChat(user.name, user.type)} key={user.name}>
-                                        <div className="item-info">
-                                            {user.type === 0 ? (
-                                                <img src={avatar} className="item-img" alt="Avatar"/>
-                                            ) : (
-                                                <img src={roomchat} className="item-img" alt="Avatar"/>
-                                            )}
-                                            <div className="item-content">
-                                                <div className="title">
-                                                    {user.name !== userHost ? (
-                                                        <p className="name">
-                                                            {user.name}
-                                                        </p>
                                                     ) : (
-                                                        <p className="name">
-                                                            {"Myself"}
-                                                        </p>
-                                                    )}
-                                                    {/*<i className="fa-regular fa-comment-dots"></i>*/}
-                                                    {/*{user.type === 0 ? (*/}
-                                                    {/*    userOnlineStatus[user.name] ? (*/}
-                                                    {/*        // <i className="fa-solid fa-circle" id="onl-true"></i>*/}
-                                                    {/*        <div>{userOnlineStatus[user.name]}</div>*/}
-
-                                                    {/*    ) : (*/}
-                                                    {/*        // <i className="fa-solid fa-circle" id="onl-false"></i>*/}
-                                                    {/*    <div>{userOnlineStatus[user.name]}</div>*/}
-                                                    {/*    )*/}
-                                                    {/*    ) : null}*/}
-                                                    {user.type === 0 ? (
-                                                        userOnlineStatus[user.name] !== undefined ? (
-                                                            userOnlineStatus[user.name] ? (
-                                                                <>
-                                                                    <i className="fa-solid fa-circle" id="onl-true"></i>
-                                                                </>
-                                                            ) : (
-                                                                <>
-                                                                    <i className="fa-solid fa-circle" id="onl-false"></i>
-                                                                </>
-                                                            )
-                                                        ) : (
-                                                            <div>Loading...</div>
-                                                        )
-                                                    ) : null}
-                                                </div>
+                                                        <i className="fa-solid fa-circle" id="onl-false"></i>
+                                                    )
+                                                ) : null}
                                             </div>
                                         </div>
-                                        <div className="item-status">
-                                            {/*<p className="time">Just now</p>*/}
-                                            {newestChat.length > 0 ? (
-                                                newestChat.map((u) => (
-                                                    u.name == user.name ? <p className="amount"></p> : ""
-                                                ))
-                                            ) : ""}
-                                        </div>
                                     </div>
-                                ))
-                            ) : (
-                                <p>Not found users</p>
-                            )}
-                        </div>
-                    )}
-                </div>
-                <div className={`right ${isChatOpen ? "rightCalc" : "rightFull"}`}>
-                    <div className="top">
-                        <div className="action">
-                            <Button text={"New Room"} className={"chat-room"} onClick={handleCreateModalRoom}/>
-                            <Button text={"Join Room"} className={"chat-room"} onClick={handleJoinModalRoom}/>
-                            <Button text={"New Chat"} className={"chat-room"} onClick={handleCreateModalChat}/>
-                            <Button text={"Events"} className={"event"}/>
-                            <Button text={"log out"} className={"logout"} onClick={handleLogOut}/>
-
-                        </div>
-                        <div className="location">
-                            <div className="info">
-                                <i className="fa-solid fa-location-dot"></i>
-                                <div className="desc">
-                                    <p className="title">Current Location</p>
-                                    <p className="locate">San Juan, Puerto Rico</p>
+                                    <div className="item-status">
+                                        {/*<p className="time">Just now</p>*/}
+                                        {newestChat.length > 0 ? (
+                                            newestChat.map((u) => (
+                                                u.name == user.name ? <p className="amount"></p> : ""
+                                            ))
+                                        ) : ""}
+                                    </div>
                                 </div>
+                            ))
+                        ) : (
+                            <p>No users available</p>
+                        )}
+                    </div>
+                ) : (
+                    <div className="chat-list">
+                        {searchUsers.length > 0 ? (
+                            searchUsers.map((user) => (
+                                <div className={`item ${user.name == username ? "isUserSelect" : ""}`}
+                                     onClick={() => toggleChat(user.name, user.type)} key={user.name}>
+                                    <div className="item-info">
+                                        {user.type === 0 ? (
+                                            <img src={avatar} className="item-img" alt="Avatar"/>
+                                        ) : (
+                                            <img src={roomchat} className="item-img" alt="Avatar"/>
+                                        )}
+                                        <div className="item-content">
+                                            <div className="title">
+                                                {user.name !== userHost ? (
+                                                    <p className="name">
+                                                        {user.name}
+                                                    </p>
+                                                ) : (
+                                                    <p className="name">
+                                                        {"Myself"}
+                                                    </p>
+                                                )}
+                                                {/*<i className="fa-regular fa-comment-dots"></i>*/}
+                                                {/*{user.type === 0 ? (*/}
+                                                {/*    userOnlineStatus[user.name] ? (*/}
+                                                {/*        // <i className="fa-solid fa-circle" id="onl-true"></i>*/}
+                                                {/*        <div>{userOnlineStatus[user.name]}</div>*/}
+
+                                                {/*    ) : (*/}
+                                                {/*        // <i className="fa-solid fa-circle" id="onl-false"></i>*/}
+                                                {/*    <div>{userOnlineStatus[user.name]}</div>*/}
+                                                {/*    )*/}
+                                                {/*    ) : null}*/}
+                                                {user.type === 0 ? (
+                                                    userOnlineStatus[user.name] !== undefined ? (
+                                                        userOnlineStatus[user.name] ? (
+                                                            <>
+                                                                <i className="fa-solid fa-circle" id="onl-true"></i>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <i className="fa-solid fa-circle" id="onl-false"></i>
+                                                            </>
+                                                        )
+                                                    ) : (
+                                                        <div>Loading...</div>
+                                                    )
+                                                ) : null}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="item-status">
+                                        {/*<p className="time">Just now</p>*/}
+                                        {newestChat.length > 0 ? (
+                                            newestChat.map((u) => (
+                                                u.name == user.name ? <p className="amount"></p> : ""
+                                            ))
+                                        ) : ""}
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p>Not found users</p>
+                        )}
+                    </div>
+                )}
+            </div>
+            <div className={`right ${isChatOpen ? "rightCalc" : "rightFull"}`}>
+                <div className="top">
+                    <div className="action">
+                        <Button text={"New Room"} className={"chat-room"} onClick={handleCreateModalRoom}/>
+                        <Button text={"Join Room"} className={"chat-room"} onClick={handleJoinModalRoom}/>
+                        <Button text={"New Chat"} className={"chat-room"} onClick={handleCreateModalChat}/>
+                        <Button text={"Events"} className={"event"}/>
+                        <Button text={"log out"} className={"logout"} onClick={handleLogOut}/>
+
+                    </div>
+                    <div className="location">
+                        <div className="info">
+                            <i className="fa-solid fa-location-dot"></i>
+                            <div className="desc">
+                                <p className="title">Current Location</p>
+                                <p className="locate">San Juan, Puerto Rico</p>
                             </div>
-                            <i className="fa-solid fa-chevron-down"></i>
                         </div>
+                        <i className="fa-solid fa-chevron-down"></i>
+                    </div>
                 </div>
                 <div className="chat-content">
                     <div className={"main-chat-content"}>
@@ -703,10 +701,10 @@ export default function Chat() {
                                                      listUsers={users} user={userHost} userChatTo={username} handleOpenInfo={handleOpenInfo}
                                                      updateUserList={(u:string) => handleUpdateUserListForSend(u)}/>
                                     :<ChatContent page={1} onRemoveFromNewestChat={(usrn: string) => removeFromNewest(usrn)}
-                                             newestChat={newestChat} isFirst={true}
-                                             onUpdateUser={(usern: string, usernTo:string, type:number) => updateUsersList(usern, usernTo,type)} listUsers={users}
-                                             user={userHost} userChatTo={username} isStart={start}
-                                             updateUserList={(u:string) => handleUpdateUserListForSend(u)}/>
+                                                  newestChat={newestChat} isFirst={true}
+                                                  onUpdateUser={(usern: string, usernTo:string, type:number) => updateUsersList(usern, usernTo,type)} listUsers={users}
+                                                  user={userHost} userChatTo={username} isStart={start}
+                                                  updateUserList={(u:string) => handleUpdateUserListForSend(u)}/>
                             )
                             : <ChatWelcome/>}
                         <div className="info-content">
@@ -723,7 +721,9 @@ export default function Chat() {
                                onButtonClick={handleButtonClick} modalRoomText={modalRoomText}/> : ""}
 
                 {isModalChatOpen ?
-                    <ModalChat onHandleGetChat={(user: string) => handleGetNewChat(user)} user={userHost}
+                    <ModalChat onHandleGetChat={(user: string) => handleGetNewChat(user)}
+                               user={userHost}
+                               userList={users}
                                onUpdateListUser={handleGetUserList} onUpdateUser={(usern : string) => updateUsersList(usern,"", 0)} onClose={handleCloseModalChat} modalText={modalChatText} btnText={modalChatBtnText}/> : ""}
                 </div>
         </div>
