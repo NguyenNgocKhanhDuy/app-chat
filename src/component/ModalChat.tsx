@@ -4,17 +4,19 @@ import React, {useEffect, useRef} from "react";
 import WebSocketService from "../webSocket/webSocketService";
 import {saveChat} from "../Store/LocalStorage";
 
-export default function ModalChat(props : any) {
-    const  inputMessRef = useRef<HTMLTextAreaElement>(null);
-    const  inputNameRef = useRef<HTMLInputElement>(null);
+export default function ModalChat(props: any) {
+    const inputMessRef = useRef<HTMLTextAreaElement>(null);
+    const inputNameRef = useRef<HTMLInputElement>(null);
     const user = props.user;
+    const userList = props.userList;
+
 
     useEffect(() => {
 
         WebSocketService.registerCallback('SEND_CHAT', (data: any) => {
-            if (data.status == 'error'){
+            if (data.status == 'error') {
                 console.log('error')
-            }else {
+            } else {
                 props.onUpdateUser()
             }
         })
@@ -22,6 +24,14 @@ export default function ModalChat(props : any) {
     }, []);
     const handleSendChat = () => {
         const name = inputNameRef.current ? inputNameRef.current.value : "";
+        /*for (let i = 0; i < userList.length; i++) {
+            if (inputNameRef == userList.get(i).name) {
+
+
+            }
+
+        }*/
+
         var mess = ""
         if (inputMessRef.current) {
             mess = inputMessRef.current.value
@@ -53,15 +63,15 @@ export default function ModalChat(props : any) {
     }
 
 
-    const handleGetNewChat = (user:string) => {
+    const handleGetNewChat = (user: string) => {
         props.onHandleGetChat(user)
     }
 
     const handleCloseModal = () => {
         props.onClose();
     }
-    const handeleKeyDown =(event: React.KeyboardEvent<HTMLElement>)=>{
-        if(event.key== 'Enter' && ! event.shiftKey){
+    const handeleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+        if (event.key == 'Enter' && !event.shiftKey) {
             event.preventDefault();
             handleSendChat();
         }

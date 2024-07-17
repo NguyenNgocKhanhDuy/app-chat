@@ -20,6 +20,8 @@ interface ChatMessage {
     createAt: ""
 }
 
+
+
 export default function RoomChatContent(props : any) {
 
     const chatListRef = useRef<HTMLDivElement>(null);
@@ -46,7 +48,11 @@ export default function RoomChatContent(props : any) {
             setImage(e.target.files[0]);
         }
     };
-
+    useEffect(() => {
+        if (textareaRef.current) {
+            textareaRef.current.focus();
+        }
+    }, [userChatTo]);
     const handleUpload = () => {
         if (!image) return;
 

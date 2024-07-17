@@ -50,6 +50,11 @@ export default function ChatContent(props : any) {
     const [url, setUrl] = useState<String | "">("");
     const [progress, setProgress] = useState(0);
 
+    useEffect(() => {
+        if (textareaRef.current) {
+            textareaRef.current.focus();
+        }
+    }, [userChatTo]);
 
     const handleChange = (e:any) => {
         if (e.target.files[0]) {
@@ -376,22 +381,37 @@ export default function ChatContent(props : any) {
                 page2Ref.current++
                 handleGetChat(page2Ref.current)
             }
-
+/*
             if (chatListRef.current) {
                 const {scrollTop, scrollHeight, clientHeight} = chatListRef.current;
                 // Kiểm tra nếu người dùng đã cuộn lên trên một khoảng nhất định
                 if (scrollTop + clientHeight < scrollHeight - 200) {
                     setShowScrollToBottom(true);
+                }
+                else {
+                    setShowScrollToBottom(false);
+                }
+                // Kiểm tra nếu người dùng đã cuộn chạm đáy
+                if (scrollTop + clientHeight > scrollHeight - 10) {
+                    setShowScrollToBottom(false);
+                }
+            }*/
+            if (chatListRef.current) {
+                const { scrollTop, scrollHeight, clientHeight } = chatListRef.current;
+
+                console.log(`scrollTop: ${scrollTop}, clientHeight: ${clientHeight}, scrollHeight: ${scrollHeight}`);
+
+                // Kiểm tra nếu người dùng đã cuộn chạm đáy hoặc gần đáy
+                if (scrollTop + clientHeight >= scrollHeight - 1900) {
+                    console.log('User is at the bottom or near the bottom of the scroll area');
+                    setShowScrollToBottom(false);
+                } else if (scrollTop + clientHeight < scrollHeight - 200) {
+                    // Kiểm tra nếu người dùng đã cuộn lên trên một khoảng nhất định (200px từ đáy)
+                    console.log('User is more than 200px from the bottom');
+                    setShowScrollToBottom(true);
                 } else {
                     setShowScrollToBottom(false);
                 }
-
-                // // Logic tải thêm tin nhắn cũ
-                // if (chatListRef.current.scrollTop < 10 && !end) {
-                //     console.log('up');
-                //     page2Ref.current++;
-                //     handleGetChat(page2Ref.current);
-                // }
             }
         }
     }
