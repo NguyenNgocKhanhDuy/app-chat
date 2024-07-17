@@ -44,7 +44,6 @@ export default function RoomChatContent(props : any) {
         if (e.target.files[0]) {
             console.log('up')
             setImage(e.target.files[0]);
-            handleUpload()
         }
     };
 
@@ -86,7 +85,7 @@ export default function RoomChatContent(props : any) {
                             data: {
                                 event: "SEND_CHAT",
                                 data: {
-                                    type: "people",
+                                    type: "room",
                                     to: userChatTo,
                                     mes: JSON.stringify(signalData)
                                 }
@@ -115,6 +114,10 @@ export default function RoomChatContent(props : any) {
             }
         );
     };
+
+    useEffect(() => {
+        handleUpload();
+    }, [image]);
 
 
     useEffect(() => {
@@ -338,17 +341,26 @@ export default function RoomChatContent(props : any) {
     const handleScroll = () => {
         // console.log('scr')
         if (chatListRef.current) {
-            // console.log(chatListRef.current.scrollHeight)
-            // console.log(chatListRef.current.scrollTop)
+            console.log(chatListRef.current.scrollHeight)
+            console.log(chatListRef.current.scrollTop)
+            console.log(chatListRef.current.scrollHeight - chatListRef.current.scrollTop)
             if (chatListRef.current.scrollHeight + chatListRef.current.scrollTop > 320 && chatListRef.current.scrollHeight + chatListRef.current.scrollTop < 330){
                 // console.log('up')
                 page2Ref.current++
                 handleGetChat(page2Ref.current)
             }
+
+            if (chatListRef.current.scrollHeight - chatListRef.current.scrollTop > 3900 && chatListRef.current.scrollHeight - chatListRef.current.scrollTop < 4000) {
+                console.log('false')
+                setShowScrollToBottom(false)
+            }
+
         }
 
         if (chatListRef.current) {
             const {scrollTop, scrollHeight, clientHeight} = chatListRef.current;
+
+
             // Kiểm tra nếu người dùng đã cuộn lên trên một khoảng nhất định
             if (scrollTop + clientHeight < scrollHeight - 200) {
                 setShowScrollToBottom(true);
@@ -363,6 +375,8 @@ export default function RoomChatContent(props : any) {
             //     handleGetChat(page2Ref.current);
             // }
         }
+
+
 
     }
 
@@ -483,8 +497,6 @@ export default function RoomChatContent(props : any) {
         setTimeout(() => {
             setShowScrollToBottom(false);
         }, 1000);
-
-
     }
     
     return (
@@ -528,11 +540,11 @@ export default function RoomChatContent(props : any) {
                 <i className="fa-solid fa-image upFileIcon"></i>
                 <Button text={"Send"} className={"send"} onClick={handleSendChat}/>
             </div>
-            {showScrollToBottom && (
+            {showScrollToBottom == true ? (
                 <div className="scroll-to-bottom" onClick={scrollToBottom}>
                 <i className="fa-solid fa-arrow-down"></i>
                 </div>
-            )}
+            ) : ""}
         </div>
     );
 }

@@ -5,6 +5,7 @@ import {useEffect} from "react";
 import WebSocketService from "../webSocket/webSocketService";
 import {useDispatch} from "react-redux";
 import {setCode, setUser} from "../Store/Action";
+import {saveCode, saveUser} from "../Store/LocalStorage";
 
 
 export default function Login() {
@@ -30,6 +31,8 @@ export default function Login() {
                 const inputUserName = document.querySelector("#username") as HTMLInputElement;
                 const username = inputUserName.value;
                 handleSetUser(username, code);
+                saveUser(username)
+                saveCode(code)
                 navigate('/chat')
             }
         })
