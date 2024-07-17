@@ -195,6 +195,7 @@
       justify-content: space-between;
       gap: 8px;
 
+
       Button {
         width: fit-content;
         text-transform: uppercase;
@@ -204,9 +205,12 @@
         background-color: $lightGray;
         color: $gray;
       }
-      .logout {
-        background-color: red;
-      }
+    }
+
+    .logout {
+      width: fit-content;
+      text-transform: capitalize;
+      background-color: red;
     }
 
     .location {

@@ -54,7 +54,7 @@ export default function Chat() {
 
         setUsername(username);
 
-        removeChat(username, userHost)
+        // removeChat(username, userHost)
 
         setNewestChat(preList => {
             const existingUserIndex = preList.findIndex(user => user.name === username);
@@ -578,10 +578,10 @@ export default function Chat() {
                                                                 <i className="fa-solid fa-circle" id="onl-true"></i>
                                                             </>
                                                         ) : (
-                                                            <div>Loading...</div>
+                                                            <i className="fa-solid fa-circle" id="onl-false"></i>
                                                         )
                                                     ) : (
-                                                        <i className="fa-solid fa-circle" id="onl-false"></i>
+                                                        <div>Loading...</div>
                                                     )
                                                 ) : null}
                                             </div>
@@ -675,20 +675,18 @@ export default function Chat() {
                         <Button text={"New Room"} className={"chat-room"} onClick={handleCreateModalRoom}/>
                         <Button text={"Join Room"} className={"chat-room"} onClick={handleJoinModalRoom}/>
                         <Button text={"New Chat"} className={"chat-room"} onClick={handleCreateModalChat}/>
-                        <Button text={"Events"} className={"event"}/>
-                        <Button text={"log out"} className={"logout"} onClick={handleLogOut}/>
-
                     </div>
-                    <div className="location">
-                        <div className="info">
-                            <i className="fa-solid fa-location-dot"></i>
-                            <div className="desc">
-                                <p className="title">Current Location</p>
-                                <p className="locate">San Juan, Puerto Rico</p>
-                            </div>
-                        </div>
-                        <i className="fa-solid fa-chevron-down"></i>
-                    </div>
+                    <Button text={"log out"} className={"logout"} onClick={handleLogOut}/>
+                    {/*<div className="location">*/}
+                    {/*    <div className="info">*/}
+                    {/*        <i className="fa-solid fa-location-dot"></i>*/}
+                    {/*        <div className="desc">*/}
+                    {/*            <p className="title">Current Location</p>*/}
+                    {/*            <p className="locate">San Juan, Puerto Rico</p>*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*    <i className="fa-solid fa-chevron-down"></i>*/}
+                    {/*</div>*/}
                 </div>
                 <div className="chat-content">
                     <div className={"main-chat-content"}>

@@ -59,6 +59,11 @@
     .action {
       i {
         font-size: 16px;
+        padding: 5px;
+        &:hover {
+          opacity: 0.8;
+          cursor: pointer;
+        }
       }
 
       i:nth-child(2) {

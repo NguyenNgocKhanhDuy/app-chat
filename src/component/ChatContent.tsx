@@ -199,10 +199,10 @@ export default function ChatContent(props : any) {
 
         })
 
-        WebSocketService.registerCallback('CHECK_USER', (data:any) => {
-            // console.log(data)
-            setOnline(data.status)
-        })
+        // WebSocketService.registerCallback('CHECK_USER', (data:any) => {
+        //     // console.log(data)
+        //     setOnline(data.status)
+        // })
 
 
         if (chatListRef.current) {
@@ -227,35 +227,35 @@ export default function ChatContent(props : any) {
     // }, [mess]);
 
 
-    useEffect(() => {
-        handleCheckOnline()
-    });
+    // useEffect(() => {
+    //     handleCheckOnline()
+    // });
 
-    const onlineRef = useRef<HTMLParagraphElement>(null);
-    const handleSetOnlineUI = () => {
-        if (onlineRef.current) {
-            onlineRef.current.innerHTML = isOnline ? "Online" : 'Offline';
-        }
-    }
+    // const onlineRef = useRef<HTMLParagraphElement>(null);
+    // const handleSetOnlineUI = () => {
+    //     if (onlineRef.current) {
+    //         onlineRef.current.innerHTML = isOnline ? "Online" : 'Offline';
+    //     }
+    // }
 
-    useEffect(() => {
-        // console.log('set')
-        handleSetOnlineUI()
-    }, [isOnline]);
+    // useEffect(() => {
+    //     // console.log('set')
+    //     handleSetOnlineUI()
+    // }, [isOnline]);
 
-    const handleCheckOnline = () => {
-        WebSocketService.sendMessage(
-            {
-                action: "onchat",
-                data: {
-                    event: "CHECK_USER",
-                    data: {
-                        user: userChatTo
-                    }
-                }
-            }
-        )
-    }
+    // const handleCheckOnline = () => {
+    //     WebSocketService.sendMessage(
+    //         {
+    //             action: "onchat",
+    //             data: {
+    //                 event: "CHECK_USER",
+    //                 data: {
+    //                     user: userChatTo
+    //                 }
+    //             }
+    //         }
+    //     )
+    // }
 
 
 
@@ -282,6 +282,17 @@ export default function ChatContent(props : any) {
                     const url = signalData.mes.data;
                     console.log(url)
                     mess += `<img src="${url}">`;
+                } else {
+                    var messTokens = data[i].mes.split("|")
+                    // console.log("MessTojken: "+messTokens)
+                    for (let j = 0; j < messTokens.length; j++) {
+                        if (messTokens[j].substring(0, 29) == "https://cdn.jsdelivr.net/npm/") {
+                            // console.log("j="+j+" "+messTokens[j])
+                            mess += `<img src="${messTokens[j]}" alt="grin" class="epr-emoji-img epr_-a3ewa5 epr_-tul3d0 epr_xfdx0l epr_-u8wwnq epr_dkrjwv __EmojiPicker__ epr_-dyxviy epr_-w2g3k2 epr_-8yncdp epr_szp4ut" loading="eager" style="font-size: 32px; height: 32px; width: 32px;"/>`
+                        }else {
+                            mess += `<p>${messTokens[j]}</p>`;
+                        }
+                    }
                 }
             }catch (error) {
                 var messTokens = data[i].mes.split("|")
@@ -557,16 +568,16 @@ export default function ChatContent(props : any) {
                     <div className="title">
                         {/*<p className="name">Santosa Yoga Health</p>*/}
                         <p className="name">{userChatTo}</p>
-                        <p className="locate">
-                            <i className="fa-solid fa-location-dot"></i>
-                            San Juan, Puerto Rico
-                        </p>
-                        <p ref={onlineRef}></p>
+                        {/*<p className="locate">*/}
+                        {/*    <i className="fa-solid fa-location-dot"></i>*/}
+                        {/*    San Juan, Puerto Rico*/}
+                        {/*</p>*/}
+                        {/*<p ref={onlineRef}></p>*/}
                     </div>
                 </div>
                 <div className="action">
-                    <i className="fa-solid fa-phone"></i>
-                    <i className="fa-solid fa-magnifying-glass"></i>
+                    {/*<i className="fa-solid fa-phone"></i>*/}
+                    {/*<i className="fa-solid fa-magnifying-glass"></i>*/}
                     <i className="fa-solid fa-ellipsis-vertical"></i>
                 </div>
             </div>

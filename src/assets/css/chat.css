@@ -178,7 +178,9 @@
   background-color: #e9ecef;
   color: #96a1af;
 }
-.right .top .action .logout {
+.right .top .logout {
+  width: fit-content;
+  text-transform: capitalize;
   background-color: red;
 }
 .right .top .location {

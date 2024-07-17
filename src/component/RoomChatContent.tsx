@@ -108,7 +108,7 @@ export default function RoomChatContent(props : any) {
                     if (chatListRef.current) {
                         chatListRef.current.innerHTML = ""
                     }
-                    saveChat(user, userChatTo)
+                    // saveChat(user, userChatTo)
                     // isEnd(false)
                     // console.log("End: "+end)
                     handleReset()
@@ -236,13 +236,13 @@ export default function RoomChatContent(props : any) {
 
     const handleAddInHtml = (data : ChatMessage[]) => {
         // console.log('update')
-        if (chatListRef.current) {
-            if (!(chatListRef.current.scrollHeight + chatListRef.current.scrollTop > 320 && chatListRef.current.scrollHeight + chatListRef.current.scrollTop < 330)){
-                chatListRef.current.innerHTML = ""
-            }
-            // console.log(chatListRef.current.textContent)
-        }
-        isSeen = getChat(user, userChatTo) == "" ? true : false;
+        // if (chatListRef.current) {
+        //     if (!(chatListRef.current.scrollHeight + chatListRef.current.scrollTop > 320 && chatListRef.current.scrollHeight + chatListRef.current.scrollTop < 330)){
+        //         chatListRef.current.innerHTML = ""
+        //     }
+        //     // console.log(chatListRef.current.textContent)
+        // }
+        // isSeen = getChat(user, userChatTo) == "" ? true : false;
         var htmlItem = ``
 
         for (let i = 0; i < data.length; i++) {
@@ -257,6 +257,17 @@ export default function RoomChatContent(props : any) {
                     const url = signalData.mes.data;
                     console.log(url)
                     mess += `<img src="${url}">`;
+                } else {
+                    var messTokens = data[i].mes.split("|")
+                    // console.log("MessTojken: "+messTokens)
+                    for (let j = 0; j < messTokens.length; j++) {
+                        if (messTokens[j].substring(0, 29) == "https://cdn.jsdelivr.net/npm/") {
+                            // console.log("j="+j+" "+messTokens[j])
+                            mess += `<img src="${messTokens[j]}" alt="grin" class="epr-emoji-img epr_-a3ewa5 epr_-tul3d0 epr_xfdx0l epr_-u8wwnq epr_dkrjwv __EmojiPicker__ epr_-dyxviy epr_-w2g3k2 epr_-8yncdp epr_szp4ut" loading="eager" style="font-size: 32px; height: 32px; width: 32px;"/>`
+                        }else {
+                            mess += `<p>${messTokens[j]}</p>`;
+                        }
+                    }
                 }
             }catch (error) {
                 var messTokens = data[i].mes.split("|")
@@ -273,11 +284,11 @@ export default function RoomChatContent(props : any) {
 
             if (data[i].name == user){
                 if (i==0) {
-                    if (isSeen) {
-                        htmlItem += "<div class='status'>Đã xem</div>"
-                    }else {
-                        htmlItem += "<div class='status'>Đã gửi</div>"
-                    }
+                    // if (isSeen) {
+                    //     htmlItem += "<div class='status'>Đã xem</div>"
+                    // }else {
+                    //     htmlItem += "<div class='status'>Đã gửi</div>"
+                    // }
                 }
                 htmlItem += `<div class="item my-chat">
                                     <div class="text">
@@ -425,7 +436,7 @@ export default function RoomChatContent(props : any) {
             if (showEmoji) {
                 setShowEmoji(!showEmoji)
             }
-            saveChat(user, userChatTo)
+            // saveChat(user, userChatTo)
             isEnd(!end)
             // console.log("End: "+end)
             handleReset()
@@ -513,16 +524,16 @@ export default function RoomChatContent(props : any) {
                     <div className="title">
                         {/*<p className="name">Santosa Yoga Health</p>*/}
                         <p className="name">{userChatTo}</p>
-                        <p className="locate">
-                            <i className="fa-solid fa-location-dot"></i>
-                            San Juan, Puerto Rico
-                        </p>
-                        <p ref={onlineRef}></p>
+                        {/*<p className="locate">*/}
+                        {/*    <i className="fa-solid fa-location-dot"></i>*/}
+                        {/*    San Juan, Puerto Rico*/}
+                        {/*</p>*/}
+                        {/*<p ref={onlineRef}></p>*/}
                     </div>
                 </div>
                 <div className="action">
-                    <i className="fa-solid fa-phone"></i>
-                    <i className="fa-solid fa-magnifying-glass"></i>
+                    {/*<i className="fa-solid fa-phone"></i>*/}
+                    {/*<i className="fa-solid fa-magnifying-glass"></i>*/}
                     <i className="fa-solid fa-ellipsis-vertical" onClick={handleOpenInfo}></i>
                 </div>
             </div>
