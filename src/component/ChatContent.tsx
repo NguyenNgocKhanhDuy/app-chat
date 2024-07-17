@@ -113,7 +113,7 @@ export default function ChatContent(props : any) {
                     if (chatListRef.current) {
                         chatListRef.current.innerHTML = ""
                     }
-                    saveChat(user, userChatTo)
+                    // saveChat(user, userChatTo)
                     // isEnd(false)
                     // console.log("End: "+end)
                     handleReset()
@@ -133,17 +133,17 @@ export default function ChatContent(props : any) {
 
 
 
-    useEffect(() => {
-        const handleStorageChange = () => {
-            handleGetChat(1)
-        };
-
-        window.addEventListener('storage', handleStorageChange);
-
-        return () => {
-            window.removeEventListener('storage', handleStorageChange);
-        };
-    }, []);
+    // useEffect(() => {
+    //     const handleStorageChange = () => {
+    //         handleGetChat(1)
+    //     };
+    //
+    //     window.addEventListener('storage', handleStorageChange);
+    //
+    //     return () => {
+    //         window.removeEventListener('storage', handleStorageChange);
+    //     };
+    // }, []);
 
 
 
@@ -257,13 +257,13 @@ export default function ChatContent(props : any) {
 
     const handleAddInHtml = (data : ChatMessage[]) => {
         // console.log('update')
-        if (chatListRef.current) {
-            if (!(chatListRef.current.scrollHeight + chatListRef.current.scrollTop > 320 && chatListRef.current.scrollHeight + chatListRef.current.scrollTop < 330)){
-                chatListRef.current.innerHTML = ""
-            }
-            // console.log(chatListRef.current.textContent)
-        }
-        isSeen = getChat(user, userChatTo) == "" ? true : false;
+        // if (chatListRef.current) {
+        //     if (!(chatListRef.current.scrollHeight + chatListRef.current.scrollTop > 320 && chatListRef.current.scrollHeight + chatListRef.current.scrollTop < 330)){
+        //         chatListRef.current.innerHTML = ""
+        //     }
+        //     // console.log(chatListRef.current.textContent)
+        // }
+        // isSeen = getChat(user, userChatTo) == "" ? true : false;
         var htmlItem = ``
 
         for (let i = 0; i < data.length; i++) {
@@ -446,7 +446,7 @@ export default function ChatContent(props : any) {
             if (chatListRef.current) {
                 chatListRef.current.innerHTML = ""
             }
-            saveChat(user, userChatTo)
+            // saveChat(user, userChatTo)
             // isEnd(false)
             // console.log("End: "+end)
             handleReset()
