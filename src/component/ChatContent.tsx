@@ -14,6 +14,8 @@ import input = Simulate.input;
 import InfomationChat from "./InfomationChat";
 
 import EmojiPicker from "emoji-picker-react";
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { storage } from "../firebase/firebase";
 
 
 
@@ -44,7 +46,54 @@ export default function ChatContent(props : any) {
     const [showEmoji, setShowEmoji] = useState(false)
     const [showScrollToBottom, setShowScrollToBottom] = useState(false);
 
+    const [images, setImages] = useState<File[]>([]);
+    const [urls, setUrls] = useState<String[]>([]);
+    const [progress, setProgress] = useState(0);
 
+    const handleChange = (e:any) => {
+        if (e.target.files) {
+            setImages([...e.target.files]);
+        }
+    };
+
+    const handleUpload = () => {
+        const promises: Promise<void>[] = [];
+        images.forEach(image => {
+            const uniqueId = "";
+            const storageRef = ref(storage, `images/${uniqueId}-${image.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, image);
+
+            promises.push(new Promise((resolve, reject) => {
+                uploadTask.on(
+                    "state_changed",
+                    snapshot => {
+                        const progress = Math.round(
+                            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                        );
+                        setProgress(progress);
+                    },
+                    error => {
+                        console.log(error);
+                        reject(error);
+                    },
+                    async () => {
+                        try {
+                            const url = await getDownloadURL(storageRef);
+                            setUrls(prevState => [...prevState, url]);
+                            resolve();
+                        } catch (error) {
+                            console.log(error);
+                            reject(error);
+                        }
+                    }
+                );
+            }));
+        });
+
+        Promise.all(promises)
+            .then(() => console.log('All files uploaded'))
+            .catch(err => console.log(err));
+    };
 
     useEffect(() => {
         const handleStorageChange = () => {
@@ -469,6 +518,7 @@ export default function ChatContent(props : any) {
                     }}></i>
                     {showEmoji ? <EmojiPicker className={"emoji"} onEmojiClick={handleGetEmoji}/> : ""}
                 </div>
+                <i className="fa-solid fa-image" onClick={handleUpload}></i>
                 <Button text={"Send"} className={"send"} onClick={handleSendChat}/>
             </div>
             {showScrollToBottom && (
@@ -476,7 +526,6 @@ export default function ChatContent(props : any) {
                     <i className="fa-solid fa-arrow-down"></i>
                 </div>
             )}
-
         </div>
     );
 }
