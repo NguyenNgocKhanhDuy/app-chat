@@ -100,9 +100,9 @@ export default function Login() {
                   <p className={"error-text"}>Please enter login information.</p>
               </div>
 
-              <div className="forgot-pass">
-                  <Link to={"forget-pass"}>Forgot your password?</Link>
-              </div>
+              {/*<div className="forgot-pass">*/}
+              {/*    <Link to={"forget-pass"}>Forgot your password?</Link>*/}
+              {/*</div>*/}
               <Button onClick={handleValidate} text={"Login"}/>
               <div className="register">
                   <p>

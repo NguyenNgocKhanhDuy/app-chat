@@ -54,6 +54,11 @@
 }
 .header .action i {
   font-size: 16px;
+  padding: 5px;
+}
+.header .action i:hover {
+  opacity: 0.8;
+  cursor: pointer;
 }
 .header .action i:nth-child(2) {
   margin: 0 16px;
