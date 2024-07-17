@@ -71,7 +71,7 @@
   border-left: 1px solid #e9ecef;
 }
 .content .item {
-  width: 50%;
+  width: 85%;
   margin: 12px 0;
 }
 .content .item .user {
@@ -98,6 +98,10 @@
   border-right: 1px solid #e9ecef;
   border-bottom: 1px solid #e9ecef;
   border-left: 1px solid #e9ecef;
+}
+.content .item .text img {
+  width: 400px;
+  height: auto;
 }
 .content .item .text p {
   text-align: justify;
@@ -194,6 +198,17 @@
   right: 0px;
   box-shadow: 0 0 4px 3px #e9ecef;
 }
+.chat-action .upfile {
+  position: absolute;
+  right: 106px;
+  width: 24px;
+  height: 24px;
+  opacity: 0;
+  cursor: pointer;
+}
+.chat-action .upFileIcon {
+  font-size: 24px;
+}
 .chat-action .send {
   width: 80px;
   height: 50px;
@@ -203,7 +218,7 @@
 .scroll-to-bottom {
   position: fixed;
   bottom: 120px;
-  right: 580px;
+  right: 35%;
   width: 30px;
   height: 30px;
   background-color: #38c585;

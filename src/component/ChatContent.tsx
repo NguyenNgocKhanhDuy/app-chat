@@ -14,6 +14,8 @@ import input = Simulate.input;
 import InfomationChat from "./InfomationChat";
 
 import EmojiPicker from "emoji-picker-react";
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { storage } from "../firebase/firebase";
 
 
 
@@ -43,6 +45,96 @@ export default function ChatContent(props : any) {
     const [isOnline, setOnline] = useState(false)
     const [showEmoji, setShowEmoji] = useState(false)
     const [showScrollToBottom, setShowScrollToBottom] = useState(false);
+
+    const [image, setImage] = useState<File|null>(null);
+    const [url, setUrl] = useState<String | "">("");
+    const [progress, setProgress] = useState(0);
+
+    useEffect(() => {
+        if (textareaRef.current) {
+            textareaRef.current.focus();
+        }
+    }, [userChatTo]);
+
+    const handleChange = (e:any) => {
+        if (e.target.files[0]) {
+            console.log('up')
+            setImage(e.target.files[0]);
+        }
+    };
+
+    const handleUpload = () => {
+        if (!image) return;
+
+        const uniqueId = user;
+        const storageRef = ref(storage, `images/${uniqueId}-${image.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, image);
+
+        uploadTask.on(
+            "state_changed",
+            snapshot => {
+                const progress = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                );
+                setProgress(progress);
+            },
+            error => {
+                console.log(error);
+            },
+            async () => {
+                try {
+                    const downloadURL = await getDownloadURL(storageRef);
+                    setUrl(downloadURL);
+
+                    console.log("File uploaded:", downloadURL);
+
+                    const signalData = {
+                        type: 'image',
+                        mes: {
+                            data: downloadURL
+                        }
+                    };
+
+                    WebSocketService.sendMessage(
+                        {
+                            action: "onchat",
+                            data: {
+                                event: "SEND_CHAT",
+                                data: {
+                                    type: "people",
+                                    to: userChatTo,
+                                    mes: JSON.stringify(signalData)
+                                }
+                            }
+                        }
+                    )
+                    if (textareaRef.current) {
+                        textareaRef.current.value = ""
+                    }
+                    setChatMess("")
+                    if (showEmoji) {
+                        setShowEmoji(!showEmoji)
+                    }
+                    if (chatListRef.current) {
+                        chatListRef.current.innerHTML = ""
+                    }
+                    saveChat(user, userChatTo)
+                    // isEnd(false)
+                    // console.log("End: "+end)
+                    handleReset()
+                    props.updateUserList(userChatTo);
+
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        );
+    };
+
+
+    useEffect(() => {
+        handleUpload();
+    }, [image]);
 
 
 
@@ -182,18 +274,29 @@ export default function ChatContent(props : any) {
         for (let i = 0; i < data.length; i++) {
             // console.log("LI: "+data[i].mes)
             var time =  getHourMinute(convertTime(data[i].createAt))
-            var messTokens = data[i].mes.split("|")
-            // console.log("MessTojken: "+messTokens)
             var mess = "";
-            for (let j = 0; j < messTokens.length; j++) {
-                if (messTokens[j].substring(0, 29) == "https://cdn.jsdelivr.net/npm/") {
-                    // console.log("j="+j+" "+messTokens[j])
-                    mess += `<img src="${messTokens[j]}" alt="grin" class="epr-emoji-img epr_-a3ewa5 epr_-tul3d0 epr_xfdx0l epr_-u8wwnq epr_dkrjwv __EmojiPicker__ epr_-dyxviy epr_-w2g3k2 epr_-8yncdp epr_szp4ut" loading="eager" style="font-size: 32px; height: 32px; width: 32px;"/>`
-                }else {
-                    mess += `<p>${messTokens[j]}</p>`;
+
+            try {
+                const signalData = JSON.parse(data[i].mes);
+                console.log(signalData)
+                if (signalData.type == 'image') {
+                    const url = signalData.mes.data;
+                    console.log(url)
+                    mess += `<img src="${url}">`;
+                }
+            }catch (error) {
+                var messTokens = data[i].mes.split("|")
+                // console.log("MessTojken: "+messTokens)
+                for (let j = 0; j < messTokens.length; j++) {
+                    if (messTokens[j].substring(0, 29) == "https://cdn.jsdelivr.net/npm/") {
+                        // console.log("j="+j+" "+messTokens[j])
+                            mess += `<img src="${messTokens[j]}" alt="grin" class="epr-emoji-img epr_-a3ewa5 epr_-tul3d0 epr_xfdx0l epr_-u8wwnq epr_dkrjwv __EmojiPicker__ epr_-dyxviy epr_-w2g3k2 epr_-8yncdp epr_szp4ut" loading="eager" style="font-size: 32px; height: 32px; width: 32px;"/>`
+                    }else {
+                        mess += `<p>${messTokens[j]}</p>`;
+                    }
                 }
             }
-            // console.log("AF: "+mess)
+
 
             if (data[i].to != user){
                 if (i==0) {
@@ -278,22 +381,37 @@ export default function ChatContent(props : any) {
                 page2Ref.current++
                 handleGetChat(page2Ref.current)
             }
-
+/*
             if (chatListRef.current) {
                 const {scrollTop, scrollHeight, clientHeight} = chatListRef.current;
                 // Kiểm tra nếu người dùng đã cuộn lên trên một khoảng nhất định
                 if (scrollTop + clientHeight < scrollHeight - 200) {
                     setShowScrollToBottom(true);
+                }
+                else {
+                    setShowScrollToBottom(false);
+                }
+                // Kiểm tra nếu người dùng đã cuộn chạm đáy
+                if (scrollTop + clientHeight > scrollHeight - 10) {
+                    setShowScrollToBottom(false);
+                }
+            }*/
+            if (chatListRef.current) {
+                const { scrollTop, scrollHeight, clientHeight } = chatListRef.current;
+
+                console.log(`scrollTop: ${scrollTop}, clientHeight: ${clientHeight}, scrollHeight: ${scrollHeight}`);
+
+                // Kiểm tra nếu người dùng đã cuộn chạm đáy hoặc gần đáy
+                if (scrollTop + clientHeight >= scrollHeight - 1900) {
+                    console.log('User is at the bottom or near the bottom of the scroll area');
+                    setShowScrollToBottom(false);
+                } else if (scrollTop + clientHeight < scrollHeight - 200) {
+                    // Kiểm tra nếu người dùng đã cuộn lên trên một khoảng nhất định (200px từ đáy)
+                    console.log('User is more than 200px from the bottom');
+                    setShowScrollToBottom(true);
                 } else {
                     setShowScrollToBottom(false);
                 }
-
-                // // Logic tải thêm tin nhắn cũ
-                // if (chatListRef.current.scrollTop < 10 && !end) {
-                //     console.log('up');
-                //     page2Ref.current++;
-                //     handleGetChat(page2Ref.current);
-                // }
             }
         }
     }
@@ -469,6 +587,8 @@ export default function ChatContent(props : any) {
                     }}></i>
                     {showEmoji ? <EmojiPicker className={"emoji"} onEmojiClick={handleGetEmoji}/> : ""}
                 </div>
+                <input type="file" className={"upfile"} onChange={handleChange}/>
+                <i className="fa-solid fa-image upFileIcon"></i>
                 <Button text={"Send"} className={"send"} onClick={handleSendChat}/>
             </div>
             {showScrollToBottom && (
@@ -476,7 +596,6 @@ export default function ChatContent(props : any) {
                     <i className="fa-solid fa-arrow-down"></i>
                 </div>
             )}
-
         </div>
     );
 }
