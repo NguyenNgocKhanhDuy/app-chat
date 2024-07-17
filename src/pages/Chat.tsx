@@ -47,8 +47,7 @@ export default function Chat() {
     const [userOnlineStatus, setUserOnlineStatus] = useState<{ [key: string]: boolean }>({});
     const indexRef = useRef<number>(-1);
     const isInitialized = useRef(false);
-    const timeoutRef = useRef<NodeJS.Timeout | null>(null); // Sử dụng NodeJS.Timeout cho TypeScript
-
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const toggleChat = (username: string, type: number) => {
         handleCloseInfo();
         (type === 1 ? isRoom(true) : isRoom(false))
@@ -187,9 +186,8 @@ export default function Chat() {
 
             })
         if (users.length > 0 && !isInitialized.current && indexRef.current !== -1) {
-            // handleCheckOnline();
+            handleCheckOnline();
             isInitialized.current = true; // Đánh dấu đã khởi tạo handleCheckOnline
-            console.log("gjeruighidfgnjidfhjidfnhkjndfjogndfognbkojdgnbkonfdghondgjkohnhnojfgnhojnfghjknfgjkhnfgkjhnjk")
         }
     }, [users]);
 
@@ -288,6 +286,10 @@ export default function Chat() {
         setIsChatOpen(true)
     }
     const handleLogOut = () => {
+        setUserOnlineStatus({});
+        setUsers([]);
+        indexRef.current = -1
+        isInitialized.current = false;
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
@@ -301,10 +303,8 @@ export default function Chat() {
             }
         )
         WebSocketService.registerCallback("LOGOUT", (data: any) => {
-            WebSocketService.unregisterCallback('CHECK_USER');
-            setUsers([]);
-            indexRef.current = -1
-            isInitialized.current = false;
+            // WebSocketService.unregisterCallback('CHECK_USER');
+
             navigate('/login')
 
         })
@@ -334,8 +334,9 @@ export default function Chat() {
     const handleOpenInfo = function () {
         const mainchat = document.querySelector(".main-chat-content") as HTMLDivElement;
         const info = document.querySelector(".info-content") as HTMLDivElement;
-        mainchat.style.width = "75%";
-        info.style.width = "25%";
+        mainchat.style.display="flex"
+        mainchat.style.width = "100%";
+        info.style.width = "34%";
         handleGetListUserOfRoom(username)
         WebSocketService.registerCallback("GET_ROOM_CHAT_MES", (data: any) => {
             setOwnRoom(data.own)
@@ -350,6 +351,7 @@ export default function Chat() {
         const info = document.querySelector(".info-content") as HTMLDivElement;
         mainchat.style.width = "100%";
         info.style.width = "0%";
+        mainchat.style.display="block"
         setIsInfoOpen(false)
 
     }
@@ -434,47 +436,71 @@ export default function Chat() {
     //         return updatedUsers;
     //
     //     });
-
-    // const handleCheckOnline = () => {
-    //     timeoutRef.current = setTimeout(() => {
-    //         var index = indexRef.current;
-    //     console.log("Ham handlecheck duoc goi", index)
-    //     if (index === -1 ||  users.length === 0) {
-    //         return;
-    //     }
-    //     if ((index >= users.length)) {
-    //         indexRef.current = 0
-    //         index = indexRef.current;
-    //     }
-    //
-    //
-    //     const user = users[index];
-    //     console.log("Gửi yêu cầu CHECK_USER cho người dùng ",user.name);
-    //
+    // const handleReLoad = () => {
+    //     const id = localStorage.getItem("id")
+    //     console.log(id)
     //     WebSocketService.sendMessage({
-    //         action: "onchat",
-    //         data: {
-    //             event: "CHECK_USER",
-    //             data: {
-    //                 user: user.name
-    //             }
-    //         }
+    //         //     "action": "onchat",
+    //         //     "data": {
+    //         //     "event": "RE_LOGIN",
+    //         //         "data": {
+    //         //         "user": userHost,
+    //         //             "code": id
+    //         //     }
+    //         // }
+    //
+    //         "status": "success",
+    //         "event": "RE_LOGIN",
+    //         "data": {
+    //         "RE_LOGIN_CODE": id
+    //     }
+    //     }
     //     });
-    //     // Đăng ký callback để nhận phản hồi từ WebSocket
-    //     WebSocketService.registerCallback('CHECK_USER', (data:any) => {
-    //         userOnlineStatus[user.name] = data.status;
+    //     WebSocketService.registerCallback('RE_LOGIN', (data:any) => {
+    //         console.log(data)
     //     });
-    //     // Lưu tên người dùng đang xét để cập nhật trạng thái online
-    //     // setUserOnl(user.name);
-    //
-    //
-    //
-    //         indexRef.current = index + 1;
-    //         handleCheckOnline(); // Gọi lại hàm với index tiếp theo
-    //
-    //     }, 100);
-    //
-    // };
+    // }
+
+    const handleCheckOnline = () => {
+        timeoutRef.current = setTimeout(() => {
+            var index = indexRef.current;
+        console.log("Ham handlecheck duoc goi", index)
+        if (index === -1 ||  users.length === 0) {
+            return;
+        }
+        if ((index >= users.length)) {
+            indexRef.current = 0
+            index = indexRef.current;
+        }
+
+
+        const user = users[index];
+        console.log("Gửi yêu cầu CHECK_USER cho người dùng ",user.name);
+
+        WebSocketService.sendMessage({
+            action: "onchat",
+            data: {
+                event: "CHECK_USER",
+                data: {
+                    user: user.name
+                }
+            }
+        });
+        // Đăng ký callback để nhận phản hồi từ WebSocket
+        WebSocketService.registerCallback('CHECK_USER', (data:any) => {
+            userOnlineStatus[user.name] = data.status;
+        });
+        // Lưu tên người dùng đang xét để cập nhật trạng thái online
+        // setUserOnl(user.name);
+
+
+
+            indexRef.current = index + 1;
+            handleCheckOnline(); // Gọi lại hàm với index tiếp theo
+
+        }, 500);
+
+    };
 
     // const updateStateonline = (userName : string, isOnl:boolean) => {
     //     console.log("ham update duoc goi")
@@ -487,7 +513,7 @@ export default function Chat() {
     //         });
     //     });
     // };
-
+    //
     //  useEffect(() => {
     //      console.log("User online status changed:", userOnlineStatus);
     // }, [userOnlineStatus]);
@@ -497,7 +523,7 @@ export default function Chat() {
         <div className={"chat"}>
             <div className="left">
                 <div className="top">
-                    <div className="logo">
+                    <div className="logo" >
                         NLUCHAT
                     </div>
                     <div className="account">
@@ -552,9 +578,7 @@ export default function Chat() {
                                                                 <i className="fa-solid fa-circle" id="onl-true"></i>
                                                             </>
                                                         ) : (
-                                                            <>
-                                                                <i className="fa-solid fa-circle" id="onl-false"></i>
-                                                            </>
+                                                            <div>Loading...</div>
                                                         )
                                                     ) : (
                                                         <i className="fa-solid fa-circle" id="onl-false"></i>
@@ -701,7 +725,7 @@ export default function Chat() {
                                user={userHost}
                                userList={users}
                                onUpdateListUser={handleGetUserList} onUpdateUser={(usern : string) => updateUsersList(usern,"", 0)} onClose={handleCloseModalChat} modalText={modalChatText} btnText={modalChatBtnText}/> : ""}
-            </div>
+                </div>
         </div>
     )
 }

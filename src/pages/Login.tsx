@@ -23,6 +23,7 @@ export default function Login() {
             const code = data
             const error = document.querySelector(".error") as HTMLDivElement;
             const errorText = document.querySelector(".error .error-text") as HTMLParagraphElement;
+            localStorage.setItem("id", data)
             data = data.substring(0, 3) == 'nlu' ? '' : data;
             if (data != ''){
                 errorText.innerText = data;
