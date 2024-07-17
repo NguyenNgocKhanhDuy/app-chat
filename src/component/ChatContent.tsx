@@ -55,6 +55,7 @@ export default function ChatContent(props : any) {
         if (e.target.files[0]) {
             console.log('up')
             setImage(e.target.files[0]);
+            handleUpload()
         }
     };
 
@@ -127,9 +128,10 @@ export default function ChatContent(props : any) {
     };
 
 
-    useEffect(() => {
-        handleUpload();
-    }, [image]);
+    // useEffect(() => {
+    //     handleUpload();
+    // }, [image]);
+
 
 
     useEffect(() => {

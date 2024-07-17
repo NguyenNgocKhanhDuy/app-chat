@@ -71,7 +71,7 @@
   border-left: 1px solid #e9ecef;
 }
 .content .item {
-  width: 50%;
+  width: 85%;
   margin: 12px 0;
 }
 .content .item .user {
@@ -98,6 +98,10 @@
   border-right: 1px solid #e9ecef;
   border-bottom: 1px solid #e9ecef;
   border-left: 1px solid #e9ecef;
+}
+.content .item .text img {
+  width: 400px;
+  height: auto;
 }
 .content .item .text p {
   text-align: justify;
@@ -127,10 +131,6 @@
   background-color: #38c585;
   color: #fff;
   margin-left: auto;
-}
-.content .my-chat .text img {
-  width: 400px;
-  height: auto;
 }
 .content .my-chat .text .time {
   right: auto;
