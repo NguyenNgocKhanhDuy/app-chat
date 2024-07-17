@@ -1,4 +1,6 @@
-    const WebSocketService = (() => {
+import {getCode, getUser} from "../Store/LocalStorage";
+
+const WebSocketService = (() => {
     let socket;
     let callbacks = {};
 
@@ -9,7 +11,7 @@
         };
 
         socket.onmessage = (event) => {
-            // console.log(event)
+            console.log(event)
             const data = JSON.parse(event.data);
             (data.data && data.event == 'LOGIN') ? callbacks[data.event](data.data.RE_LOGIN_CODE || data.mes) : callbacks[data.event](data.data || data.mes)
         };
@@ -42,6 +44,22 @@
             // console.log(message)
         } catch (error) {
             console.error('Error sending message:', error);
+            connect("ws://140.238.54.136:8080/chat/chat")
+            // const code = getCode();
+            // const user = getUser();
+            //
+            // WebSocketService.sendMessage(
+            //     {
+            //         action: "onchat",
+            //         data: {
+            //             event: "RE_LOGIN",
+            //             data: {
+            //                 user: user,
+            //                 code: code
+            //             }
+            //         }
+            //     }
+            // )
         }
     };
 

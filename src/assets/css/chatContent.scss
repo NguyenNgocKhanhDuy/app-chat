@@ -79,7 +79,7 @@
 
 
     .item {
-      width: 50%;
+      width:85%;
       margin: 12px 0;
 
       .user {
@@ -106,6 +106,11 @@
         position: relative;
         cursor: pointer;
         @include line(1, 1, 1, 1);
+
+        img {
+          width: 400px;
+          height: auto;
+        }
 
         p {
           text-align: justify;
@@ -140,6 +145,7 @@
         background-color: $green;
         color: $white;
         margin-left: auto;
+
 
         .time {
           right: auto;
@@ -217,6 +223,19 @@
         right: 0px;
         box-shadow: 0 0 4px 3px $lightGray;
       }
+    }
+
+    .upfile {
+      position: absolute;
+      right: 106px;
+      width: 24px;
+      height: 24px;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .upFileIcon {
+      font-size: 24px;
     }
 
     .send {
