@@ -7,6 +7,8 @@ import convertTime, {getHourMinute} from "../utils/convertTime";
 import {getChat, removeChat, saveChat} from "../Store/LocalStorage";
 import EmojiPicker, {Emoji} from "emoji-picker-react";
 import ReactDOM from "react-dom/client";
+import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
+import {storage} from "../firebase/firebase";
 
 
 
@@ -33,6 +35,89 @@ export default function RoomChatContent(props : any) {
     const [isOnline, setOnline] = useState(false)
     const [showEmoji, setShowEmoji] = useState(false)
     const [showScrollToBottom, setShowScrollToBottom] = useState(false);
+
+    const [image, setImage] = useState<File|null>(null);
+    const [url, setUrl] = useState<String | "">("");
+    const [progress, setProgress] = useState(0);
+
+    const handleChange = (e:any) => {
+        if (e.target.files[0]) {
+            console.log('up')
+            setImage(e.target.files[0]);
+        }
+    };
+
+    const handleUpload = () => {
+        if (!image) return;
+
+        const uniqueId = user;
+        const storageRef = ref(storage, `images/${uniqueId}-${image.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, image);
+
+        uploadTask.on(
+            "state_changed",
+            snapshot => {
+                const progress = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                );
+                setProgress(progress);
+            },
+            error => {
+                console.log(error);
+            },
+            async () => {
+                try {
+                    const downloadURL = await getDownloadURL(storageRef);
+                    setUrl(downloadURL);
+
+                    console.log("File uploaded:", downloadURL);
+
+                    const signalData = {
+                        type: 'image',
+                        mes: {
+                            data: downloadURL
+                        }
+                    };
+
+                    WebSocketService.sendMessage(
+                        {
+                            action: "onchat",
+                            data: {
+                                event: "SEND_CHAT",
+                                data: {
+                                    type: "room",
+                                    to: userChatTo,
+                                    mes: JSON.stringify(signalData)
+                                }
+                            }
+                        }
+                    )
+                    if (textareaRef.current) {
+                        textareaRef.current.value = ""
+                    }
+                    setChatMess("")
+                    if (showEmoji) {
+                        setShowEmoji(!showEmoji)
+                    }
+                    if (chatListRef.current) {
+                        chatListRef.current.innerHTML = ""
+                    }
+                    saveChat(user, userChatTo)
+                    // isEnd(false)
+                    // console.log("End: "+end)
+                    handleReset()
+                    props.updateUserList(userChatTo);
+
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        );
+    };
+
+    useEffect(() => {
+        handleUpload();
+    }, [image]);
 
 
     useEffect(() => {
@@ -156,13 +241,27 @@ export default function RoomChatContent(props : any) {
 
         for (let i = 0; i < data.length; i++) {
             var time =  getHourMinute(convertTime(data[i].createAt))
-            var messTokens = data[i].mes.split("|")
+
             var mess = "";
-            for (let j = 0; j < messTokens.length; j++) {
-                if (messTokens[j].substring(0, 29) == "https://cdn.jsdelivr.net/npm/") {
-                    mess += `<img src="${messTokens[j]}" alt="grin" class="epr-emoji-img epr_-a3ewa5 epr_-tul3d0 epr_xfdx0l epr_-u8wwnq epr_dkrjwv __EmojiPicker__ epr_-dyxviy epr_-w2g3k2 epr_-8yncdp epr_szp4ut" loading="eager" style="font-size: 32px; height: 32px; width: 32px;"/>`
-                }else {
-                    mess += `<p>${messTokens[j]}</p>`;
+
+            try {
+                const signalData = JSON.parse(data[i].mes);
+                console.log(signalData)
+                if (signalData.type == 'image') {
+                    const url = signalData.mes.data;
+                    console.log(url)
+                    mess += `<img src="${url}">`;
+                }
+            }catch (error) {
+                var messTokens = data[i].mes.split("|")
+                // console.log("MessTojken: "+messTokens)
+                for (let j = 0; j < messTokens.length; j++) {
+                    if (messTokens[j].substring(0, 29) == "https://cdn.jsdelivr.net/npm/") {
+                        // console.log("j="+j+" "+messTokens[j])
+                        mess += `<img src="${messTokens[j]}" alt="grin" class="epr-emoji-img epr_-a3ewa5 epr_-tul3d0 epr_xfdx0l epr_-u8wwnq epr_dkrjwv __EmojiPicker__ epr_-dyxviy epr_-w2g3k2 epr_-8yncdp epr_szp4ut" loading="eager" style="font-size: 32px; height: 32px; width: 32px;"/>`
+                    }else {
+                        mess += `<p>${messTokens[j]}</p>`;
+                    }
                 }
             }
 
@@ -242,17 +341,26 @@ export default function RoomChatContent(props : any) {
     const handleScroll = () => {
         // console.log('scr')
         if (chatListRef.current) {
-            // console.log(chatListRef.current.scrollHeight)
-            // console.log(chatListRef.current.scrollTop)
+            console.log(chatListRef.current.scrollHeight)
+            console.log(chatListRef.current.scrollTop)
+            console.log(chatListRef.current.scrollHeight - chatListRef.current.scrollTop)
             if (chatListRef.current.scrollHeight + chatListRef.current.scrollTop > 320 && chatListRef.current.scrollHeight + chatListRef.current.scrollTop < 330){
                 // console.log('up')
                 page2Ref.current++
                 handleGetChat(page2Ref.current)
             }
+
+            if (chatListRef.current.scrollHeight - chatListRef.current.scrollTop > 3900 && chatListRef.current.scrollHeight - chatListRef.current.scrollTop < 4000) {
+                console.log('false')
+                setShowScrollToBottom(false)
+            }
+
         }
 
         if (chatListRef.current) {
             const {scrollTop, scrollHeight, clientHeight} = chatListRef.current;
+
+
             // Kiểm tra nếu người dùng đã cuộn lên trên một khoảng nhất định
             if (scrollTop + clientHeight < scrollHeight - 200) {
                 setShowScrollToBottom(true);
@@ -267,6 +375,8 @@ export default function RoomChatContent(props : any) {
             //     handleGetChat(page2Ref.current);
             // }
         }
+
+
 
     }
 
@@ -387,8 +497,6 @@ export default function RoomChatContent(props : any) {
         setTimeout(() => {
             setShowScrollToBottom(false);
         }, 1000);
-
-
     }
     
     return (
@@ -420,18 +528,23 @@ export default function RoomChatContent(props : any) {
             <div className="chat-action">
                 <div className="holder">
                     <textarea ref={textareaRef} onInput={handleInput} className={"input-mess"}
-                              onClick={handleSeenInputClick} placeholder={"Type here"} onKeyPress={handleKeyPress}></textarea>
+                              onClick={handleSeenInputClick} placeholder={"Type here"}
+                              onKeyPress={handleKeyPress}></textarea>
                     {/*<input type="text" placeholder={"Type here"} ref={inputMessRef} onClick={handleSeenInputClick}/>*/}
-                    <i className="fa-regular fa-face-smile" onClick={()=>{setShowEmoji(!showEmoji)}}></i>
+                    <i className="fa-regular fa-face-smile" onClick={() => {
+                        setShowEmoji(!showEmoji)
+                    }}></i>
                     {showEmoji ? <EmojiPicker className={"emoji"} onEmojiClick={handleGetEmoji}/> : ""}
                 </div>
+                <input type="file" className={"upfile"} onChange={handleChange}/>
+                <i className="fa-solid fa-image upFileIcon"></i>
                 <Button text={"Send"} className={"send"} onClick={handleSendChat}/>
             </div>
-            {showScrollToBottom && (
+            {showScrollToBottom == true ? (
                 <div className="scroll-to-bottom" onClick={scrollToBottom}>
-                    <i className="fa-solid fa-arrow-down"></i>
+                <i className="fa-solid fa-arrow-down"></i>
                 </div>
-            )}
+            ) : ""}
         </div>
     );
 }

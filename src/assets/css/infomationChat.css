@@ -10,8 +10,7 @@
   height: 120%;
   width: 100%;
   background-color: #e9ecef;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  overflow: auto;
   display: flex;
   flex-direction: column;
 }
@@ -40,7 +39,7 @@
   border-radius: 20px;
   margin-top: 10px;
   padding: 5px 0 0 10px;
-  margin-left: 10px;
+  margin-left: 12px;
 }
 .info-chat-room .chat-bar .leave-btn p {
   margin-top: 0;

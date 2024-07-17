@@ -5,6 +5,7 @@ import {useEffect} from "react";
 import WebSocketService from "../webSocket/webSocketService";
 import {useDispatch} from "react-redux";
 import {setCode, setUser} from "../Store/Action";
+import {saveCode, saveUser} from "../Store/LocalStorage";
 
 
 export default function Login() {
@@ -22,6 +23,7 @@ export default function Login() {
             const code = data
             const error = document.querySelector(".error") as HTMLDivElement;
             const errorText = document.querySelector(".error .error-text") as HTMLParagraphElement;
+            localStorage.setItem("id", data)
             data = data.substring(0, 3) == 'nlu' ? '' : data;
             if (data != ''){
                 errorText.innerText = data;
@@ -30,6 +32,8 @@ export default function Login() {
                 const inputUserName = document.querySelector("#username") as HTMLInputElement;
                 const username = inputUserName.value;
                 handleSetUser(username, code);
+                saveUser(username)
+                saveCode(code)
                 navigate('/chat')
             }
         })

@@ -47,7 +47,7 @@ export default function Chat() {
     const [userOnlineStatus, setUserOnlineStatus] = useState<{ [key: string]: boolean }>({});
     const indexRef = useRef<number>(-1);
     const isInitialized = useRef(false);
-    const timeoutRef = useRef<NodeJS.Timeout | null>(null); // Sử dụng NodeJS.Timeout cho TypeScript
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const toggleChat = (username: string, type: number) => {
         handleCloseInfo();
         (type === 1 ? isRoom(true) : isRoom(false))
@@ -334,8 +334,9 @@ export default function Chat() {
     const handleOpenInfo = function () {
         const mainchat = document.querySelector(".main-chat-content") as HTMLDivElement;
         const info = document.querySelector(".info-content") as HTMLDivElement;
-        mainchat.style.width = "75%";
-        info.style.width = "25%";
+        mainchat.style.display="flex"
+        mainchat.style.width = "100%";
+        info.style.width = "34%";
         handleGetListUserOfRoom(username)
         WebSocketService.registerCallback("GET_ROOM_CHAT_MES", (data: any) => {
             setOwnRoom(data.own)
@@ -350,6 +351,7 @@ export default function Chat() {
         const info = document.querySelector(".info-content") as HTMLDivElement;
         mainchat.style.width = "100%";
         info.style.width = "0%";
+        mainchat.style.display="block"
         setIsInfoOpen(false)
 
     }
@@ -434,6 +436,30 @@ export default function Chat() {
     //         return updatedUsers;
     //
     //     });
+    // const handleReLoad = () => {
+    //     const id = localStorage.getItem("id")
+    //     console.log(id)
+    //     WebSocketService.sendMessage({
+    //         //     "action": "onchat",
+    //         //     "data": {
+    //         //     "event": "RE_LOGIN",
+    //         //         "data": {
+    //         //         "user": userHost,
+    //         //             "code": id
+    //         //     }
+    //         // }
+    //
+    //         "status": "success",
+    //         "event": "RE_LOGIN",
+    //         "data": {
+    //         "RE_LOGIN_CODE": id
+    //     }
+    //     }
+    //     });
+    //     WebSocketService.registerCallback('RE_LOGIN', (data:any) => {
+    //         console.log(data)
+    //     });
+    // }
 
     const handleCheckOnline = () => {
         timeoutRef.current = setTimeout(() => {
@@ -472,7 +498,7 @@ export default function Chat() {
             indexRef.current = index + 1;
             handleCheckOnline(); // Gọi lại hàm với index tiếp theo
 
-        }, 100);
+        }, 500);
 
     };
 
@@ -487,7 +513,7 @@ export default function Chat() {
     //         });
     //     });
     // };
-
+    //
     //  useEffect(() => {
     //      console.log("User online status changed:", userOnlineStatus);
     // }, [userOnlineStatus]);
@@ -497,7 +523,7 @@ export default function Chat() {
         <div className={"chat"}>
             <div className="left">
                 <div className="top">
-                    <div className="logo">
+                    <div className="logo" >
                         NLUCHAT
                     </div>
                     <div className="account">
@@ -699,8 +725,7 @@ export default function Chat() {
                 {isModalChatOpen ?
                     <ModalChat onHandleGetChat={(user: string) => handleGetNewChat(user)} user={userHost}
                                onUpdateListUser={handleGetUserList} onUpdateUser={(usern : string) => updateUsersList(usern,"", 0)} onClose={handleCloseModalChat} modalText={modalChatText} btnText={modalChatBtnText}/> : ""}
-            </div>
+                </div>
         </div>
-
     )
-    }
+}
