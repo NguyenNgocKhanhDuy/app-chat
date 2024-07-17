@@ -128,6 +128,10 @@
   color: #fff;
   margin-left: auto;
 }
+.content .my-chat .text img {
+  width: 400px;
+  height: auto;
+}
 .content .my-chat .text .time {
   right: auto;
   left: 0;
@@ -193,6 +197,17 @@
   bottom: 40px;
   right: 0px;
   box-shadow: 0 0 4px 3px #e9ecef;
+}
+.chat-action .upfile {
+  position: absolute;
+  right: 106px;
+  width: 24px;
+  height: 24px;
+  opacity: 0;
+  cursor: pointer;
+}
+.chat-action .upFileIcon {
+  font-size: 24px;
 }
 .chat-action .send {
   width: 80px;

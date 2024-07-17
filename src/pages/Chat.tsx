@@ -187,7 +187,7 @@ export default function Chat() {
 
             })
         if (users.length > 0 && !isInitialized.current && indexRef.current !== -1) {
-            handleCheckOnline();
+            // handleCheckOnline();
             isInitialized.current = true; // Đánh dấu đã khởi tạo handleCheckOnline
             console.log("gjeruighidfgnjidfhjidfnhkjndfjogndfognbkojdgnbkonfdghondgjkohnhnojfgnhojnfghjknfgjkhnfgkjhnjk")
         }
@@ -435,46 +435,46 @@ export default function Chat() {
     //
     //     });
 
-    const handleCheckOnline = () => {
-        timeoutRef.current = setTimeout(() => {
-            var index = indexRef.current;
-        console.log("Ham handlecheck duoc goi", index)
-        if (index === -1 ||  users.length === 0) {
-            return;
-        }
-        if ((index >= users.length)) {
-            indexRef.current = 0
-            index = indexRef.current;
-        }
-
-
-        const user = users[index];
-        console.log("Gửi yêu cầu CHECK_USER cho người dùng ",user.name);
-
-        WebSocketService.sendMessage({
-            action: "onchat",
-            data: {
-                event: "CHECK_USER",
-                data: {
-                    user: user.name
-                }
-            }
-        });
-        // Đăng ký callback để nhận phản hồi từ WebSocket
-        WebSocketService.registerCallback('CHECK_USER', (data:any) => {
-            userOnlineStatus[user.name] = data.status;
-        });
-        // Lưu tên người dùng đang xét để cập nhật trạng thái online
-        // setUserOnl(user.name);
-
-
-
-            indexRef.current = index + 1;
-            handleCheckOnline(); // Gọi lại hàm với index tiếp theo
-
-        }, 100);
-
-    };
+    // const handleCheckOnline = () => {
+    //     timeoutRef.current = setTimeout(() => {
+    //         var index = indexRef.current;
+    //     console.log("Ham handlecheck duoc goi", index)
+    //     if (index === -1 ||  users.length === 0) {
+    //         return;
+    //     }
+    //     if ((index >= users.length)) {
+    //         indexRef.current = 0
+    //         index = indexRef.current;
+    //     }
+    //
+    //
+    //     const user = users[index];
+    //     console.log("Gửi yêu cầu CHECK_USER cho người dùng ",user.name);
+    //
+    //     WebSocketService.sendMessage({
+    //         action: "onchat",
+    //         data: {
+    //             event: "CHECK_USER",
+    //             data: {
+    //                 user: user.name
+    //             }
+    //         }
+    //     });
+    //     // Đăng ký callback để nhận phản hồi từ WebSocket
+    //     WebSocketService.registerCallback('CHECK_USER', (data:any) => {
+    //         userOnlineStatus[user.name] = data.status;
+    //     });
+    //     // Lưu tên người dùng đang xét để cập nhật trạng thái online
+    //     // setUserOnl(user.name);
+    //
+    //
+    //
+    //         indexRef.current = index + 1;
+    //         handleCheckOnline(); // Gọi lại hàm với index tiếp theo
+    //
+    //     }, 100);
+    //
+    // };
 
     // const updateStateonline = (userName : string, isOnl:boolean) => {
     //     console.log("ham update duoc goi")
